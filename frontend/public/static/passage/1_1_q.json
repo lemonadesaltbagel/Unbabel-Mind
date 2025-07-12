@@ -1,0 +1,101 @@
+[
+  {
+    "type": "intro",
+    "text": "Questions 1-6\n\nDo the following statements agree with the information given in Reading Passage 1?\nIn boxes 1–6 on your answer sheet, write\nTRUE           if the statement agrees with the information\nFALSE         if the statement contradicts the information\nNOT GIVEN  if there is no information on this"
+  },
+  {
+    "type": "tfng",
+    "number": 1,
+    "question": "There are other parrots that share the kakapo’s inability to fly.",
+    "options": ["TRUE", "FALSE", "NOT GIVEN"]
+  },
+  {
+    "type": "tfng",
+    "number": 2,
+    "question": "Adult kakapo produce chicks every year.",
+    "options": ["TRUE", "FALSE", "NOT GIVEN"]
+  },
+  {
+    "type": "tfng",
+    "number": 3,
+    "question": "Adult male kakapo bring food back to nesting females.",
+    "options": ["TRUE", "FALSE", "NOT GIVEN"]
+  },
+  {
+    "type": "tfng",
+    "number": 4,
+    "question": "The Polynesian rat was a greater threat to the kakapo than Polynesian settlers.",
+    "options": ["TRUE", "FALSE", "NOT GIVEN"]
+  },
+  {
+    "type": "tfng",
+    "number": 5,
+    "question": "Kakapo were transferred from Rakiura Island to other locations because they were at risk from feral cats.",
+    "options": ["TRUE", "FALSE", "NOT GIVEN"]
+  },
+  {
+    "type": "tfng",
+    "number": 6,
+    "question": "One Recovery Plan initiative that helped increase the kakapo population size was caring for struggling young birds.",
+    "options": ["TRUE", "FALSE", "NOT GIVEN"]
+  },
+  {
+    "type": "intro",
+    "text": "\n\nQuestions 7–13\nComplete the notes below.\n\nChoose ONE WORD AND/OR A NUMBER from the passage for each answer."
+  },
+  {
+    "type": "subheading",
+    "text": "New Zealand’s kākāpō"
+  },
+  {
+    "type": "subheading",
+    "text": "A type of parrot:"
+  },
+  {
+    "type": "fill-in-line",
+    "number": 7,
+    "text": "* diet consists of fern fronds, various parts of a tree and ____"
+  },
+  {
+    "type": "fill-in-line",
+    "number": 8,
+    "text": "* nests are created in ____ where eggs are laid."
+  },
+  {
+    "type": "subheading",
+    "text": "Arrival of Polynesian settlers"
+  },
+  {
+    "type": "fill-in-line",
+    "number": 9,
+    "text": "* the ____ of the kākāpō were used to make clothes."
+  },
+  {
+    "type": "subheading",
+    "text": "Arrival of European colonisers"
+  },
+  {
+    "type": "fill-in-line",
+    "number": 10,
+    "text": "* ____ were an animal which they introduced that ate the kākāpō’s food sources."
+  },
+  {
+    "type": "subheading",
+    "text": "Protecting kākāpō"
+  },
+  {
+    "type": "fill-in-line",
+    "number": 11,
+    "text": "* a definite sighting of female kākāpō on Rakiura Island was reported in the year ____"
+  },
+  {
+    "type": "fill-in-line",
+    "number": 12,
+    "text": "* the Recovery Plan included an increase in ____"
+  },
+  {
+    "type": "fill-in-line",
+    "number": 13,
+    "text": "* a current goal of the Recovery Plan is to maintain the involvement of ____ in kākāpō protection."
+  }
+]
