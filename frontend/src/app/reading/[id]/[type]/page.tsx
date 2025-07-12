@@ -106,10 +106,23 @@ export default function ReadingPage() {
   const hsub = async () => {
     if (is) return;
     setIs(true);
-    if (!user) {
-      alert('Please log in to submit answers.');
+    
+    // 检查是否有答案
+    const hasAnswers = Object.keys(a).length > 0;
+    if (!hasAnswers) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 px-6 py-3 rounded shadow-lg z-50 text-white bg-red-500';
+      toast.textContent = 'Please answer at least one question.';
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        document.body.removeChild(toast);
+      }, 1000);
+      
+      setIs(false);
       return;
     }
+
     const pl = {
       passageId: pid,
       questionType: qt,
@@ -130,19 +143,38 @@ export default function ReadingPage() {
         body: JSON.stringify(pl),
       });
       const result = await res.json();
+      
+      const toast = document.createElement('div');
+      toast.className = 'fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 px-6 py-3 rounded shadow-lg z-50 text-white';
+      
       if (res.ok) {
-        if (result.score !== undefined) {
-          alert(`Submission successful! Score: ${result.score}% (${result.correctAnswers}/${result.totalQuestions} correct)`);
-        } else {
-          alert('Submission successful!');
-        }
-        localStorage.removeItem(lk);
-        r.push('/dashboard');
+        toast.className += ' bg-green-500';
+        toast.textContent = 'Submission successful!';
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+          document.body.removeChild(toast);
+          localStorage.removeItem(lk);
+          r.push(`/reading/${id}/${type}/review`);
+        }, 1000);
       } else {
-        alert(result.message || 'Submission failed.');
+        toast.className += ' bg-red-500';
+        toast.textContent = result.message || 'Submission failed.';
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+          document.body.removeChild(toast);
+        }, 1000);
       }
     } catch {
-      alert('Network error.');
+      const toast = document.createElement('div');
+      toast.className = 'fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50';
+      toast.textContent = 'Submission error.';
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        document.body.removeChild(toast);
+      }, 1000);
     }
     setIs(false);
   };
