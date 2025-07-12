@@ -1,7 +1,7 @@
 import {Request,Response} from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import {createUser,findUserByEmail} from '../models/User';
+import {createUser,findUserByEmail,findUserById} from '../models/User';
 export const register=async(req:Request,res:Response):Promise<void>=>{
 try{
 const {firstName,lastName,email,password}=req.body;
@@ -43,6 +43,25 @@ const token=jwt.sign({userId:user.id},process.env.JWT_SECRET||'fallback-secret',
 res.json({message:'Login successful',token,user:{id:user.id.toString(),firstName:user.first_name,lastName:user.last_name,email:user.email}});
 }catch(error){
 console.error('Login error:',error);
+res.status(500).json({error:'Internal server error'});
+}
+};
+export const getProfile=async(req:Request,res:Response):Promise<void>=>{
+try{
+const authReq=req as any;
+const userId=authReq.user?.userId;
+if(!userId){
+res.status(401).json({error:'User not authenticated'});
+return;
+}
+const user=await findUserById(userId);
+if(!user){
+res.status(404).json({error:'User not found'});
+return;
+}
+res.json({id:user.id.toString(),firstName:user.first_name,lastName:user.last_name,email:user.email});
+}catch(error){
+console.error('Get profile error:',error);
 res.status(500).json({error:'Internal server error'});
 }
 }; 
