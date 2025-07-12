@@ -3,13 +3,43 @@ services:
   postgres:
     image: postgres:17
     container_name: hackathon-db
+    restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
       POSTGRES_DB: hackathon
-      POSTGRES_USER: xintianhuang
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - hackathon-network
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: hackathon-backend
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=hackathon
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - JWT_SECRET=your-secret-key
+    depends_on:
+      - postgres
+    networks:
+      - hackathon-network
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+networks:
+  hackathon-network:
+    driver: bridge
 volumes:
   postgres_data: 
