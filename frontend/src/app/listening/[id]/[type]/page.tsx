@@ -18,22 +18,14 @@ export default function ListeningPage() {
   const il = useRef(true);
   useEffect(() => {
     const s = localStorage.getItem(lk);
-    if (s) {
-      setA(JSON.parse(s));
-    } else {
-      setA({});
-    }
+    setA(s ? JSON.parse(s) : {});
     il.current = true;
   }, [lk]);
   useEffect(() => {
-    if (il.current) {
-      il.current = false;
-    } else {
-      localStorage.setItem(lk, JSON.stringify(a));
-    }
+    if (!il.current) localStorage.setItem(lk, JSON.stringify(a));
   }, [a, lk]);
   useEffect(() => {
-    const lp = async () => {
+    (async () => {
       try {
         const res = await fetch(`/static/listening/${id}_${type}.txt`);
         const text = await res.text();
@@ -44,11 +36,10 @@ export default function ListeningPage() {
         setPt('');
         setPc('Failed to load audio transcript.');
       }
-    };
-    lp();
+    })();
   }, [id, type]);
   useEffect(() => {
-    const lq = async () => {
+    (async () => {
       try {
         const res = await fetch(`/static/listening/${id}_${type}_q.json`);
         const data = await res.json();
@@ -56,49 +47,23 @@ export default function ListeningPage() {
       } catch {
         setQs([{ type: 'intro', text: 'Failed to load questions.' }]);
       }
-    };
-    lq();
+    })();
   }, [id, type]);
-  const hs = (n: number, o: string, m: boolean) => {
-    setA(prev => {
-      const pa = prev[n] || [];
-      const u = m ? pa.includes(o) ? pa.filter(x => x !== o) : [...pa, o] : [o];
-      return { ...prev, [n]: u };
-    });
-  };
-  const hf = (n: number, v: string) => {
-    setA(prev => ({ ...prev, [n]: [v] }));
-  };
+  const hs = (n: number, o: string, m: boolean) => setA(prev => ({ ...prev, [n]: m ? (prev[n] || []).includes(o) ? (prev[n] || []).filter(x => x !== o) : [...(prev[n] || []), o] : [o] }));
+  const hf = (n: number, v: string) => setA(prev => ({ ...prev, [n]: [v] }));
   const hsub = async () => {
     if (is) return;
     setIs(true);
-    const pl = {
-      passageId: pid,
-      questionType: qt,
-      userId: 123,
-      answers: Object.entries(a).map(([qi, ua]) => ({
-        questionId: Number(qi),
-        userAnswer: ua,
-      })),
-    };
+    const pl = { passageId: pid, questionType: qt, userId: 123, answers: Object.entries(a).map(([qi, ua]) => ({ questionId: Number(qi), userAnswer: ua })) };
     try {
-      const res = await fetch('/api/submitAnswer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(pl),
-      });
+      const res = await fetch('/api/submitAnswer', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(pl) });
       const result = await res.json();
       if (res.ok) {
-        if (result.score !== undefined) {
-          alert(`Submission successful! Score: ${result.score}% (${result.correctAnswers}/${result.totalQuestions} correct)`);
-        } else {
-          alert('Submission successful!');
-        }
+        if (result.score !== undefined) alert(`Submission successful! Score: ${result.score}% (${result.correctAnswers}/${result.totalQuestions} correct)`);
+        else alert('Submission successful!');
         localStorage.removeItem(lk);
         r.push('/dashboard');
-      } else {
-        alert(result.message || 'Submission failed.');
-      }
+      } else alert(result.message || 'Submission failed.');
     } catch {
       alert('Network error.');
     }
@@ -106,9 +71,7 @@ export default function ListeningPage() {
   };
   const hn = (d: 'back' | 'next') => {
     const nt = d === 'back' ? qt - 1 : qt + 1;
-    if (nt >= 1 && nt <= 4) {
-      r.push(`/listening/${id}/${nt}`);
-    }
+    if (nt >= 1 && nt <= 4) r.push(`/listening/${id}/${nt}`);
   };
   return (
     <div className="min-h-screen bg-black text-black p-4 sm:p-6 flex flex-col items-center">
@@ -131,42 +94,28 @@ export default function ListeningPage() {
           <h2 className="text-xl font-bold mb-4">Questions</h2>
           <ol className="space-y-6 text-sm">
             {qs.map((q, i) => {
-              if (q.type === 'intro') {
-                return (
-                  <div key={`intro-${i}`} className="text-base font-semibold mb-3 whitespace-pre-line">
-                    {q.text}
+              if (q.type === 'intro') return <div key={`intro-${i}`} className="text-base font-semibold mb-3 whitespace-pre-line">{q.text}</div>;
+              if (q.type === 'subheading') return <div key={`subheading-${i}`} className="font-semibold mb-2">{q.text}</div>;
+              if (q.type === 'fill-in-line') return (
+                <li key={`fill-${q.number}`}>
+                  <div className="mb-2">
+                    {q.text.split('____').map((part, j, arr) => (
+                      <span key={j}>
+                        {part}
+                        {j < arr.length - 1 && (
+                          <input
+                            type="text"
+                            className="inline-block w-40 border border-gray-400 rounded px-2 py-1 mx-1"
+                            value={a[q.number]?.[0] || ''}
+                            placeholder={`${q.number}`}
+                            onChange={e => hf(q.number, e.target.value)}
+                          />
+                        )}
+                      </span>
+                    ))}
                   </div>
-                );
-              }
-              if (q.type === 'subheading') {
-                return (
-                  <div key={`subheading-${i}`} className="font-semibold mb-2">
-                    {q.text}
-                  </div>
-                );
-              }
-              if (q.type === 'fill-in-line') {
-                return (
-                  <li key={`fill-${q.number}`}>
-                    <div className="mb-2">
-                      {q.text.split('____').map((part, j, arr) => (
-                        <span key={j}>
-                          {part}
-                          {j < arr.length - 1 && (
-                            <input
-                              type="text"
-                              className="inline-block w-40 border border-gray-400 rounded px-2 py-1 mx-1"
-                              value={a[q.number]?.[0] || ''}
-                              placeholder={`${q.number}`}
-                              onChange={e => hf(q.number, e.target.value)}
-                            />
-                          )}
-                        </span>
-                      ))}
-                    </div>
-                  </li>
-                );
-              }
+                </li>
+              );
               return (
                 <li key={`q-${q.number}`}>
                   <div className="mb-2">{q.number}. {q.question}</div>
@@ -194,9 +143,7 @@ export default function ListeningPage() {
       <div className="mt-8 flex space-x-4 items-center">
         <button
           onClick={() => hn('back')}
-          className={`px-4 py-2 rounded text-white ${
-            qt <= 1 ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-700 hover:bg-gray-600'
-          }`}
+          className={`px-4 py-2 rounded text-white ${qt <= 1 ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-700 hover:bg-gray-600'}`}
           disabled={qt <= 1}
         >
           Back
@@ -204,17 +151,13 @@ export default function ListeningPage() {
         <button
           onClick={hsub}
           disabled={is}
-          className={`px-6 py-2 rounded text-white ${
-            is ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-          }`}
+          className={`px-6 py-2 rounded text-white ${is ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
         >
           {is ? 'Submitting...' : 'Submit'}
         </button>
         <button
           onClick={() => hn('next')}
-          className={`px-4 py-2 rounded text-white ${
-            qt >= 4 ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-700 hover:bg-gray-600'
-          }`}
+          className={`px-4 py-2 rounded text-white ${qt >= 4 ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-700 hover:bg-gray-600'}`}
           disabled={qt >= 4}
         >
           Next
