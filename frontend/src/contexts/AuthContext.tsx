@@ -14,15 +14,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      authAPI.getProfile().then(setUser).catch(() => {
+    const initAuth = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const userData = await authAPI.getProfile();
+          setUser(userData);
+        }
+      } catch {
         localStorage.removeItem('token');
         setUser(null);
-      }).finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+      } finally {
+        setLoading(false);
+      }
+    };
+    initAuth();
   }, []);
   const login = async (email: string, password: string) => {
     const response = await authAPI.login(email, password);
@@ -35,7 +41,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(response.user);
   };
   const logout = () => {
-    authAPI.logout();
+    localStorage.removeItem('token');
     setUser(null);
   };
   return (

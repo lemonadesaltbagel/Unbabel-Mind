@@ -32,7 +32,9 @@ export const authAPI = {
   login: (email: string, password: string) => apiClient.post<AuthResponse>('/auth/login', { email, password }),
   register: (data: { firstName: string; lastName: string; email: string; password: string }) => apiClient.post<AuthResponse>('/auth/register', data),
   logout: () => {
-    if (typeof window !== 'undefined') localStorage.removeItem('token');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+    }
   },
   getProfile: () => apiClient.get<User>('/auth/profile'),
 };

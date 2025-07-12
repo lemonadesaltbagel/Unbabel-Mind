@@ -1,1 +1,15 @@
-version:'3.8'services:postgres:image:postgres:15container_name:hackathon-dbports:-"5432:5432"environment:POSTGRES_DB:hackathonPOSTGRES_USER:postgresPOSTGRES_PASSWORD:passwordvolumes:-postgres_data:/var/lib/postgresql/data 
+version: '3.8'
+services:
+  postgres:
+    image: postgres:17
+    container_name: hackathon-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: hackathon
+      POSTGRES_USER: xintianhuang
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data: 
