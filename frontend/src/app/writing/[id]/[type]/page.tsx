@@ -31,12 +31,7 @@ export default function WritingPage() {
   const hsub = async () => {
     if (is) return;
     setIs(true);
-    const pl = {
-      passageId: pid,
-      questionType: qt,
-      userId: 123,
-      essay: essay,
-    };
+    const pl = { passageId: pid, questionType: qt, userId: 123, essay };
     try {
       const res = await fetch('/api/submitAnswer', {
         method: 'POST',
@@ -58,9 +53,7 @@ export default function WritingPage() {
   };
   const hn = (d: 'back' | 'next') => {
     const nt = d === 'back' ? qt - 1 : qt + 1;
-    if (nt >= 1 && nt <= 4) {
-      r.push(`/writing/${id}/${nt}`);
-    }
+    if (nt >= 1 && nt <= 4) r.push(`/writing/${id}/${nt}`);
   };
   return (
     <div className="min-h-screen bg-black text-black p-4 sm:p-6 flex flex-col items-center">
@@ -103,9 +96,7 @@ export default function WritingPage() {
       <div className="mt-8 flex space-x-4 items-center">
         <button
           onClick={() => hn('back')}
-          className={`px-4 py-2 rounded text-white ${
-            qt <= 1 ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-700 hover:bg-gray-600'
-          }`}
+          className={`px-4 py-2 rounded text-white ${qt <= 1 ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-700 hover:bg-gray-600'}`}
           disabled={qt <= 1}
         >
           Back
@@ -113,17 +104,13 @@ export default function WritingPage() {
         <button
           onClick={hsub}
           disabled={is}
-          className={`px-6 py-2 rounded text-white ${
-            is ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-          }`}
+          className={`px-6 py-2 rounded text-white ${is ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
         >
           {is ? 'Submitting...' : 'Submit'}
         </button>
         <button
           onClick={() => hn('next')}
-          className={`px-4 py-2 rounded text-white ${
-            qt >= 4 ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-700 hover:bg-gray-600'
-          }`}
+          className={`px-4 py-2 rounded text-white ${qt >= 4 ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-700 hover:bg-gray-600'}`}
           disabled={qt >= 4}
         >
           Next
