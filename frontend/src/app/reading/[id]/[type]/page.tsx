@@ -17,6 +17,11 @@ export default function ReadingPage() {
   const [qs, setQs] = useState<Q[]>([]);
   const [a, setA] = useState<Record<number, string[]>>({});
   const [is, setIs] = useState(false);
+  const [highlights, setHighlights] = useState<Array<{
+    text: string;
+    start: number;
+    end: number;
+  }>>([]);
   const il = useRef(true);
   useEffect(() => {
     if (!loading && !user) {
@@ -67,6 +72,17 @@ export default function ReadingPage() {
     };
     lq();
   }, [id, type]);
+  // 添加 useEffect 来保存和加载高亮
+  useEffect(() => {
+    const savedHighlights = localStorage.getItem(`highlights-${id}-${type}`);
+    if (savedHighlights) {
+      setHighlights(JSON.parse(savedHighlights));
+    }
+  }, [id, type]);
+
+  useEffect(() => {
+    localStorage.setItem(`highlights-${id}-${type}`, JSON.stringify(highlights));
+  }, [highlights, id, type]);
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -136,6 +152,64 @@ export default function ReadingPage() {
       r.push(`/reading/${id}/${nt}`);
     }
   };
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const selection = window.getSelection();
+    if (!selection || selection.toString().trim() === '') return;
+    
+    const selectedText = selection.toString().trim();
+    
+    // 获取选中文本的精确位置
+    const container = e.currentTarget as HTMLElement;
+    const range = selection.getRangeAt(0);
+    const preCaretRange = range.cloneRange();
+    preCaretRange.selectNodeContents(container);
+    preCaretRange.setEnd(range.startContainer, range.startOffset);
+    const start = preCaretRange.toString().length;
+    const end = start + selectedText.length;
+
+    // 检查是否与任何现有高亮区域重叠
+    const overlappingHighlight = highlights.find(h => 
+      // 检查选中区域是否与高亮区域有重叠
+      (start <= h.end && end >= h.start)
+    );
+
+    const contextMenu = document.createElement('div');
+    contextMenu.className = 'fixed bg-white shadow-lg rounded-md py-2 z-50';
+    contextMenu.style.left = `${e.pageX}px`;
+    contextMenu.style.top = `${e.pageY}px`;
+
+    const menuItem = document.createElement('div');
+    menuItem.className = 'px-4 py-2 hover:bg-gray-100 cursor-pointer';
+    
+    if (overlappingHighlight) {
+      // 如果有重叠的高亮，显示移除选项
+      menuItem.textContent = 'Remove Highlight';
+      menuItem.onclick = () => {
+        setHighlights(prev => prev.filter(h => h !== overlappingHighlight));
+        document.body.removeChild(contextMenu);
+      };
+    } else {
+      // 如果没有重叠，显示添加选项
+      menuItem.textContent = 'Add Highlight';
+      menuItem.onclick = () => {
+        setHighlights(prev => [...prev, { text: selectedText, start, end }]);
+        document.body.removeChild(contextMenu);
+      };
+    }
+
+    contextMenu.appendChild(menuItem);
+    document.body.appendChild(contextMenu);
+
+    const handleClickOutside = () => {
+      document.body.removeChild(contextMenu);
+      document.removeEventListener('click', handleClickOutside);
+    };
+    
+    setTimeout(() => {
+      document.addEventListener('click', handleClickOutside);
+    }, 0);
+  };
   return (
     <div className="min-h-screen bg-black text-black p-4 sm:p-6 flex flex-col items-center">
       <div className="w-full max-w-6xl flex justify-start mb-4">
@@ -147,7 +221,42 @@ export default function ReadingPage() {
         <div className="bg-white p-6 rounded-xl shadow w-full lg:w-1/2 h-[80vh] overflow-y-auto">
           <h2 className="text-xl font-bold mb-2">Reading Section {type}</h2>
           <h3 className="text-md font-semibold mb-4">{pt}</h3>
-          <p className="whitespace-pre-wrap text-sm">{pc}</p>
+          <p className="whitespace-pre-wrap text-sm" onContextMenu={handleContextMenu}>
+            {(() => {
+              let lastIndex = 0;
+              const sortedHighlights = [...highlights].sort((a, b) => a.start - b.start);
+              const result = [];
+
+              sortedHighlights.forEach((highlight, index) => {
+                // 添加未高亮的文本
+                if (highlight.start > lastIndex) {
+                  result.push(
+                    <span key={`text-${index}`}>
+                      {pc.slice(lastIndex, highlight.start)}
+                    </span>
+                  );
+                }
+                // 添加高亮的文本
+                result.push(
+                  <span key={`highlight-${index}`} className="bg-yellow-200">
+                    {pc.slice(highlight.start, highlight.end)}
+                  </span>
+                );
+                lastIndex = highlight.end;
+              });
+
+              // 添加剩余的未高亮文本
+              if (lastIndex < pc.length) {
+                result.push(
+                  <span key="text-last">
+                    {pc.slice(lastIndex)}
+                  </span>
+                );
+              }
+
+              return result;
+            })()}
+          </p>
         </div>
         <div className="bg-white p-6 rounded-xl shadow w-full lg:w-1/2 h-[80vh] overflow-y-auto">
           <h2 className="text-xl font-bold mb-4">Questions</h2>
@@ -244,4 +353,4 @@ export default function ReadingPage() {
       </div>
     </div>
   );
-} 
+}
