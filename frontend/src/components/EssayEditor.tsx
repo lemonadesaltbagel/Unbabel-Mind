@@ -1,0 +1,5 @@
+import{Save}from'lucide-react';
+import{wc}from'@/utils/writing';
+type Props={essay:string;setEssay:(text:string)=>void;};
+export default function EssayEditor({essay,setEssay}:Props){
+return(<div className="bg-white p-6 rounded-xl shadow w-full lg:w-1/2 h-[80vh] overflow-y-auto"><div className="flex justify-between items-center mb-4"><h2 className="text-xl font-bold">Essay Editor</h2><button className="flex items-center space-x-2 px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-sm"><Save className="w-4 h-4"/><span>Auto-save</span></button></div><textarea value={essay} onChange={(e)=>setEssay(e.target.value)} placeholder="Start writing your essay here..." className="w-full h-[60vh] p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"/><div className="mt-4 text-sm text-gray-500"><div>Words: {wc(essay)}</div><div>Characters: {essay.length}</div></div></div>);} 

@@ -1,0 +1,3 @@
+type Props={title:string;content:string;};
+export default function ListeningTranscript({title,content}:Props){
+return(<div className="bg-white p-6 rounded-xl shadow w-full lg:w-1/2 h-[80vh] overflow-y-auto"><h2 className="text-xl font-bold mb-2">Listening Section</h2><h3 className="text-md font-semibold mb-4">{title}</h3><div className="bg-gray-100 p-4 rounded-lg mb-4"><div className="text-center text-gray-600 mb-2">🎧 Audio Player</div><div className="text-center text-sm text-gray-500">Audio file would be embedded here</div></div><p className="whitespace-pre-wrap text-sm">{content}</p></div>);} 

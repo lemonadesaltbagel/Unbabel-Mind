@@ -1,0 +1,3 @@
+type Props={title:string;content:string;wordCount:number;};
+export default function WritingPrompt({title,content,wordCount}:Props){
+return(<div className="bg-white p-6 rounded-xl shadow w-full lg:w-1/2 h-[80vh] overflow-y-auto"><h2 className="text-xl font-bold mb-2">Writing Section</h2><h3 className="text-md font-semibold mb-4">{title}</h3><div className="bg-yellow-50 p-4 rounded-lg mb-4"><div className="text-center text-yellow-600 mb-2">✍️ Writing Task</div><div className="text-sm text-gray-600 mb-2">Write your response in the editor on the right.</div><div className="text-xs text-gray-500">Word count: {wordCount}/250</div></div><p className="whitespace-pre-wrap text-sm">{content}</p></div>);} 
