@@ -2,7 +2,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:17
-    container_name: hackathon-db
+    container_name: hackathon-db-prod
     restart: unless-stopped
     ports:
       - "5432:5432"
@@ -17,13 +17,13 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile.dev
-    container_name: hackathon-backend
+      dockerfile: Dockerfile
+    container_name: hackathon-backend-prod
     restart: unless-stopped
     ports:
       - "3001:3001"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - PORT=3001
       - DB_HOST=postgres
       - DB_PORT=5432
@@ -35,28 +35,21 @@ services:
       - postgres
     networks:
       - hackathon-network
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.dev
-    container_name: hackathon-frontend
+      dockerfile: Dockerfile.prod
+    container_name: hackathon-frontend-prod
     restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost:3001/api
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
     depends_on:
       - backend
     networks:
       - hackathon-network
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - /app/.next
 networks:
   hackathon-network:
     driver: bridge

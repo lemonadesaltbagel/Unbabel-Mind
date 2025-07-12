@@ -1,0 +1,1 @@
+export type WritingSubmission={passageId:number;questionType:number;userId:number;essay:string}; 
