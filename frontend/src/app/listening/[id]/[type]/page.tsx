@@ -89,7 +89,11 @@ export default function ListeningPage() {
       });
       const result = await res.json();
       if (res.ok) {
-        alert('Submission successful!');
+        if (result.score !== undefined) {
+          alert(`Submission successful! Score: ${result.score}% (${result.correctAnswers}/${result.totalQuestions} correct)`);
+        } else {
+          alert('Submission successful!');
+        }
         localStorage.removeItem(lk);
         r.push('/dashboard');
       } else {

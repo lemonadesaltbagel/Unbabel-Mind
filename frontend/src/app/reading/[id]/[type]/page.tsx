@@ -2,10 +2,12 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { Home } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 type Q = { type: 'intro'; text: string } | { type: 'subheading'; text: string } | { type: 'tfng' | 'single' | 'multi'; number: number; question: string; options: string[] } | { type: 'fill-in-line'; number: number; text: string };
 export default function ReadingPage() {
   const r = useRouter();
   const p = useParams();
+  const { user, loading } = useAuth();
   const { id, type } = p as { id: string; type: string };
   const pid = Number(id);
   const qt = Number(type);
@@ -16,6 +18,12 @@ export default function ReadingPage() {
   const [a, setA] = useState<Record<number, string[]>>({});
   const [is, setIs] = useState(false);
   const il = useRef(true);
+  useEffect(() => {
+    if (!loading && !user) {
+      r.push('/login');
+      return;
+    }
+  }, [user, loading, r]);
   useEffect(() => {
     const s = localStorage.getItem(lk);
     if (s) {
@@ -59,6 +67,16 @@ export default function ReadingPage() {
     };
     lq();
   }, [id, type]);
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+  if (!user) {
+    return null;
+  }
   const hs = (n: number, o: string, m: boolean) => {
     setA(prev => {
       const pa = prev[n] || [];
@@ -72,24 +90,36 @@ export default function ReadingPage() {
   const hsub = async () => {
     if (is) return;
     setIs(true);
+    if (!user) {
+      alert('Please log in to submit answers.');
+      return;
+    }
     const pl = {
       passageId: pid,
       questionType: qt,
-      userId: 123,
-      answers: Object.entries(a).map(([qi, ua]) => ({
-        questionId: Number(qi),
-        userAnswer: ua,
-      })),
+      userId: user.id,
+      answers: Object.entries(a).map(([qi, ua]) => {
+        const q = qs.find(q => 'number' in q && q.number === Number(qi));
+        return {
+          questionId: Number(qi),
+          userAnswer: ua,
+          question: q,
+        };
+      }),
     };
     try {
-      const res = await fetch('/api/submitAnswer', {
+      const res = await fetch('http://localhost:3001/api/answers/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(pl),
       });
       const result = await res.json();
       if (res.ok) {
-        alert('Submission successful!');
+        if (result.score !== undefined) {
+          alert(`Submission successful! Score: ${result.score}% (${result.correctAnswers}/${result.totalQuestions} correct)`);
+        } else {
+          alert('Submission successful!');
+        }
         localStorage.removeItem(lk);
         r.push('/dashboard');
       } else {

@@ -6,38 +6,44 @@
     {
       "type": "tfng",
       "number": 1,
-      "question": "There are other parrots that share the kakapo’s inability to fly.",
-      "options": ["TRUE", "FALSE", "NOT GIVEN"]
+      "question": "There are other parrots that share the kakapo's inability to fly.",
+      "options": ["TRUE", "FALSE", "NOT GIVEN"],
+      "correctAnswer": "FALSE"
     },
     {
       "type": "tfng",
       "number": 2,
       "question": "Adult kakapo produce chicks every year.",
-      "options": ["TRUE", "FALSE", "NOT GIVEN"]
+      "options": ["TRUE", "FALSE", "NOT GIVEN"],
+      "correctAnswer": "FALSE"
     },
     {
       "type": "tfng",
       "number": 3,
       "question": "Adult male kakapo bring food back to nesting females.",
-      "options": ["TRUE", "FALSE", "NOT GIVEN"]
+      "options": ["TRUE", "FALSE", "NOT GIVEN"],
+      "correctAnswer": "FALSE"
     },
     {
       "type": "tfng",
       "number": 4,
       "question": "The Polynesian rat was a greater threat to the kakapo than Polynesian settlers.",
-      "options": ["TRUE", "FALSE", "NOT GIVEN"]
+      "options": ["TRUE", "FALSE", "NOT GIVEN"],
+      "correctAnswer": "NOT GIVEN"
     },
     {
       "type": "tfng",
       "number": 5,
       "question": "Kakapo were transferred from Rakiura Island to other locations because they were at risk from feral cats.",
-      "options": ["TRUE", "FALSE", "NOT GIVEN"]
+      "options": ["TRUE", "FALSE", "NOT GIVEN"],
+      "correctAnswer": "TRUE"
     },
     {
       "type": "tfng",
       "number": 6,
       "question": "One Recovery Plan initiative that helped increase the kakapo population size was caring for struggling young birds.",
-      "options": ["TRUE", "FALSE", "NOT GIVEN"]
+      "options": ["TRUE", "FALSE", "NOT GIVEN"],
+      "correctAnswer": "TRUE"
     },
     {
       "type": "intro",
@@ -45,7 +51,7 @@
     },
     {
       "type": "subheading",
-      "text": "New Zealand’s kākāpō"
+      "text": "New Zealand's kākāpō"
     },
     {
       "type": "subheading",
@@ -54,12 +60,14 @@
     {
       "type": "fill-in-line",
       "number": 7,
-      "text": "* diet consists of fern fronds, various parts of a tree and ____"
+      "text": "* diet consists of fern fronds, various parts of a tree and ____",
+      "correctAnswer": "bulbs"
     },
     {
       "type": "fill-in-line",
       "number": 8,
-      "text": "* nests are created in ____ where eggs are laid."
+      "text": "* nests are created in ____ where eggs are laid.",
+      "correctAnswer": "soil"
     },
     {
       "type": "subheading",
@@ -68,7 +76,8 @@
     {
       "type": "fill-in-line",
       "number": 9,
-      "text": "* the ____ of the kākāpō were used to make clothes."
+      "text": "* the ____ of the kākāpō were used to make clothes.",
+      "correctAnswer": "feathers"
     },
     {
       "type": "subheading",
@@ -77,7 +86,8 @@
     {
       "type": "fill-in-line",
       "number": 10,
-      "text": "* ____ were an animal which they introduced that ate the kākāpō’s food sources."
+      "text": "* ____ were an animal which they introduced that ate the kākāpō's food sources.",
+      "correctAnswer": "deer"
     },
     {
       "type": "subheading",
@@ -86,16 +96,19 @@
     {
       "type": "fill-in-line",
       "number": 11,
-      "text": "* a definite sighting of female kākāpō on Rakiura Island was reported in the year ____"
+      "text": "* a definite sighting of female kākāpō on Rakiura Island was reported in the year ____",
+      "correctAnswer": "1980"
     },
     {
       "type": "fill-in-line",
       "number": 12,
-      "text": "* the Recovery Plan included an increase in ____"
+      "text": "* the Recovery Plan included an increase in ____",
+      "correctAnswer": "funding"
     },
     {
       "type": "fill-in-line",
       "number": 13,
-      "text": "* a current goal of the Recovery Plan is to maintain the involvement of ____ in kākāpō protection."
+      "text": "* a current goal of the Recovery Plan is to maintain the involvement of ____ in kākāpō protection.",
+      "correctAnswer": "stakeholders"
     }
   ]
