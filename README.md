@@ -62,6 +62,16 @@ Hackathon/
 
 Copy `backend/env.example` to `backend/.env` and configure your database settings.
 
+## Database Setup
+
+**Important:** Ensure PostgreSQL client tools are available. On macOS with Homebrew:
+```bash
+# PostgreSQL client location
+/opt/homebrew/opt/postgresql@17/bin/psql
+```
+
+This path is required for database operations and service management.
+
 ## Tech Stack
 
 - **Frontend:** Next.js 14, TypeScript, Tailwind CSS
