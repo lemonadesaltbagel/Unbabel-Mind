@@ -6,7 +6,7 @@ A modern React/Next.js frontend for an interactive reading comprehension platfor
 
 - **Authentication System**: User registration, login, and profile management
 - **Protected Routes**: Automatic redirection for unauthenticated users
-- **Reading Passages**: Interactive passages with multiple-choice questions
+- **Reading**: Interactive reading sections with multiple-choice questions
 - **Progress Tracking**: Track completion status and scores
 - **Responsive Design**: Modern UI with dark theme
 - **TypeScript**: Full type safety throughout the application
@@ -27,7 +27,7 @@ src/
 │   ├── dashboard/         # Protected dashboard page
 │   ├── login/            # Authentication pages
 │   ├── signup/
-│   ├── passage/[id]/     # Dynamic passage pages
+│   ├── reading/[id]/     # Dynamic reading pages
 │   └── layout.tsx        # Root layout with AuthProvider
 ├── components/           # Reusable components
 │   └── ProtectedRoute.tsx
@@ -110,8 +110,8 @@ npm start
 5. Protected routes redirect to login
 
 ### Reading Experience
-1. Dashboard shows available passages
-2. Click to start reading a passage
+1. Dashboard shows available reading sections
+2. Click to start a reading section
 3. Answer multiple-choice questions
 4. Submit answers for scoring
 5. View results and return to dashboard

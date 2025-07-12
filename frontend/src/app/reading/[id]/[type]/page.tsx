@@ -3,13 +3,13 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { Home } from 'lucide-react';
 type Q = { type: 'intro'; text: string } | { type: 'subheading'; text: string } | { type: 'tfng' | 'single' | 'multi'; number: number; question: string; options: string[] } | { type: 'fill-in-line'; number: number; text: string };
-export default function PassagePage() {
+export default function ReadingPage() {
   const r = useRouter();
   const p = useParams();
   const { id, type } = p as { id: string; type: string };
   const pid = Number(id);
   const qt = Number(type);
-  const lk = `answers-${id}-${type}`;
+  const lk = `reading-answers-${id}-${type}`;
   const [pt, setPt] = useState('');
   const [pc, setPc] = useState('Loading passage...');
   const [qs, setQs] = useState<Q[]>([]);
@@ -35,7 +35,7 @@ export default function PassagePage() {
   useEffect(() => {
     const lp = async () => {
       try {
-        const res = await fetch(`/static/passage/${id}_${type}.txt`);
+        const res = await fetch(`/static/reading/${id}_${type}.txt`);
         const text = await res.text();
         const [tl, ...rest] = text.split('\n');
         setPt(tl.trim());
@@ -50,7 +50,7 @@ export default function PassagePage() {
   useEffect(() => {
     const lq = async () => {
       try {
-        const res = await fetch(`/static/passage/${id}_${type}_q.json`);
+        const res = await fetch(`/static/reading/${id}_${type}_q.json`);
         const data = await res.json();
         setQs(data);
       } catch {
@@ -103,7 +103,7 @@ export default function PassagePage() {
   const hn = (d: 'back' | 'next') => {
     const nt = d === 'back' ? qt - 1 : qt + 1;
     if (nt >= 1 && nt <= 4) {
-      r.push(`/passage/${id}/${nt}`);
+      r.push(`/reading/${id}/${nt}`);
     }
   };
   return (
@@ -115,7 +115,7 @@ export default function PassagePage() {
       </div>
       <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6 w-full max-w-6xl">
         <div className="bg-white p-6 rounded-xl shadow w-full lg:w-1/2 h-[80vh] overflow-y-auto">
-          <h2 className="text-xl font-bold mb-2">Passage {type}</h2>
+          <h2 className="text-xl font-bold mb-2">Reading Section {type}</h2>
           <h3 className="text-md font-semibold mb-4">{pt}</h3>
           <p className="whitespace-pre-wrap text-sm">{pc}</p>
         </div>
@@ -214,4 +214,4 @@ export default function PassagePage() {
       </div>
     </div>
   );
-}
+} 
