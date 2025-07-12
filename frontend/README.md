@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Reading App Frontend
+
+A modern React/Next.js frontend for an interactive reading comprehension platform.
+
+## Features
+
+- **Authentication System**: User registration, login, and profile management
+- **Protected Routes**: Automatic redirection for unauthenticated users
+- **Reading Passages**: Interactive passages with multiple-choice questions
+- **Progress Tracking**: Track completion status and scores
+- **Responsive Design**: Modern UI with dark theme
+- **TypeScript**: Full type safety throughout the application
+
+## Tech Stack
+
+- **Next.js 15**: React framework with App Router
+- **TypeScript**: Type-safe development
+- **Tailwind CSS**: Utility-first styling
+- **Lucide React**: Icon library
+- **Context API**: State management for authentication
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── dashboard/         # Protected dashboard page
+│   ├── login/            # Authentication pages
+│   ├── signup/
+│   ├── passage/[id]/     # Dynamic passage pages
+│   └── layout.tsx        # Root layout with AuthProvider
+├── components/           # Reusable components
+│   └── ProtectedRoute.tsx
+├── contexts/            # React contexts
+│   └── AuthContext.tsx
+├── types/               # TypeScript type definitions
+│   └── index.ts
+└── utils/              # Utility functions
+    └── api.ts          # API client
+```
+
+## API Integration
+
+The frontend is configured to communicate with a Node.js backend running on `http://localhost:3001/api`. The API client includes:
+
+- **Authentication**: Login, register, logout, get profile
+- **Passages**: Get all passages, get by ID, submit answers
+- **Progress**: Track user progress and scores
+
+## Environment Variables
+
+Create a `.env.local` file in the frontend directory:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3001/api
+```
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+2. Set up environment variables (see above)
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Backend Requirements
+
+The frontend expects a Node.js backend with the following endpoints:
+
+### Authentication
+- `POST /api/auth/login` - User login
+- `POST /api/auth/register` - User registration
+- `GET /api/auth/profile` - Get user profile
+
+### Passages
+- `GET /api/passages` - Get all passages
+- `GET /api/passages/:id` - Get passage by ID
+- `POST /api/passages/:id/submit` - Submit answers
+- `GET /api/passages/progress` - Get user progress
+
+## Development
+
+- **TypeScript**: All components and utilities are fully typed
+- **ESLint**: Code linting with Next.js configuration
+- **Tailwind**: Utility-first CSS framework
+- **Hot Reload**: Fast development with Next.js hot reload
+
+## Build
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Key Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Authentication Flow
+1. Users can register with email/password
+2. Login with credentials
+3. JWT tokens stored in localStorage
+4. Automatic token validation on app load
+5. Protected routes redirect to login
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Reading Experience
+1. Dashboard shows available passages
+2. Click to start reading a passage
+3. Answer multiple-choice questions
+4. Submit answers for scoring
+5. View results and return to dashboard
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### State Management
+- **AuthContext**: Manages user authentication state
+- **ProtectedRoute**: Guards routes requiring authentication
+- **API Client**: Centralized API communication with error handling
