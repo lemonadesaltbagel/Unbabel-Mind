@@ -1,0 +1,3 @@
+import {NextRequest,NextResponse} from 'next/server';
+const b=process.env.NEXT_PUBLIC_API_URL||'http://localhost:3001';
+export async function POST(req:NextRequest){try{const d=await req.json();const r=await fetch(`${b}/api/answers/submit`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});const result=await r.json();if(r.ok){return NextResponse.json(result);}else{return NextResponse.json({message:result.message||'Submission failed'},{status:r.status});}}catch{return NextResponse.json({message:'Network error'},{status:500});}} 

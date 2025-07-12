@@ -1,0 +1,5 @@
+import pool from '../config/database';
+export interface Question{id:number;passage_id:number;question_type:number;question_number:number;correct_answer:string[];created_at:Date;}
+export const createQuestion=async(pid:number,qt:number,qn:number,ca:string[]):Promise<Question>=>{const q='INSERT INTO questions (passage_id, question_type, question_number, correct_answer) VALUES ($1, $2, $3, $4) RETURNING *';const r=await pool.query(q,[pid,qt,qn,ca]);return r.rows[0];};
+export const getQuestionsByPassage=async(pid:number,qt:number):Promise<Question[]>=>{const q='SELECT * FROM questions WHERE passage_id = $1 AND question_type = $2 ORDER BY question_number';const r=await pool.query(q,[pid,qt]);return r.rows;};
+export const initQuestionsTable=async():Promise<void>=>{const q=`CREATE TABLE IF NOT EXISTS questions (id SERIAL PRIMARY KEY,passage_id INTEGER NOT NULL,question_type INTEGER NOT NULL,question_number INTEGER NOT NULL,correct_answer TEXT[] NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;await pool.query(q);}; 
