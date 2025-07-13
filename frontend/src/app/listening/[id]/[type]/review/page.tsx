@@ -3,7 +3,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { Home } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { ld, ldp, ldq, ldh, ldFromBackend, lde } from '@/utils/reading';
+import { ld, ldp, ldq, ldh, ldFromBackend, lde } from '@/utils/listening';
 import { useTestPageTitle } from '@/utils/usePageTitle';
 
 interface Question {
@@ -21,7 +21,7 @@ interface Highlight {
   end: number;
 }
 
-export default function ReviewPage() {
+export default function ListeningReviewPage() {
   useTestPageTitle();
   const r = useRouter();
   const p = useParams();
@@ -77,8 +77,8 @@ export default function ReviewPage() {
 
       if (wrongQuestions.length === 0) {
         setAiSuggestions([
-          "Focus on reading comprehension strategies",
-          "Practice identifying key information in passages", 
+          "Focus on listening comprehension strategies",
+          "Practice identifying key information in audio passages", 
           "Work on vocabulary building exercises",
           "Review question types you struggled with"
         ]);
@@ -86,9 +86,9 @@ export default function ReviewPage() {
       }
 
       setIsLoading(true);
-            const prompt = `You are an expert IELTS tutor with deep knowledge of reading comprehension strategies and test preparation.
+      const prompt = `You are an expert IELTS tutor with deep knowledge of listening comprehension strategies and test preparation.
 
-Background: The user has completed a reading comprehension test and made some mistakes. Your task is to analyze their performance and provide personalized improvement suggestions.
+Background: The user has completed a listening comprehension test and made some mistakes. Your task is to analyze their performance and provide personalized improvement suggestions.
 
 Wrong Questions Analysis:
 ${wrongQuestions.map(q => {
@@ -100,7 +100,7 @@ ${wrongQuestions.map(q => {
     Evidence: ${evidence.filter(e => e.number === q.number).map(e => e.text).join('; ')}`;
 }).join('\n')}
 
-Please provide 4-6 specific, actionable suggestions to help the user improve their reading comprehension skills based on their mistakes. Focus on the specific question types and skills they struggled with.
+Please provide 4-6 specific, actionable suggestions to help the user improve their listening comprehension skills based on their mistakes. Focus on the specific question types and skills they struggled with.
 
 Respond with plain text suggestions only, one per line, without any formatting or JSON structure.`;
 
@@ -116,16 +116,16 @@ Respond with plain text suggestions only, one per line, without any formatting o
             setAiSuggestions(suggestions);
           } else {
             setAiSuggestions([
-              "Focus on reading comprehension strategies",
-              "Practice identifying key information in passages",
+              "Focus on listening comprehension strategies",
+              "Practice identifying key information in audio passages",
               "Work on vocabulary building exercises", 
               "Review question types you struggled with"
             ]);
           }
         } catch {
           setAiSuggestions([
-            "Focus on reading comprehension strategies",
-            "Practice identifying key information in passages",
+            "Focus on listening comprehension strategies",
+            "Practice identifying key information in audio passages",
             "Work on vocabulary building exercises", 
             "Review question types you struggled with"
           ]);
@@ -153,8 +153,8 @@ Respond with plain text suggestions only, one per line, without any formatting o
   };
 
   const hn = (d: 'back' | 'next') => {
-    if (d === 'back') r.push('/dashboard?tab=Reading');
-    else r.push(`/reading/${id}/${Number(type) + 1}/review`);
+    if (d === 'back') r.push('/dashboard?tab=Listening');
+    else r.push(`/listening/${id}/${Number(type) + 1}/review`);
   };
 
   const hcm = (e: React.MouseEvent) => {
@@ -169,7 +169,7 @@ Respond with plain text suggestions only, one per line, without any formatting o
     const st = s.toString().trim();
     const r = s.getRangeAt(0);
     const pcr = r.cloneRange();
-    pcr.selectNodeContents(document.querySelector('.passage-content') as Node);
+    pcr.selectNodeContents(document.querySelector('.transcript-content') as Node);
     pcr.setEnd(r.startContainer, r.startOffset);
     const start = pcr.toString().length;
     setHighlights(prev => [...prev, { text: st, start, end: start + st.length }]);
@@ -182,7 +182,7 @@ Respond with plain text suggestions only, one per line, without any formatting o
     const st = s.toString().trim();
     const r = s.getRangeAt(0);
     const pcr = r.cloneRange();
-    pcr.selectNodeContents(document.querySelector('.passage-content') as Node);
+    pcr.selectNodeContents(document.querySelector('.transcript-content') as Node);
     pcr.setEnd(r.startContainer, r.startOffset);
     const start = pcr.toString().length;
     const end = start + st.length;
@@ -214,10 +214,10 @@ Respond with plain text suggestions only, one per line, without any formatting o
       const qEvidence = evidence.filter(e => e.number === qn);
       
       // 构建背景设置信息
-      const backgroundInfo = `This is an IELTS Reading test. The user is reviewing their performance on question ${qn} of passage ${id}, type ${type}.`;
+      const backgroundInfo = `This is an IELTS Listening test. The user is reviewing their performance on question ${qn} of passage ${id}, type ${type}.`;
       
       // 构建详细的prompt
-      const prompt = `You are an expert IELTS tutor with deep knowledge of reading comprehension strategies and test preparation.
+      const prompt = `You are an expert IELTS tutor with deep knowledge of listening comprehension strategies and test preparation.
 
 Background Setting:
 ${backgroundInfo}
@@ -230,13 +230,13 @@ Question Analysis:
 - User's Answer: "${ua}"
 - Correct Answer: "${ca}"
 
-Evidence from Reading Passage:
+Evidence from Audio Transcript:
 ${qEvidence.map(e => `- Evidence ${e.number}: ${e.text}`).join('\n')}
 
 Your Task:
 1. Analyze why the correct answer "${ca}" is the right choice based on the evidence provided
 2. Analyze why the user might have chosen "${ua}" - what could have led to this mistake?
-3. Identify the specific reading skills or strategies the user needs to improve
+3. Identify the specific listening skills or strategies the user needs to improve
 4. Provide specific, actionable suggestions for improvement
 
 IMPORTANT: Respond in plain text format, NOT JSON. Structure your response as follows:
@@ -248,12 +248,12 @@ IMPORTANT: Respond in plain text format, NOT JSON. Structure your response as fo
 [Your analysis here]
 
 **Skills to improve:**
-[Specific reading skills that need work]
+[Specific listening skills that need work]
 
 **Suggestions:**
 [3-4 actionable tips for improvement]
 
-Keep your response concise, clear, encouraging, and focused on helping the user improve their reading comprehension skills.`;
+Keep your response concise, clear, encouraging, and focused on helping the user improve their listening comprehension skills.`;
 
       const response = await callGptApi(prompt);
       setAiResponse(response);
@@ -261,8 +261,6 @@ Keep your response concise, clear, encouraging, and focused on helping the user 
       setIsLoading(false);
     }
   };
-
-
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -285,7 +283,7 @@ Keep your response concise, clear, encouraging, and focused on helping the user 
           </button>
         </div>
         <div className="flex-1 flex justify-center">
-          <h1 className="text-white text-2xl font-bold">Review: Reading Passage {type}</h1>
+          <h1 className="text-white text-2xl font-bold">Review: Listening Passage {type}</h1>
         </div>
         <div className="w-6"></div>
       </div>
@@ -311,7 +309,7 @@ Keep your response concise, clear, encouraging, and focused on helping the user 
         <div className="flex space-x-4">
           <div className="w-[500px] bg-white p-6 rounded-xl shadow overflow-y-auto h-[80vh] border-r border-gray-400">
             <h2 className="text-xl font-bold mb-2">{pt}</h2>
-            <div className="whitespace-pre-wrap text-sm passage-content" onContextMenu={hcm}>
+            <div className="whitespace-pre-wrap text-sm transcript-content" onContextMenu={hcm}>
               {(() => {
                 let lastIndex = 0;
                 const sortedHighlights = [...highlights].sort((a, b) => a.start - b.start);
@@ -418,9 +416,9 @@ Keep your response concise, clear, encouraging, and focused on helping the user 
         </button>
         <button
           onClick={() => hn('next')}
-          disabled={type === '3'}
+          disabled={type === '4'}
           className={`px-6 py-2 rounded-lg transition-colors ${
-            type === '3'
+            type === '4'
               ? 'bg-gray-300 cursor-not-allowed text-gray-500'
               : 'bg-blue-500 hover:bg-blue-600 text-white'
           }`}
@@ -430,4 +428,4 @@ Keep your response concise, clear, encouraging, and focused on helping the user 
       </div>
     </div>
   );
-}
+} 
