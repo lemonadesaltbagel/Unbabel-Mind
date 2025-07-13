@@ -1,21 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
-console.log('HF TOKEN:', process.env.HUGGINGFACE_API_TOKEN);
+
 export async function POST(req: NextRequest) {
   try {
     const { prompt } = await req.json();
 
-    const response = await fetch(
-      'https://api-inference.huggingface.co/models/google/gemma-2-2b-it',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${process.env.HUGGINGFACE_API_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ inputs: prompt }),
-      }
-    );
-    
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo', // or gpt-4
+        messages: [
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
+        temperature: 0.7,
+      }),
+    });
 
     if (!response.ok) {
       const err = await response.text();
@@ -23,13 +28,11 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await response.json();
+    const message = data.choices?.[0]?.message?.content || '';
 
-    // 👇 统一结构，确保前端可以稳拿到字段
-    return NextResponse.json({
-      generated_text: data[0]?.generated_text || '',
-    });
+    return NextResponse.json({ generated_text: message });
   } catch (err) {
-    console.error('Hugging Face API error:', err);
+    console.error('OpenAI API error:', err);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
