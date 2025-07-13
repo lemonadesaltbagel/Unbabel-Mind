@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
         messages: [
           {
             role: 'system',
-            content: 'You are an expert IELTS tutor. Always respond with valid JSON format as requested.'
+            content: 'You are an expert IELTS tutor. Respond in plain text format as requested by the user.'
           },
           {
             role: 'user',
