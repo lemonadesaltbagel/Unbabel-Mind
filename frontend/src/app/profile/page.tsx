@@ -8,11 +8,12 @@ export default function ProfilePage() {
   const { user, updateUser } = useAuth();
   const [editing, setEditing] = useState(false);
   const [firstName, setFirstName] = useState(user?.firstName || '');
+  const [lastName, setLastName] = useState(user?.lastName || '');
   const [email, setEmail] = useState(user?.email || '');
   const router = useRouter();
 
   const handleSave = () => {
-    updateUser({ firstName, email });
+    updateUser({ firstName, lastName, email });
     setEditing(false);
   };
 
@@ -52,6 +53,20 @@ export default function ProfilePage() {
               />
             ) : (
               <p className="mt-1">{firstName}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-gray-400">Last Name:</label>
+            {editing ? (
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full p-2 rounded bg-gray-800 text-white"
+              />
+            ) : (
+              <p className="mt-1">{lastName}</p>
             )}
           </div>
         </div>
