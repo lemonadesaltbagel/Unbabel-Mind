@@ -1,0 +1,105 @@
+'use client';
+
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Home } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { ldp } from '@/utils/writing';
+import { useTestPageTitle } from '@/utils/usePageTitle';
+
+export default function WritingReviewPage() {
+  useTestPageTitle();
+  const { id, type } = useParams() as { id: string; type: string };
+  const router = useRouter();
+  const { user, loading } = useAuth();
+
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [essay, setEssay] = useState('');
+  const [aiResponse, setAiResponse] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !user) router.push('/login');
+  }, [loading, user]);
+
+  useEffect(() => {
+    (async () => {
+      const { title, content } = await ldp(id, type);
+      setTitle(title);
+      setContent(content);
+    })();
+
+    const saved = localStorage.getItem(`writing-answers-${id}-${type}`);
+    if (saved) setEssay(saved);
+  }, [id, type]);
+
+  useEffect(() => {
+    if (!essay) return;
+    setIsLoading(true);
+    const prompt = `You are an IELTS writing expert. Please review the following essay:\n\n"${essay}"\n\nGive specific suggestions to improve it in terms of grammar, structure, coherence, and task response. Reply with bullet points.`;
+    fetch('/api/reviewaiapi', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt }),
+    }).then(res => res.json())
+      .then(data => {
+        setAiResponse(data.generated_text || 'No response.');
+        setIsLoading(false);
+      }).catch(() => {
+        setAiResponse('Error fetching suggestions.');
+        setIsLoading(false);
+      });
+  }, [essay]);
+
+  if (loading) return <div className="text-white">Loading...</div>;
+  if (!user) return null;
+
+  return (
+    <div className="min-h-screen bg-black text-white p-4">
+
+      {/* 左上角 Home 图标 */}
+      <div className="mb-2">
+        <Home
+          className="w-6 h-6 cursor-pointer hover:text-gray-300"
+          onClick={() => router.push('/dashboard')}
+        />
+      </div>
+
+      {/* 三个卡片整体下移 */}
+      <div className="flex max-w-7xl w-full space-x-4 mt-6 mx-auto">
+        
+        {/* 左侧：题目框，四个角圆角 */}
+        <div className="basis-[35%] bg-white text-black p-6 rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl rounded-br-2xl shadow overflow-y-auto h-[80vh]">
+          <h2 className="text-xl font-bold mb-4">Writing Prompt</h2>
+          <h3 className="text-lg font-semibold mb-2">{title}</h3>
+          <div className="text-sm whitespace-pre-wrap">{content}</div>
+        </div>
+
+        {/* 中间：作文框 */}
+        <div className="basis-[35%] bg-white text-black p-6 rounded-xl shadow overflow-y-auto h-[80vh]">
+          <h2 className="text-xl font-bold mb-4">Your Essay</h2>
+          <div className="whitespace-pre-wrap bg-gray-100 p-4 rounded">
+            {essay}
+          </div>
+        </div>
+
+        {/* 右侧：AI反馈框 */}
+        <div className="basis-[30%] bg-white text-black p-6 rounded-xl shadow overflow-y-auto h-[80vh]">
+          <button className="w-full py-2 bg-gray-100 text-gray-800 rounded font-semibold text-center mb-4">
+            Unbabel
+          </button>
+          <p className="text-center text-sm text-gray-500 mb-6">
+            Get Started with Unbabel for IELTS
+          </p>
+
+          {isLoading ? (
+            <div className="text-gray-500">Generating...</div>
+          ) : (
+            <div className="text-sm whitespace-pre-wrap">{aiResponse}</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

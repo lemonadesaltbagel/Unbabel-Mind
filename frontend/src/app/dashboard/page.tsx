@@ -248,10 +248,15 @@ Respond in JSON format only:
             <Home className="w-6 h-6 text-white" />
           </button>
           <div className="mt-auto mb-4 flex flex-col items-center">
-            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-              {user?.firstName?.charAt(0) || 'U'}
-            </div>
-            <span className="text-xs mt-1 text-white">Profile</span>
+            <div
+                className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold cursor-pointer"
+                onClick={() => router.push('/profile')}
+              >
+                {user?.firstName?.charAt(0) || 'U'}
+              </div>
+              <span className="text-xs mt-1 text-white cursor-pointer" onClick={() => router.push('/profile')}>
+                Profile
+              </span>
             <button onClick={handleLogout} className="mt-2">
               <LogOut className="w-4 h-4 text-gray-400 hover:text-white" />
             </button>
