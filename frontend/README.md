@@ -53,7 +53,20 @@ Create a `.env.local` file in the frontend directory:
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:3001/api
+OPENAI_API_KEY=your_openai_api_key_here
 ```
+
+### OpenAI API Key Setup
+
+The application uses OpenAI's API for AI-powered features. You can set up your API key in two ways:
+
+1. **Environment Variable** (Recommended for production):
+   Add `OPENAI_API_KEY=your_actual_api_key` to your `.env.local` file
+
+2. **Token File** (Easy setup for local development):
+   Edit `openai_token.txt` in the frontend directory and replace `your_openai_api_key_here` with your actual OpenAI API key
+
+The application will first check for the environment variable, then fall back to the token file if needed.
 
 ## Getting Started
 

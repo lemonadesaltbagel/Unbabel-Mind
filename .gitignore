@@ -16,6 +16,9 @@ node_modules/
 .env.production.local
 .env*
 
+# API Keys and Tokens
+openai_token.txt
+
 # Build outputs
 .next/
 out/
