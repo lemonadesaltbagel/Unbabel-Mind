@@ -8,6 +8,7 @@ import { showToast } from '@/utils/toast';
 import WritingPrompt from '@/components/WritingPrompt';
 import EssayEditor from '@/components/EssayEditor';
 import ReadingControls from '@/components/ReadingControls';
+import CopyrightMessage from '@/components/CopyrightMessage';
 import { useTestPageTitle } from '@/utils/usePageTitle';
 export default function WritingPage(){
 useTestPageTitle();
@@ -59,5 +60,7 @@ if(nt>=1&&nt<=4)r.push(`/writing/${id}/${nt}`);
 };
 if(loading)return(<div className="min-h-screen bg-black flex items-center justify-center"><div className="text-white text-xl">Loading...</div></div>);
 if(!user)return null;
+const isContentMissing=pt===''||pc==='Failed to load writing prompt.';
+if(isContentMissing)return<CopyrightMessage quizType="writing" quizId={id} questionType={type}/>;
 return(<div className="min-h-screen bg-black text-black p-4 sm:p-6 flex flex-col items-center"><div className="w-full max-w-6xl flex justify-start mb-4"><button onClick={()=>r.push('/dashboard')}><Home className="w-6 h-6 text-white hover:text-blue-500 transition"/></button></div><div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6 w-full max-w-6xl"><WritingPrompt title={pt} content={pc} wordCount={wc(essay)}/><EssayEditor essay={essay} setEssay={setEssay}/></div><ReadingControls questionType={qt} isSubmitting={is} onSubmit={hsub} onNavigate={hn}/></div>);
 }
