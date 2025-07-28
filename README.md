@@ -118,7 +118,10 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - 📧 **Email**: support@unbabelmind.com
 - 💬 **Discord**: Join our community
-- 📖 **Documentation**: [Full Documentation](./DOCKER_SETUP.md)
+- 📖 **Full Developer Documentation**: 
+  - [Docker Documentation](./DOCKER_README.md)
+  - [Frontend Documentation](./frontend/README.md)
+  - [Backend Documentation](./backend/README.md)
 
 ---
 
