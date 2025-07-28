@@ -3,7 +3,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { Home } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { ld, ldp, ldq, ldh, ldFromBackend, lde } from '@/utils/reading';
+import { ldp, ldq, ldh, lde, getResultsWithCorrectAnswers } from '@/utils/reading';
 import { useTestPageTitle } from '@/utils/usePageTitle';
 interface Question{type:string;text?:string;number?:number;question?:string;options?:string[];correctAnswer?:string;}
 interface Highlight{text:string;start:number;end:number;}
@@ -16,7 +16,6 @@ const {id,type}=p as {id:string;type:string};
 const [pt,setPt]=useState('');
 const [pc,setPc]=useState('');
 const [qs,setQs]=useState<Question[]>([]);
-const [a,setA]=useState<Record<number,string[]>>({});
 const [highlights,setHighlights]=useState<Highlight[]>([]);
 const [showContextMenu,setShowContextMenu]=useState(false);
 const [contextMenuPosition,setContextMenuPosition]=useState({x:0,y:0});
@@ -25,19 +24,20 @@ const [aiResponse,setAiResponse]=useState('');
 const [isLoading,setIsLoading]=useState(false);
 const [evidence,setEvidence]=useState<{number:number;text:string}[]>([]);
 const [aiSuggestions,setAiSuggestions]=useState<string[]>([]);
+const [results,setResults]=useState<{questionId:number;userAnswer:string[];correctAnswer:string;isCorrect:boolean}[]>([]);
 useEffect(()=>{
 if(!loading&&!user){r.push('/login');return;}
 },[user,loading,r]);
 useEffect(()=>{
 (async()=>{const{title,content}=await ldp(id,type);setPt(title);setPc(content);})();
 (async()=>setQs(await ldq(id,type)))();
-(async()=>{if(user){const backendAnswers=await ldFromBackend(Number(user.id),Number(id),Number(type));setA(Object.keys(backendAnswers).length>0?backendAnswers:ld(id,type));}else{setA(ld(id,type));}})();
+(async()=>{if(user){const backendResults=await getResultsWithCorrectAnswers(Number(user.id),Number(id),Number(type));setResults(backendResults);}})();
 setHighlights(ldh(id,type));
 (async()=>setEvidence(await lde(id,type)))();
 },[id,type,user]);
 useEffect(()=>{
-if(qs.length>0&&Object.keys(a).length>0&&evidence.length>0){
-const wrongQuestions=qs.filter(q=>{if(!('number'in q)||!q.number)return false;const userAns=a[q.number]?.[0]??'';return userAns!==q.correctAnswer;});
+if(qs.length>0&&results.length>0&&evidence.length>0){
+const wrongQuestions=results.filter(r=>!r.isCorrect).map(r=>{const q=qs.find(q=>q.number===r.questionId);return{...q,userAnswer:r.userAnswer[0]||'',correctAnswer:r.correctAnswer};});
 if(wrongQuestions.length===0){setAiSuggestions(["Focus on reading comprehension strategies","Practice identifying key information in passages","Work on vocabulary building exercises","Review question types you struggled with"]);return;}
 setIsLoading(true);
 const prompt=`You are an expert IELTS tutor with deep knowledge of reading comprehension strategies and test preparation.
@@ -45,17 +45,17 @@ const prompt=`You are an expert IELTS tutor with deep knowledge of reading compr
 Background: The user has completed a reading comprehension test and made some mistakes. Your task is to analyze their performance and provide personalized improvement suggestions.
 
 Wrong Questions Analysis:
-${wrongQuestions.map(q=>{const userAns=a[q.number!]?.[0]??'';return`- Question ${q.number}: ${q.question}
+${wrongQuestions.map(q=>`- Question ${q.number}: ${q.question}
     Type: ${q.type}
-    User Answer: ${userAns}
+    User Answer: ${q.userAnswer}
     Correct Answer: ${q.correctAnswer}
-    Evidence: ${evidence.filter(e=>e.number===q.number).map(e=>e.text).join('; ')}`;}).join('\n')}
+    Evidence: ${evidence.filter(e=>e.number===q.number).map(e=>e.text).join('; ')}`).join('\n')}
 
 Please provide 4-6 specific, actionable suggestions to help the user improve their reading comprehension skills based on their mistakes. Focus on the specific question types and skills they struggled with.
 
 Respond with plain text suggestions only, one per line, without any formatting or JSON structure.`;
 callGptApi(prompt).then(response=>{try{const suggestions=response.split('\n').map(line=>line.trim()).filter(line=>line.length>0).slice(0,6);if(suggestions.length>0){setAiSuggestions(suggestions);}else{setAiSuggestions(["Focus on reading comprehension strategies","Practice identifying key information in passages","Work on vocabulary building exercises","Review question types you struggled with"]);}}catch{setAiSuggestions(["Focus on reading comprehension strategies","Practice identifying key information in passages","Work on vocabulary building exercises","Review question types you struggled with"]);}}).finally(()=>{setIsLoading(false);});}
-},[qs,a,evidence]);
+},[qs,results,evidence]);
 const callGptApi=async(prompt:string):Promise<string>=>{try{const res=await fetch('/api/reviewaiapi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt}),});const data=await res.json();if(Array.isArray(data)&&data[0]?.generated_text)return data[0].generated_text;if(data.generated_text)return data.generated_text;return JSON.stringify(data);}catch{return'Error calling Unbabel API.';}};
 const hn=(d:'back'|'next')=>{if(d==='back')r.push('/dashboard?tab=Reading');else r.push(`/reading/${id}/${Number(type)+1}/review`);};
 const hcm=(e:React.MouseEvent)=>{e.preventDefault();setContextMenuPosition({x:e.pageX,y:e.pageY});setShowContextMenu(true);};
@@ -140,7 +140,7 @@ Unbabel
 <div className="w-[320px] bg-white p-6 rounded-xl shadow overflow-y-auto h-[80vh]">
 <h2 className="text-xl font-bold mb-4">Your Answers</h2>
 <ol className="space-y-4 text-sm">
-{qs.map((q,i)=>{if(!('number'in q)||!q.number)return null;const userAns=a[q.number]?.[0]??'';const correct=q.correctAnswer;const isCorrect=userAns===correct;return(<li key={i}>
+{qs.map((q,i)=>{if(!('number'in q)||!q.number)return null;const result=results.find(r=>r.questionId===q.number);if(!result)return null;const userAns=result.userAnswer[0]||'';const correct=result.correctAnswer;const isCorrect=result.isCorrect;return(<li key={i}>
 <div className="mb-1 font-semibold">{q.number}. {q.question}</div>
 <div className={isCorrect?'text-green-600':'text-red-600'}>
 Your Answer: {userAns||'—'}
@@ -156,10 +156,10 @@ Unbabel
 <div className="mt-8 pt-4 border-t border-gray-200">
 <h3 className="text-lg font-semibold mb-2">Conclusion</h3>
 <div className="text-sm text-gray-600 space-y-2">
-<p>Total Questions: {qs.filter(q=>'number'in q&&q.number).length}</p>
-<p>Correct Answers: {qs.filter(q=>'number'in q&&q.number&&a[q.number]?.[0]===q.correctAnswer).length}</p>
+<p>Total Questions: {results.length}</p>
+<p>Correct Answers: {results.filter(r=>r.isCorrect).length}</p>
 <p className="font-medium">
-Score: {Math.round((qs.filter(q=>'number'in q&&q.number&&a[q.number]?.[0]===q.correctAnswer).length/qs.filter(q=>'number'in q&&q.number).length)*100)}%
+Score: {results.length>0?Math.round((results.filter(r=>r.isCorrect).length/results.length)*100):0}%
 </p>
 <p className="text-xs text-gray-400 mt-4 italic">Generated by Unbabel</p>
 </div>
