@@ -9,6 +9,7 @@ import { showToast } from '@/utils/toast';
 import ListeningTranscript from '@/components/ListeningTranscript';
 import QuestionList from '@/components/QuestionList';
 import ReadingControls from '@/components/ReadingControls';
+import CopyrightMessage from '@/components/CopyrightMessage';
 import { useTestPageTitle } from '@/utils/usePageTitle';
 export default function ListeningPage(){
 useTestPageTitle();
@@ -71,6 +72,8 @@ if(nt>=1&&nt<=4){
 r.push(`/listening/${id}/${nt}`);}};
 if(loading)return <div className="min-h-screen bg-black flex items-center justify-center"><div className="text-white text-xl">Loading...</div></div>;
 if(!user)return null;
+const isContentMissing=pt===''||(qs.length===1&&qs[0].type==='intro'&&qs[0].text==='Failed to load questions.');
+if(isContentMissing)return<CopyrightMessage quizType="listening" quizId={id} questionType={type}/>;
 return(
 <div className="min-h-screen bg-black text-black p-4 sm:p-6 flex flex-col items-center">
 <div className="w-full max-w-6xl flex justify-start mb-4">

@@ -3,9 +3,9 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { Home } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { ld, ldp, ldq, ldh, ldFromBackend, lde, getResultsWithCorrectAnswers } from '@/utils/reading';
+import { ldp, ldq, ldh, lde, getResultsWithCorrectAnswers } from '@/utils/reading';
 import { useTestPageTitle } from '@/utils/usePageTitle';
-interface Question{type:string;text?:string;number?:number;question?:string;options?:string[];}
+interface Question{type:string;text?:string;number?:number;question?:string;options?:string[];correctAnswer?:string;}
 interface Highlight{text:string;start:number;end:number;}
 export default function ReviewPage(){
 useTestPageTitle();
@@ -16,7 +16,6 @@ const {id,type}=p as {id:string;type:string};
 const [pt,setPt]=useState('');
 const [pc,setPc]=useState('');
 const [qs,setQs]=useState<Question[]>([]);
-const [a,setA]=useState<Record<number,string[]>>({});
 const [highlights,setHighlights]=useState<Highlight[]>([]);
 const [showContextMenu,setShowContextMenu]=useState(false);
 const [contextMenuPosition,setContextMenuPosition]=useState({x:0,y:0});
@@ -32,7 +31,7 @@ if(!loading&&!user){r.push('/login');return;}
 useEffect(()=>{
 (async()=>{const{title,content}=await ldp(id,type);setPt(title);setPc(content);})();
 (async()=>setQs(await ldq(id,type)))();
-(async()=>{if(user){const backendAnswers=await ldFromBackend(Number(user.id),Number(id),Number(type));setA(Object.keys(backendAnswers).length>0?backendAnswers:ld(id,type));const backendResults=await getResultsWithCorrectAnswers(Number(user.id),Number(id),Number(type));setResults(backendResults);}else{setA(ld(id,type));}})();
+(async()=>{if(user){const backendResults=await getResultsWithCorrectAnswers(Number(user.id),Number(id),Number(type));setResults(backendResults);}})();
 setHighlights(ldh(id,type));
 (async()=>setEvidence(await lde(id,type)))();
 },[id,type,user]);
@@ -56,7 +55,7 @@ Please provide 4-6 specific, actionable suggestions to help the user improve the
 
 Respond with plain text suggestions only, one per line, without any formatting or JSON structure.`;
 callGptApi(prompt).then(response=>{try{const suggestions=response.split('\n').map(line=>line.trim()).filter(line=>line.length>0).slice(0,6);if(suggestions.length>0){setAiSuggestions(suggestions);}else{setAiSuggestions(["Focus on reading comprehension strategies","Practice identifying key information in passages","Work on vocabulary building exercises","Review question types you struggled with"]);}}catch{setAiSuggestions(["Focus on reading comprehension strategies","Practice identifying key information in passages","Work on vocabulary building exercises","Review question types you struggled with"]);}}).finally(()=>{setIsLoading(false);});}
-},[qs,a,evidence]);
+},[qs,results,evidence]);
 const callGptApi=async(prompt:string):Promise<string>=>{try{const res=await fetch('/api/reviewaiapi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt}),});const data=await res.json();if(Array.isArray(data)&&data[0]?.generated_text)return data[0].generated_text;if(data.generated_text)return data.generated_text;return JSON.stringify(data);}catch{return'Error calling Unbabel API.';}};
 const hn=(d:'back'|'next')=>{if(d==='back')r.push('/dashboard?tab=Reading');else r.push(`/reading/${id}/${Number(type)+1}/review`);};
 const hcm=(e:React.MouseEvent)=>{e.preventDefault();setContextMenuPosition({x:e.pageX,y:e.pageY});setShowContextMenu(true);};

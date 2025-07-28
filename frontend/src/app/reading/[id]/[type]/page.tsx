@@ -10,6 +10,7 @@ import{createContextMenu,getTextPosition}from'@/utils/contextMenu';
 import ReadingPassage from'@/components/ReadingPassage';
 import QuestionList from'@/components/QuestionList';
 import ReadingControls from'@/components/ReadingControls';
+import CopyrightMessage from'@/components/CopyrightMessage';
 import{useTestPageTitle}from'@/utils/usePageTitle';
 export default function ReadingPage(){
 useTestPageTitle();
@@ -23,6 +24,8 @@ useEffect(()=>{setHighlights(ldh(id,type));},[id,type]);
 useEffect(()=>{svh(id,type,highlights);},[highlights,id,type]);
 if(loading)return<div className="min-h-screen bg-black flex items-center justify-center"><div className="text-white text-xl">Loading...</div></div>;
 if(!user)return null;
+const isContentMissing=pc==='Failed to load passage.'||(qs.length===1&&qs[0].type==='intro'&&qs[0].text==='Failed to load questions.');
+if(isContentMissing)return<CopyrightMessage quizType="reading" quizId={id} questionType={type}/>;
 const hsub=async()=>{if(is)return;setIs(true);const answers=qs.filter(q=>q.type==='tfng'||q.type==='single'||q.type==='multi'||q.type==='fill-in-line').map(q=>{const qn=(q as{number:number}).number;const ua=a[qn]||['—'];return{questionId:qn,userAnswer:ua};});const pl={passageId:pid,questionType:qt,userId:user.id,answers};const{ok,message}=await sub(pl);if(ok){showToast('Submission successful!');setTimeout(()=>{localStorage.removeItem(lk);r.push(`/reading/${id}/${type}/review`);},1000);}else{showToast(message,true);}setIs(false);};
 const hn=(d:'back'|'next')=>{if(d==='back'){r.push('/dashboard?tab=Reading');}else{const nt=qt+1;if(nt>=1&&nt<=4)r.push(`/reading/${id}/${nt}`);}};
 const handleContextMenu=(e:React.MouseEvent)=>{const selection=window.getSelection();if(!selection||selection.toString().trim()==='')return;const selectedText=selection.toString().trim();const container=e.currentTarget as HTMLElement;const{start,end}=getTextPosition(container,selection);createContextMenu(e,selectedText,start,end,()=>setHighlights(prev=>[...prev,{text:selectedText,start,end}]),()=>setHighlights(prev=>prev.filter(h=>!(start<=h.end&&end>=h.start))));};
