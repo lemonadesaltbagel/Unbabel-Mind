@@ -2,23 +2,23 @@ version: '3.8'
 services:
   postgres:
     image: postgres:17
-    container_name: hackathon-db
+    container_name: unbabel-db
     restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: hackathon
+      POSTGRES_DB: unbabel
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - hackathon-network
+      - unbabel-network
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
-    container_name: hackathon-backend
+    container_name: unbabel-backend
     restart: unless-stopped
     ports:
       - "3001:3001"
@@ -27,14 +27,14 @@ services:
       - PORT=3001
       - DB_HOST=postgres
       - DB_PORT=5432
-      - DB_NAME=hackathon
+      - DB_NAME=unbabel
       - DB_USER=postgres
       - DB_PASSWORD=password
       - JWT_SECRET=your-secret-key
     depends_on:
       - postgres
     networks:
-      - hackathon-network
+      - unbabel-network
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -42,7 +42,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
-    container_name: hackathon-frontend
+    container_name: unbabel-frontend
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -52,13 +52,13 @@ services:
     depends_on:
       - backend
     networks:
-      - hackathon-network
+      - unbabel-network
     volumes:
       - ./frontend:/app
       - /app/node_modules
       - /app/.next
 networks:
-  hackathon-network:
+  unbabel-network:
     driver: bridge
 volumes:
   postgres_data: 

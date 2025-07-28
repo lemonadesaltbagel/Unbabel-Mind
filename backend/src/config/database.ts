@@ -1,1 +1,1 @@
-import {Pool} from 'pg';const p=new Pool({host:process.env.DB_HOST||'postgres',port:parseInt(process.env.DB_PORT||'5432'),database:process.env.DB_NAME||'hackathon',user:process.env.DB_USER||'postgres',password:process.env.DB_PASSWORD||'password'});export default p; 
+import {Pool} from 'pg';const p=new Pool({host:process.env.DB_HOST||'postgres',port:parseInt(process.env.DB_PORT||'5432'),database:process.env.DB_NAME||'unbabel',user:process.env.DB_USER||'postgres',password:process.env.DB_PASSWORD||'password'});export default p; 

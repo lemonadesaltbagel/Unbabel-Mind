@@ -1,135 +1,254 @@
-# Reading App Frontend
+# IELTS Practice App Frontend - Developer Documentation
 
-A modern React/Next.js frontend for an interactive reading comprehension platform.
+A modern React/Next.js frontend for an interactive IELTS practice platform with comprehensive skill development.
 
-## Features
+## Technical Overview
 
-- **Authentication System**: User registration, login, and profile management
-- **Protected Routes**: Automatic redirection for unauthenticated users
-- **Reading**: Interactive reading sections with multiple-choice questions
-- **Progress Tracking**: Track completion status and scores
-- **Responsive Design**: Modern UI with dark theme
-- **TypeScript**: Full type safety throughout the application
+This frontend application is built with Next.js 15 using the App Router pattern, providing a comprehensive IELTS practice platform with four core skills (Reading, Listening, Speaking, Writing) plus AI-powered quiz functionality.
 
-## Tech Stack
+## Architecture
 
-- **Next.js 15**: React framework with App Router
-- **TypeScript**: Type-safe development
-- **Tailwind CSS**: Utility-first styling
-- **Lucide React**: Icon library
-- **Context API**: State management for authentication
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript for type safety
+- **Styling**: Tailwind CSS v4 with utility-first approach
+- **State Management**: React Context API for authentication
+- **API Integration**: Custom API client with OpenAI integration
+- **Build Tool**: Next.js built-in bundler
+
+## Core Features Implementation
+
+### Authentication System
+- JWT-based authentication with localStorage persistence
+- Protected route wrapper component
+- Automatic token validation and refresh
+- User profile management with update capabilities
+
+### Skill Modules
+Each IELTS skill is implemented as a separate module with consistent patterns:
+
+#### Reading Module
+- **File Structure**: `app/reading/[id]/[type]/page.tsx`
+- **Components**: `ReadingPassage`, `QuestionList`, `ReadingControls`
+- **Utilities**: `utils/reading.ts` for data management
+- **Features**: Text highlighting, context menu, multiple question types
+
+#### Listening Module
+- **File Structure**: `app/listening/[id]/[type]/page.tsx`
+- **Components**: `ListeningTranscript`, `QuestionList`, `ReadingControls`
+- **Utilities**: `utils/listening.ts` for audio management
+- **Features**: Transcript display, audio controls
+
+#### Speaking Module
+- **File Structure**: `app/speaking/[id]/[type]/page.tsx`
+- **Components**: `SpeakingPrompt`, `QuestionList`, `ReadingControls`
+- **Utilities**: `utils/speaking.ts` for recording management
+- **Features**: Audio recording, prompt display
+
+#### Writing Module
+- **File Structure**: `app/writing/[id]/[type]/page.tsx`
+- **Components**: `WritingPrompt`, `EssayEditor`, `ReadingControls`
+- **Utilities**: `utils/writing.ts` for essay management
+- **Features**: Word count tracking, AI review integration
+
+#### AI Quiz Module
+- **Location**: Integrated in dashboard page
+- **API**: `/api/reviewaiapi` for OpenAI integration
+- **Features**: Dynamic question generation, real-time scoring
 
 ## Project Structure
 
 ```
 src/
 ├── app/                    # Next.js App Router pages
-│   ├── dashboard/         # Protected dashboard page
+│   ├── dashboard/         # Main dashboard with skill selection
 │   ├── login/            # Authentication pages
 │   ├── signup/
-│   ├── reading/[id]/     # Dynamic reading pages
+│   ├── profile/          # User profile management
+│   ├── reading/[id]/     # Dynamic reading practice pages
+│   │   └── [type]/
+│   │       ├── page.tsx
+│   │       └── review/
+│   ├── listening/[id]/   # Dynamic listening practice pages
+│   │   └── [type]/
+│   │       ├── page.tsx
+│   │       └── review/
+│   ├── speaking/[id]/    # Dynamic speaking practice pages
+│   │   └── [type]/
+│   │       └── page.tsx
+│   ├── writing/[id]/     # Dynamic writing practice pages
+│   │   └── [type]/
+│   │       ├── page.tsx
+│   │       └── review/
+│   ├── api/              # API routes
+│   │   ├── reviewaiapi/  # OpenAI integration
+│   │   └── submitAnswer/ # Answer submission
 │   └── layout.tsx        # Root layout with AuthProvider
 ├── components/           # Reusable components
-│   └── ProtectedRoute.tsx
+│   ├── EssayEditor.tsx
+│   ├── ListeningTranscript.tsx
+│   ├── ProtectedRoute.tsx
+│   ├── QuestionList.tsx
+│   ├── ReadingControls.tsx
+│   ├── ReadingPassage.tsx
+│   ├── SpeakingPrompt.tsx
+│   └── WritingPrompt.tsx
 ├── contexts/            # React contexts
 │   └── AuthContext.tsx
 ├── types/               # TypeScript type definitions
-│   └── index.ts
+│   ├── index.ts
+│   ├── reading.ts
+│   ├── listening.ts
+│   ├── speaking.ts
+│   └── writing.ts
 └── utils/              # Utility functions
-    └── api.ts          # API client
+    ├── api.ts          # API client
+    ├── contextMenu.ts  # Text highlighting
+    ├── listening.ts    # Listening utilities
+    ├── reading.ts      # Reading utilities
+    ├── speaking.ts     # Speaking utilities
+    ├── toast.ts        # Toast notifications
+    ├── usePageTitle.ts # Page title management
+    └── writing.ts      # Writing utilities
 ```
 
-## API Integration
+## API Architecture
 
-The frontend is configured to communicate with a Node.js backend running on `http://localhost:3001/api`. The API client includes:
+### Backend Integration
+- **Base URL**: Configurable via `NEXT_PUBLIC_API_URL` environment variable
+- **Authentication**: JWT token management with automatic header injection
+- **Error Handling**: Centralized error handling with toast notifications
+- **Request Methods**: GET, POST, PUT, DELETE with type-safe responses
 
-- **Authentication**: Login, register, logout, get profile
-- **Passages**: Get all passages, get by ID, submit answers
-- **Progress**: Track user progress and scores
+### OpenAI Integration
+- **Endpoint**: `/api/reviewaiapi`
+- **Purpose**: Dynamic question generation and essay review
+- **Authentication**: API key from environment or token file
+- **Fallback**: Offline question sets for reliability
 
-## Environment Variables
+## Development Setup
 
-Create a `.env.local` file in the frontend directory:
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+- OpenAI API key (for AI features)
 
+### Installation
+```bash
+npm install
+```
+
+### Environment Configuration
+Create `.env.local`:
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:3001/api
 OPENAI_API_KEY=your_openai_api_key_here
 ```
 
-### OpenAI API Key Setup
+### Development Server
+```bash
+npm run dev
+```
 
-The application uses OpenAI's API for AI-powered features. You can set up your API key in two ways:
-
-1. **Environment Variable** (Recommended for production):
-   Add `OPENAI_API_KEY=your_actual_api_key` to your `.env.local` file
-
-2. **Token File** (Easy setup for local development):
-   Edit `openai_token.txt` in the frontend directory and replace `your_openai_api_key_here` with your actual OpenAI API key
-
-The application will first check for the environment variable, then fall back to the token file if needed.
-
-## Getting Started
-
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-2. Set up environment variables (see above)
-
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-## Backend Requirements
-
-The frontend expects a Node.js backend with the following endpoints:
-
-### Authentication
-- `POST /api/auth/login` - User login
-- `POST /api/auth/register` - User registration
-- `GET /api/auth/profile` - Get user profile
-
-### Passages
-- `GET /api/passages` - Get all passages
-- `GET /api/passages/:id` - Get passage by ID
-- `POST /api/passages/:id/submit` - Submit answers
-- `GET /api/passages/progress` - Get user progress
-
-## Development
-
-- **TypeScript**: All components and utilities are fully typed
-- **ESLint**: Code linting with Next.js configuration
-- **Tailwind**: Utility-first CSS framework
-- **Hot Reload**: Fast development with Next.js hot reload
-
-## Build
-
+### Build Process
 ```bash
 npm run build
 npm start
 ```
 
-## Key Features
+## Code Patterns
 
-### Authentication Flow
-1. Users can register with email/password
-2. Login with credentials
-3. JWT tokens stored in localStorage
-4. Automatic token validation on app load
-5. Protected routes redirect to login
-
-### Reading Experience
-1. Dashboard shows available reading sections
-2. Click to start a reading section
-3. Answer multiple-choice questions
-4. Submit answers for scoring
-5. View results and return to dashboard
+### Component Structure
+All skill pages follow a consistent pattern:
+```typescript
+'use client';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+// Skill-specific imports
+```
 
 ### State Management
-- **AuthContext**: Manages user authentication state
-- **ProtectedRoute**: Guards routes requiring authentication
-- **API Client**: Centralized API communication with error handling
+- **Local State**: useState for component-specific data
+- **Global State**: AuthContext for user authentication
+- **Persistence**: localStorage for progress and answers
+- **API State**: Custom hooks for data fetching
+
+### Type Safety
+- **Interface Definitions**: Centralized in `/types` directory
+- **API Types**: Type-safe API client with generic responses
+- **Component Props**: Fully typed component interfaces
+
+## Key Utilities
+
+### API Client (`utils/api.ts`)
+- Centralized HTTP client with authentication
+- Type-safe request/response handling
+- Automatic error handling and retry logic
+
+### Context Menu (`utils/contextMenu.ts`)
+- Text selection and highlighting functionality
+- Right-click context menu implementation
+- Position calculation for text ranges
+
+### Toast Notifications (`utils/toast.ts`)
+- User feedback system
+- Success/error message display
+- Auto-dismiss functionality
+
+## Development Guidelines
+
+### Code Style
+- Follow TypeScript strict mode
+- Use functional components with hooks
+- Implement proper error boundaries
+- Maintain consistent naming conventions
+
+### Performance
+- Implement proper memoization where needed
+- Use Next.js Image component for optimization
+- Lazy load non-critical components
+- Optimize bundle size with dynamic imports
+
+### Testing
+- Unit tests for utility functions
+- Component testing with React Testing Library
+- API integration testing
+- E2E testing for critical user flows
+
+## Deployment
+
+### Production Build
+```bash
+npm run build
+npm start
+```
+
+### Docker Deployment
+- Multi-stage Dockerfile for optimization
+- Environment variable configuration
+- Health check endpoints
+- Static asset optimization
+
+## Backend Dependencies
+
+The frontend expects the following backend endpoints:
+
+### Authentication
+- `POST /api/auth/login` - User authentication
+- `POST /api/auth/register` - User registration  
+- `GET /api/auth/profile` - Profile retrieval
+- `PUT /api/auth/profile` - Profile updates
+
+### Answer Submission
+- `POST /api/answers/submit` - Submit answers for all skills
+
+## Troubleshooting
+
+### Common Issues
+1. **API Connection**: Verify backend URL in environment variables
+2. **OpenAI Integration**: Check API key configuration
+3. **Authentication**: Clear localStorage for token issues
+4. **Build Errors**: Ensure all TypeScript types are properly defined
+
+### Debug Mode
+Enable debug logging by setting `NODE_ENV=development` and checking browser console for detailed error messages.
