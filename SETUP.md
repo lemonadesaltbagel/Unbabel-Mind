@@ -33,7 +33,7 @@ That's it! 🎉 Your application should now be running at:
 
 > 💡 **What's happening**: Docker Compose automatically sets up the database, installs dependencies, and starts all services for you. No manual configuration needed!
 
-## 🔧 Detailed Setup (Step by Step)
+## 🔧 Detailed Alternative Setup by npm (Step by Step)
 
 Prefer to understand what's happening under the hood? Let's break it down:
 
@@ -174,44 +174,6 @@ After adding your API key, restart the frontend:
 # If using npm run start, stop and restart
 # If running individually:
 npm run dev:frontend
-```
-
-## 🐳 Docker Setup (Alternative Options)
-
-### Development Environment
-```bash
-# Start all services
-docker-compose up --build
-
-# Stop services
-docker-compose down
-
-# View logs
-docker-compose logs -f
-```
-
-### Production Environment
-```bash
-# Start production services
-docker-compose -f docker-compose.prod.yml up --build
-
-# Stop production services
-docker-compose -f docker-compose.prod.yml down
-```
-
-### Useful Docker Commands
-```bash
-# Rebuild specific service
-docker-compose build frontend
-docker-compose build backend
-
-# Clean up volumes (removes database data)
-docker-compose down -v
-
-# View specific service logs
-docker-compose logs -f frontend
-docker-compose logs -f backend
-docker-compose logs -f postgres
 ```
 
 ## 🧪 Testing Your Setup
