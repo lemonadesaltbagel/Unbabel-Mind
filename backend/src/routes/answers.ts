@@ -1,9 +1,10 @@
 import {Router} from 'express';
-import {submitAnswer,getAnswers,getEssay,getUserResults,getUserResultsByType} from '../controllers/answerController';
+import {submitAnswer,getAnswers,getEssay,getUserResults,getUserResultsByType,getResultsWithCorrectAnswers} from '../controllers/answerController';
 const r=Router();
 r.post('/submit',submitAnswer);
 r.get('/:userId/:passageId/:questionType',getAnswers);
 r.get('/essay/:userId/:passageId/:questionType',getEssay);
 r.get('/results/:userId',getUserResults);
 r.get('/results/:userId/:questionType',getUserResultsByType);
+r.get('/review/:userId/:passageId/:questionType',getResultsWithCorrectAnswers);
 export default r; 

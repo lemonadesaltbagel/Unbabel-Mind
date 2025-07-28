@@ -1,0 +1,54 @@
+[
+    {
+      "number": 1,
+      "correctAnswer": "FALSE"
+    },
+    {
+      "number": 2,
+      "correctAnswer": "FALSE"
+    },
+    {
+      "number": 3,
+      "correctAnswer": "FALSE"
+    },
+    {
+      "number": 4,
+      "correctAnswer": "NOT GIVEN"
+    },
+    {
+      "number": 5,
+      "correctAnswer": "TRUE"
+    },
+    {
+      "number": 6,
+      "correctAnswer": "TRUE"
+    },
+    {
+      "number": 7,
+      "correctAnswer": "bulbs"
+    },
+    {
+      "number": 8,
+      "correctAnswer": "soil"
+    },
+    {
+      "number": 9,
+      "correctAnswer": "feathers"
+    },
+    {
+      "number": 10,
+      "correctAnswer": "deer"
+    },
+    {
+      "number": 11,
+      "correctAnswer": "1980"
+    },
+    {
+      "number": 12,
+      "correctAnswer": "funding"
+    },
+    {
+      "number": 13,
+      "correctAnswer": "stakeholders"
+    }
+  ]
