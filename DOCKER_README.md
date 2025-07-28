@@ -1,37 +1,50 @@
-# Docker Setup for Hackathon Project
+# Docker Setup for Unbabel Project
 
-This project now uses Docker for consistent development and deployment environments.
+This project uses Docker for consistent development and deployment environments with a full-stack setup including frontend, backend, and database services.
 
 ## Quick Start
 
-1. **Start all services:**
-   ```bash
-   docker-compose up --build
-   ```
+### Development Environment
+```bash
+# Start all services in development mode
+docker-compose up --build
 
-2. **Stop all services:**
-   ```bash
-   docker-compose down
-   ```
+# Stop all services
+docker-compose down
 
-3. **View logs:**
-   ```bash
-   docker-compose logs -f
-   ```
+# View logs for all services
+docker-compose logs -f
+```
 
-## Services
+### Production Environment
+```bash
+# Start production services
+docker-compose -f docker-compose.prod.yml up --build
+
+# Stop production services
+docker-compose -f docker-compose.prod.yml down
+```
+
+## Services Overview
+
+### Frontend (Next.js)
+- **Container:** `unbabel-frontend` (dev) / `unbabel-frontend-prod` (prod)
+- **Port:** `3000` (host) → `3000` (container)
+- **URL:** http://localhost:3000
+- **Environment:** Development with hot reload, production optimized
+
+### Backend API (Node.js/Express)
+- **Container:** `unbabel-backend` (dev) / `unbabel-backend-prod` (prod)
+- **Port:** `3001` (host) → `3001` (container)
+- **URL:** http://localhost:3001/api
+- **Environment:** Development with nodemon, production optimized
 
 ### PostgreSQL Database
-- **Container:** `hackathon-db`
+- **Container:** `unbabel-db` (dev) / `unbabel-db-prod` (prod)
 - **Port:** `5432` (host) → `5432` (container)
-- **Database:** `hackathon`
+- **Database:** `unbabel`
 - **User:** `postgres`
 - **Password:** `password`
-
-### Backend API
-- **Container:** `hackathon-backend`
-- **Port:** `3001` (host) → `3001` (container)
-- **Environment:** Development with hot reload
 
 ## Development Commands
 
@@ -40,15 +53,23 @@ This project now uses Docker for consistent development and deployment environme
 # Start development environment
 docker-compose up --build
 
+# Start in detached mode
+docker-compose up -d --build
+
 # Stop services
 docker-compose down
 
 # Clean up volumes (removes database data)
 docker-compose down -v
 
-# View logs
+# View specific service logs
+docker-compose logs -f frontend
 docker-compose logs -f backend
 docker-compose logs -f postgres
+
+# Rebuild specific service
+docker-compose build frontend
+docker-compose build backend
 ```
 
 ### Using npm scripts (from backend directory)
@@ -68,31 +89,59 @@ npm run docker:logs
 
 ## Environment Variables
 
+### Development Environment
 The following environment variables are automatically set in Docker:
 
-- `DB_HOST=postgres` (Docker service name)
+**Backend:**
+- `NODE_ENV=development`
+- `PORT=3001`
+- `DB_HOST=postgres`
 - `DB_PORT=5432`
-- `DB_NAME=hackathon`
+- `DB_NAME=unbabel`
 - `DB_USER=postgres`
 - `DB_PASSWORD=password`
 - `JWT_SECRET=your-secret-key`
+
+**Frontend:**
+- `NODE_ENV=development`
+- `NEXT_PUBLIC_API_URL=http://localhost:3001/api`
+
+### Production Environment
+**Backend:**
+- `NODE_ENV=production`
 - `PORT=3001`
+- `DB_HOST=postgres`
+- `DB_PORT=5432`
+- `DB_NAME=unbabel`
+- `DB_USER=postgres`
+- `DB_PASSWORD=password`
+- `JWT_SECRET=your-secret-key`
+
+**Frontend:**
+- `NODE_ENV=production`
+- `NEXT_PUBLIC_API_URL=http://localhost:3001`
 
 ## Database Access
 
 ### From Host Machine
 ```bash
 # Connect to PostgreSQL
-psql -h localhost -p 5432 -U postgres -d hackathon
+psql -h localhost -p 5432 -U postgres -d unbabel
 ```
 
 ### From Inside Backend Container
 ```bash
 # Access backend container
-docker exec -it hackathon-backend sh
+docker exec -it unbabel-backend sh
 
 # Connect to database
-psql -h postgres -p 5432 -U postgres -d hackathon
+psql -h postgres -p 5432 -U postgres -d unbabel
+```
+
+### From Inside Frontend Container
+```bash
+# Access frontend container
+docker exec -it unbabel-frontend sh
 ```
 
 ## Troubleshooting
@@ -104,10 +153,14 @@ docker-compose down -v
 docker-compose up --build
 ```
 
-### Rebuild Backend
+### Rebuild Services
 ```bash
-# Rebuild backend container
+# Rebuild specific service
+docker-compose build frontend
 docker-compose build backend
+
+# Rebuild all services
+docker-compose build --no-cache
 docker-compose up
 ```
 
@@ -117,19 +170,67 @@ docker-compose up
 docker ps
 
 # Check container logs
-docker logs hackathon-backend
-docker logs hackathon-db
+docker logs unbabel-frontend
+docker logs unbabel-backend
+docker logs unbabel-db
 ```
 
-## Production
+### Common Issues
 
-For production deployment, use the production Dockerfile:
-
+**Port conflicts:**
 ```bash
-# Build production image
-docker build -f backend/Dockerfile -t hackathon-backend:prod ./backend
+# Check what's using the ports
+lsof -i :3000
+lsof -i :3001
+lsof -i :5432
 ```
 
-## Network
+**Permission issues:**
+```bash
+# Fix node_modules permissions
+docker-compose down
+sudo rm -rf backend/node_modules frontend/node_modules
+docker-compose up --build
+```
 
-All services are connected via the `hackathon-network` bridge network, allowing them to communicate using service names (e.g., `postgres` for the database host). 
+## Production Deployment
+
+### Using Production Docker Compose
+```bash
+# Build and start production services
+docker-compose -f docker-compose.prod.yml up --build -d
+
+# Stop production services
+docker-compose -f docker-compose.prod.yml down
+```
+
+### Manual Production Build
+```bash
+# Build production images
+docker build -f backend/Dockerfile -t unbabel-backend:prod ./backend
+docker build -f frontend/Dockerfile.prod -t unbabel-frontend:prod ./frontend
+```
+
+## Network Configuration
+
+All services are connected via the `unbabel-network` bridge network, allowing them to communicate using service names:
+- Frontend → Backend: `http://backend:3001/api`
+- Backend → Database: `postgres:5432`
+
+## Volume Mounts
+
+### Development
+- **Frontend:** `./frontend:/app` (source code), `/app/node_modules` (dependencies), `/app/.next` (build cache)
+- **Backend:** `./backend:/app` (source code), `/app/node_modules` (dependencies)
+- **Database:** `postgres_data:/var/lib/postgresql/data` (persistent data)
+
+### Production
+- **Database:** `postgres_data:/var/lib/postgresql/data` (persistent data)
+- Frontend and backend use built images without source code mounts
+
+## Technology Stack
+
+- **Frontend:** Next.js 15.3.5, React 19, TypeScript, Tailwind CSS
+- **Backend:** Node.js 18, Express 5, TypeScript, PostgreSQL
+- **Database:** PostgreSQL 17
+- **Containerization:** Docker, Docker Compose 

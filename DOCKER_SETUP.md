@@ -18,7 +18,7 @@ This project is now fully containerized with Docker. The setup includes frontend
 
 1. **Clone and navigate to the project:**
    ```bash
-   cd Hackathon
+   cd Unbabel-Mind
    ```
 
 2. **Start all services:**
@@ -49,10 +49,10 @@ This project is now fully containerized with Docker. The setup includes frontend
 2. **Or build individual services:**
    ```bash
    # Frontend
-   docker build -f frontend/Dockerfile.prod -t hackathon-frontend:prod ./frontend
+   docker build -f frontend/Dockerfile.prod -t unbabel-frontend:prod ./frontend
    
    # Backend
-   docker build -f backend/Dockerfile -t hackathon-backend:prod ./backend
+   docker build -f backend/Dockerfile -t unbabel-backend:prod ./backend
    ```
 
 ## Docker Files Structure
@@ -141,13 +141,13 @@ docker-compose up postgres
 docker ps
 
 # View container logs
-docker logs hackathon-frontend
-docker logs hackathon-backend
-docker logs hackathon-db
+docker logs unbabel-frontend
+docker logs unbabel-backend
+docker logs unbabel-db
 
 # Access container shell
-docker exec -it hackathon-frontend sh
-docker exec -it hackathon-backend sh
+docker exec -it unbabel-frontend sh
+docker exec -it unbabel-backend sh
 ```
 
 ## Performance Optimizations
