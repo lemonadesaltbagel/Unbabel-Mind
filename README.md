@@ -15,7 +15,8 @@ Unbabel Mind is your comprehensive IELTS preparation companion, combining tradit
 - **Progress tracking** and performance analytics
 - **Context-aware question generation**
 
-{reading-screenshot: Screenshot showing a reading passage with highlighted text and questions on the side}
+<img width="1779" height="1883" alt="image" src="https://github.com/user-attachments/assets/fa9bf4a0-54bc-410f-b8fb-4e38ea9b8e1c" />
+
 
 ### 🎧 **Listening Module**
 - **Audio transcript synchronization**
@@ -24,7 +25,8 @@ Unbabel Mind is your comprehensive IELTS preparation companion, combining tradit
 - **Cambridge IELTS listening materials**
 - **Progress persistence across sessions**
 
-{listening-screenshot: Screenshot showing the listening interface with transcript and questions}
+<img width="1789" height="1179" alt="image" src="https://github.com/user-attachments/assets/534da315-ff3e-4675-9e9c-815e7aebddb2" />
+
 
 ### 🗣️ **Speaking Module**
 - **AI-powered speaking prompts**
@@ -33,7 +35,7 @@ Unbabel Mind is your comprehensive IELTS preparation companion, combining tradit
 - **Performance tracking**
 - **IELTS-style question formats**
 
-{speaking-screenshot: Screenshot showing the speaking interface with recording controls}
+<img width="1070" height="1113" alt="image" src="https://github.com/user-attachments/assets/68463f92-6f56-4b85-b1d7-a96140a97b64" />
 
 ### ✍️ **Writing Module**
 - **Rich text editor** with word count
@@ -53,7 +55,8 @@ Unbabel Mind is your comprehensive IELTS preparation companion, combining tradit
 - **Adaptive difficulty** based on your level
 - **Instant feedback** and explanations
 
-{ai-quiz-screenshot: Screenshot showing the AI quiz interface with colorful question cards}
+<img width="2337" height="1771" alt="image" src="https://github.com/user-attachments/assets/f7fe0450-f242-47ce-abc8-75828f736a5a" />
+
 
 ## 🚀 Technology Stack
 
@@ -71,7 +74,7 @@ Unbabel Mind is your comprehensive IELTS preparation companion, combining tradit
 - **Real-time feedback** and performance tracking
 - **Seamless authentication** and user management
 
-{dashboard-screenshot: Screenshot showing the main dashboard with all modules and progress indicators}
+<img width="3802" height="2297" alt="image" src="https://github.com/user-attachments/assets/310f930c-e3d7-4e21-b405-3b92765f2324" />
 
 ## 📊 Progress Tracking
 
