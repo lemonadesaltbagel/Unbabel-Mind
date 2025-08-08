@@ -9,8 +9,8 @@ Unbabel Mind is your comprehensive IELTS preparation companion, combining tradit
 ## ✨ Key Features
 
 ### ✨ AI Assistant
-- **AI Explanation for each wrong question.
-- **AI Suggestion.
+- AI Explanation for each wrong question.
+- AI Suggestion.
 
 ![3eedb4176c989e0d9c02b751c19bc218](https://github.com/user-attachments/assets/9a376bd6-f65d-4efe-badf-6835feb4a238)
 
