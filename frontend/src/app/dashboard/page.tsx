@@ -4,71 +4,61 @@ import{useAuth}from'@/contexts/AuthContext';
 import{ProtectedRoute}from'@/components/ProtectedRoute';
 import{Home,LogOut}from'lucide-react';
 import{useState,useEffect}from'react';
+import{checkTokenAndWarn}from'@/utils/tokenCheck';
 const t=['Reading','Listening','Speaking','Writing','AI Quiz'];
 interface DynamicQuestion{type:string;question:string;options:string[];correct:string;}
 export default function DashboardPage(){
-const r=useRouter();const{user,logout}=useAuth();const[at,setAt]=useState('Reading');const[ao,setAo]=useState('Context Understanding');const[cq,setCq]=useState(0);const[a,setA]=useState<Record<number,{selected:string;submitted:boolean}>>({});const[dq,setDq]=useState<DynamicQuestion[]>([]);const[ilq,setIlq]=useState(false);
+const r=useRouter();
+const{user,logout}=useAuth();
+const[at,setAt]=useState('Reading');
+const[ao,setAo]=useState('Context Understanding');
+const[cq,setCq]=useState(0);
+const[a,setA]=useState<Record<number,{selected:string;submitted:boolean}>>({});
+const[dq,setDq]=useState<DynamicQuestion[]>([]);
+const[ilq,setIlq]=useState(false);
 const hl=()=>{logout();r.push('/login');};
 const htc=(t:string)=>{setAt(t);};
-const gqfl=async(qt:string)=>{setIlq(true);try{const p={'Context Understanding':`You are an expert IELTS tutor creating context understanding questions.
-
-Background: Create a multiple choice question that tests the student's ability to understand context and choose the most appropriate word or phrase that fits a given situation. This should simulate real-world language use scenarios.
-
-Requirements:
-- Create a realistic scenario or context (business, academic, social, or everyday situations)
-- Provide 4 options (A, B, C, D) with clear, distinct choices
-- Only one option should be correct
-- The question should be suitable for B1-C1 level English learners
-- Focus on vocabulary, idioms, phrasal verbs, or contextual understanding
-- Include scenarios like: workplace communication, academic discussions, social interactions, or daily conversations
-- Make the question challenging but appropriate for the level
-- Ensure the incorrect options are plausible but clearly wrong in the given context
-
-Respond in JSON format only:
-{
-  "question": "Your question text here",
-  "options": ["Option A", "Option B", "Option C", "Option D"],
-  "correct": "Correct option text"
-}`,'English to English':`You are an expert IELTS tutor creating English to English vocabulary questions.
-
-Background: Create a multiple choice question that tests the student's knowledge of English synonyms, antonyms, or word relationships. This should help students expand their vocabulary and understand word nuances.
-
-Requirements:
-- Focus on vocabulary building and word relationships
-- Provide 4 options (A, B, C, D) with clear, distinct choices
-- Only one option should be correct
-- The question should be suitable for B1-C1 level English learners
-- Include topics like: synonyms, antonyms, word associations, collocations, or academic vocabulary
-- Focus on words commonly used in IELTS contexts (academic, formal, or everyday language)
-- Make the question challenging but appropriate for the level
-- Ensure the incorrect options are plausible but clearly wrong
-- The question should test understanding of word meanings and usage
-
-Respond in JSON format only:
-{
-  "question": "Your question text here",
-  "options": ["Option A", "Option B", "Option C", "Option D"],
-  "correct": "Correct option text"
-}`,'Grammar MCQ':`You are an expert IELTS tutor creating grammar multiple choice questions.
-
-Background: Create a multiple choice question that tests the student's understanding of English grammar rules. The question should focus on common grammar topics that IELTS students often struggle with.
-
-Requirements:
-- Focus on common grammar mistakes and rules that IELTS students encounter
-- Provide 4 options (A, B, C, D) with clear, distinct choices
-- Only one option should be correct
-- The question should be suitable for B1-C1 level English learners
-- Include topics like: verb tenses (present perfect, past perfect, future perfect), articles (a, an, the), prepositions, modal verbs, conditionals, passive voice, reported speech, relative clauses, or sentence structure
-- Make the question challenging but appropriate for the level
-- Ensure the incorrect options are plausible but clearly wrong
-- The question should test understanding, not just memorization
-
-Respond in JSON format only:
-{
-  "question": "Your question text here",
-  "options": ["Option A", "Option B", "Option C", "Option D"],
-  "correct": "Correct option text"
-}`};const pr=p[qt as keyof typeof p];const res=await fetch('/api/reviewaiapi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:pr})});if(!res.ok)throw new Error(`API request failed: ${res.status}`);const d=await res.json();const gt=d.generated_text||d[0]?.generated_text||'';if(!gt)throw new Error('No response from LLM');let jt=gt.trim();if(jt.includes('```json'))jt=jt.split('```json')[1]?.split('```')[0]||jt;else if(jt.includes('```'))jt=jt.split('```')[1]||jt;try{const pq=JSON.parse(jt);if(pq.question&&pq.options&&pq.correct){const nq:DynamicQuestion={type:qt,question:pq.question,options:pq.options,correct:pq.correct};setDq(prev=>[...prev,nq]);}else{throw new Error('Invalid question format - missing required fields');}}catch(pe){console.error('Failed to parse LLM response:',pe);console.error('Raw response:',gt);const fq={'Context Understanding':{question:'In a business meeting, when someone says "Let\'s touch base next week," they mean:',options:['Let\'s meet next week','Let\'s call each other next week','Let\'s send emails next week','Let\'s avoid each other next week'],correct:'Let\'s meet next week'},'English to English':{question:'Which word is a synonym for "excellent"?',options:['Good','Outstanding','Average','Poor'],correct:'Outstanding'},'Grammar MCQ':{question:'Choose the correct form: "She _____ to the store yesterday."',options:['go','goes','went','gone'],correct:'went'}};const f=fq[qt as keyof typeof fq]||{question:'What is the capital of Australia?',options:['Sydney','Melbourne','Canberra','Perth'],correct:'Canberra'};const nq:DynamicQuestion={type:qt,question:f.question,options:f.options,correct:f.correct};setDq(prev=>[...prev,nq]);}}catch(e){console.error('Error generating question:',e);const fq={'Context Understanding':{question:'In a business meeting, when someone says "Let\'s touch base next week," they mean:',options:['Let\'s meet next week','Let\'s call each other next week','Let\'s send emails next week','Let\'s avoid each other next week'],correct:'Let\'s meet next week'},'English to English':{question:'Which word is a synonym for "excellent"?',options:['Good','Outstanding','Average','Poor'],correct:'Outstanding'},'Grammar MCQ':{question:'Choose the correct form: "She _____ to the store yesterday."',options:['go','goes','went','gone'],correct:'went'}};const f=fq[qt as keyof typeof fq]||{question:'What is the capital of Australia?',options:['Sydney','Melbourne','Canberra','Perth'],correct:'Canberra'};const nq:DynamicQuestion={type:qt,question:f.question,options:f.options,correct:f.correct};setDq(prev=>[...prev,nq]);}finally{setIlq(false);}};
+const gqfl=async(qt:string)=>{
+setIlq(true);
+try{
+const hasToken=await checkTokenAndWarn();
+if(!hasToken){setIlq(false);return;}
+const p={'Context Understanding':'You are an expert IELTS tutor creating context understanding questions. Background: Create a multiple choice question that tests the student\'s ability to understand context and choose the most appropriate word or phrase that fits a given situation. This should simulate real-world language use scenarios. Requirements: - Create a realistic scenario or context (business, academic, social, or everyday situations) - Provide 4 options (A, B, C, D) with clear, distinct choices - Only one option should be correct - The question should be suitable for B1-C1 level English learners - Focus on vocabulary, idioms, phrasal verbs, or contextual understanding - Include scenarios like: workplace communication, academic discussions, social interactions, or daily conversations - Make the question challenging but appropriate for the level - Ensure the incorrect options are plausible but clearly wrong in the given context Respond in JSON format only: {"question": "Your question text here","options": ["Option A", "Option B", "Option C", "Option D"],"correct": "Correct option text"}','English to English':'You are an expert IELTS tutor creating English to English vocabulary questions. Background: Create a multiple choice question that tests the student\'s knowledge of English synonyms, antonyms, or word relationships. This should help students expand their vocabulary and understand word nuances. Requirements: - Focus on vocabulary building and word relationships - Provide 4 options (A, B, C, D) with clear, distinct choices - Only one option should be correct - The question should be suitable for B1-C1 level English learners - Include topics like: synonyms, antonyms, word associations, collocations, or academic vocabulary - Focus on words commonly used in IELTS contexts (academic, formal, or everyday language) - Make the question challenging but appropriate for the level - Ensure the incorrect options are plausible but clearly wrong - The question should test understanding of word meanings and usage Respond in JSON format only: {"question": "Your question text here","options": ["Option A", "Option B", "Option C", "Option D"],"correct": "Correct option text"}','Grammar MCQ':'You are an expert IELTS tutor creating grammar multiple choice questions. Background: Create a multiple choice question that tests the student\'s understanding of English grammar rules. The question should focus on common grammar topics that IELTS students often struggle with. Requirements: - Focus on common grammar mistakes and rules that IELTS students encounter - Provide 4 options (A, B, C, D) with clear, distinct choices - Only one option should be correct - The question should be suitable for B1-C1 level English learners - Include topics like: verb tenses (present perfect, past perfect, future perfect), articles (a, an, the), prepositions, modal verbs, conditionals, passive voice, reported speech, relative clauses, or sentence structure - Make the question challenging but appropriate for the level - Ensure the incorrect options are plausible but clearly wrong - The question should test understanding, not just memorization Respond in JSON format only: {"question": "Your question text here","options": ["Option A", "Option B", "Option C", "Option D"],"correct": "Correct option text"}'};
+const pr=p[qt as keyof typeof p];
+const res=await fetch('/api/reviewaiapi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:pr})});
+if(!res.ok)throw new Error(`API request failed: ${res.status}`);
+const d=await res.json();
+const gt=d.generated_text||d[0]?.generated_text||'';
+if(!gt)throw new Error('No response from LLM');
+let jt=gt.trim();
+if(jt.includes('```json'))jt=jt.split('```json')[1]?.split('```')[0]||jt;
+else if(jt.includes('```'))jt=jt.split('```')[1]||jt;
+try{
+const pq=JSON.parse(jt);
+if(pq.question&&pq.options&&pq.correct){
+const nq:DynamicQuestion={type:qt,question:pq.question,options:pq.options,correct:pq.correct};
+setDq(prev=>[...prev,nq]);
+}else{
+throw new Error('Invalid question format - missing required fields');
+}
+}catch(pe){
+console.error('Failed to parse LLM response:',pe);
+console.error('Raw response:',gt);
+const fq={'Context Understanding':{question:'In a business meeting, when someone says "Let\'s touch base next week," they mean:',options:['Let\'s meet next week','Let\'s call each other next week','Let\'s send emails next week','Let\'s avoid each other next week'],correct:'Let\'s meet next week'},'English to English':{question:'Which word is a synonym for "excellent"?',options:['Good','Outstanding','Average','Poor'],correct:'Outstanding'},'Grammar MCQ':{question:'Choose the correct form: "She _____ to the store yesterday."',options:['go','goes','went','gone'],correct:'went'}};
+const f=fq[qt as keyof typeof fq]||{question:'What is the capital of Australia?',options:['Sydney','Melbourne','Canberra','Perth'],correct:'Canberra'};
+const nq:DynamicQuestion={type:qt,question:f.question,options:f.options,correct:f.correct};
+setDq(prev=>[...prev,nq]);
+}
+}catch(e){
+console.error('Error generating question:',e);
+const fq={'Context Understanding':{question:'In a business meeting, when someone says "Let\'s touch base next week," they mean:',options:['Let\'s meet next week','Let\'s call each other next week','Let\'s send emails next week','Let\'s avoid each other next week'],correct:'Let\'s meet next week'},'English to English':{question:'Which word is a synonym for "excellent"?',options:['Good','Outstanding','Average','Poor'],correct:'Outstanding'},'Grammar MCQ':{question:'Choose the correct form: "She _____ to the store yesterday."',options:['go','goes','went','gone'],correct:'went'}};
+const f=fq[qt as keyof typeof fq]||{question:'What is the capital of Australia?',options:['Sydney','Melbourne','Canberra','Perth'],correct:'Canberra'};
+const nq:DynamicQuestion={type:qt,question:f.question,options:f.options,correct:f.correct};
+setDq(prev=>[...prev,nq]);
+}finally{
+setIlq(false);
+}
+};
 const hoc=(o:string)=>{setAo(o);setCq(0);setA({});setDq([]);gqfl(o);};
 useEffect(()=>{if(at==='AI Quiz'&&dq.length===0)gqfl(ao);},[at,ao,dq.length]);
 const cqs=dq.filter(q=>q.type===ao);const q=cqs[cq];const ans=a[cq]||{selected:'',submitted:false};
