@@ -6,14 +6,14 @@ const validateOpenAIToken=(token:string):{valid:boolean;error?:string}=>{
 if(!token)return {valid:false,error:'Token is required'};
 if(!token.startsWith('sk-'))return {valid:false,error:'Token must start with "sk-"'};
 if(token.length<20)return {valid:false,error:'Token is too short'};
-if(token.length>100)return {valid:false,error:'Token is too long'};
+if(token.length>200)return {valid:false,error:'Token is too long'};
 return {valid:true};
 };
 const blurToken=(token:string):string=>{
 if(!token||token.length<10)return token;
-const prefix=token.substring(0,7);
+const prefix=token.substring(0,12);
 const suffix=token.substring(token.length-4);
-const middle='*'.repeat(token.length-11);
+const middle='*'.repeat(Math.min(8,token.length-16));
 return prefix+middle+suffix;
 };
 export default function ProfilePage(){

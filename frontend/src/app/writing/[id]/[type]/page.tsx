@@ -43,7 +43,7 @@ localStorage.setItem(lk,essay);
 const hsub=async()=>{
 if(is)return;
 setIs(true);
-const pl={passageId:pid,questionType:qt,userId:123,essay};
+const pl={passageId:pid,questionType:qt,userId:Number(user?.id),essay};
 const {ok,message}=await sub(pl);
 if(ok){
 showToast('Submission successful!');

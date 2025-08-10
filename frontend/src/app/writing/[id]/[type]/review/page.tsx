@@ -1,28 +1,164 @@
 'use client';
-import {useParams,useRouter} from 'next/navigation';
-import {useEffect,useState} from 'react';
-import {Home} from 'lucide-react';
-import {useAuth} from '@/contexts/AuthContext';
-import {ldp} from '@/utils/writing';
-import {useTestPageTitle} from '@/utils/usePageTitle';
-import {checkTokenAndWarn} from '@/utils/tokenCheck';
+import{useParams,useRouter}from'next/navigation';
+import{useEffect,useState,useCallback}from'react';
+import{Home,RefreshCw}from'lucide-react';
+import{useAuth}from'@/contexts/AuthContext';
+import{ldp,getWritingRating}from'@/utils/writing';
+import{useTestPageTitle}from'@/utils/usePageTitle';
+import{WritingRatingResponse}from'@/types/writing';
 export default function WritingReviewPage(){
 useTestPageTitle();
-const {id,type}=useParams() as {id:string;type:string};
 const r=useRouter();
+const p=useParams();
 const {user,loading}=useAuth();
-const [t,setT]=useState('');
-const [c,setC]=useState('');
-const [e,setE]=useState('');
-const [a,setA]=useState('');
-const [i,setI]=useState(false);
-useEffect(()=>{if(!loading&&!user)r.push('/login');},[loading,user,r]);
-useEffect(()=>{(async()=>{const {title,content}=await ldp(id,type);setT(title);setC(content);})();
-const s=localStorage.getItem(`writing-answers-${id}-${type}`);
-if(s)setE(s);},[id,type]);
-useEffect(()=>{if(!e)return;setI(true);
-const p=`You are an IELTS writing expert. Please review the following essay:\n\n"${e}"\n\nGive specific suggestions to improve it in terms of grammar, structure, coherence, and task response. Reply with bullet points.`;
-checkTokenAndWarn().then(hasToken=>{if(hasToken){fetch('/api/reviewaiapi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:p})}).then(res=>res.json()).then(data=>{setA(data.generated_text||'No response.');setI(false);}).catch(()=>{setA('Error fetching suggestions.');setI(false);});}else{setA('Please configure your OpenAI API token in your profile to use AI features.');setI(false);}});},[e]);
-if(loading)return <div className="text-white">Loading...</div>;
+const {id,type}=p as {id:string;type:string};
+const [pt,setPt]=useState('');
+const [pc,setPc]=useState('');
+const [essay,setEssay]=useState('');
+const [rating,setRating]=useState<WritingRatingResponse|null>(null);
+const [isLoading,setIsLoading]=useState(false);
+const [essayLoading,setEssayLoading]=useState(false);
+const [error,setError]=useState('');
+useEffect(()=>{
+if(!loading&&!user)r.push('/login');
+},[user,loading,r]);
+useEffect(()=>{
+(async()=>{
+const {title,content}=await ldp(id,type);
+setPt(title);
+setPc(content);
+})();
+},[id,type]);
+useEffect(()=>{
+if(user&&id&&type){
+setEssayLoading(true);
+setError('');
+fetch(`/api/answers/essay/${user.id}/${id}/${type}`).then(res=>res.json()).then(data=>{
+console.log('Essay API response:',data);
+if(data.success&&data.data)setEssay(data.data.essay_text);
+else{
+const saved=localStorage.getItem(`writing-answers-${id}-${type}`);
+if(saved)setEssay(saved);
+else setError('No essay found for this task');
+}
+setEssayLoading(false);
+}).catch((e)=>{
+console.error('Essay API error:',e);
+const saved=localStorage.getItem(`writing-answers-${id}-${type}`);
+if(saved)setEssay(saved);
+else setError('Failed to load essay');
+setEssayLoading(false);
+});
+}
+},[user,id,type]);
+const getFeedback=useCallback(async()=>{
+if(!essay||!pc)return;
+setIsLoading(true);
+setError('');
+try{
+const result=await getWritingRating(essay,`${pt}\n\n${pc}`);
+setRating(result);
+}catch{
+setError('Failed to get AI feedback. Please try again.');
+}finally{
+setIsLoading(false);
+}
+},[essay,pc,pt]);
+useEffect(()=>{
+if(essay&&pc&&!rating&&!isLoading&&!error)getFeedback();
+},[essay,pc,pt,rating,isLoading,error,getFeedback]);
+const hn=(d:'back'|'next')=>{
+const nt=d==='back'?Number(type)-1:Number(type)+1;
+if(nt>=1&&nt<=4)r.push(`/writing/${id}/${nt}/review`);
+};
+if(loading)return(<div className="min-h-screen bg-black flex items-center justify-center"><div className="text-white text-xl">Loading...</div></div>);
 if(!user)return null;
-return(<div className="min-h-screen bg-black text-white p-4"><div className="mb-2"><Home className="w-6 h-6 cursor-pointer hover:text-gray-300" onClick={()=>r.push('/dashboard')}/></div><div className="flex max-w-7xl w-full space-x-4 mt-6 mx-auto"><div className="basis-[35%] bg-white text-black p-6 rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl rounded-br-2xl shadow overflow-y-auto h-[80vh]"><h2 className="text-xl font-bold mb-4">Writing Prompt</h2><h3 className="text-lg font-semibold mb-2">{t}</h3><div className="text-sm whitespace-pre-wrap">{c}</div></div><div className="basis-[35%] bg-white text-black p-6 rounded-xl shadow overflow-y-auto h-[80vh]"><h2 className="text-xl font-bold mb-4">Your Essay</h2><div className="whitespace-pre-wrap bg-gray-100 p-4 rounded">{e}</div></div><div className="basis-[30%] bg-white text-black p-6 rounded-xl shadow overflow-y-auto h-[80vh]"><button className="w-full py-2 bg-gray-100 text-gray-800 rounded font-semibold text-center mb-4">Unbabel</button><p className="text-center text-sm text-gray-500 mb-6">Get Started with Unbabel for IELTS</p>{i?<div className="text-gray-500">Generating...</div>:<div className="text-sm whitespace-pre-wrap">{a}</div>}</div></div></div>);}
+if(pt===''||pc==='Failed to load writing prompt.')return(<div className="min-h-screen bg-black flex items-center justify-center"><div className="text-white text-xl">Failed to load writing prompt.</div></div>);
+return(<div className="min-h-screen bg-black text-black p-4 sm:p-6 flex flex-col items-center">
+<div className="w-full max-w-6xl flex items-center mb-4">
+<div className="w-6">
+<button onClick={()=>r.push('/dashboard')} className="text-white hover:text-blue-500 transition">
+<Home className="w-6 h-6"/>
+</button>
+</div>
+<div className="flex-1 flex justify-center">
+<h1 className="text-white text-2xl font-bold">Review: Writing Task {type}</h1>
+</div>
+<div className="w-6"></div>
+</div>
+<div className="flex w-full max-w-6xl space-x-4">
+<div className="w-1/3 bg-white p-6 rounded-xl shadow overflow-y-auto h-[80vh]">
+<h2 className="text-xl font-bold mb-4">Writing Prompt</h2>
+<div className="mb-4">
+<h3 className="font-semibold text-lg">{pt}</h3>
+</div>
+<div className="whitespace-pre-wrap text-sm text-gray-700">{pc}</div>
+</div>
+<div className="w-1/3 bg-white p-6 rounded-xl shadow overflow-y-auto h-[80vh]">
+<h2 className="text-xl font-bold mb-4">Your Essay</h2>
+{essayLoading?(<div className="flex items-center justify-center h-32 text-gray-500">Loading essay...</div>):essay?(<div>
+<div className="whitespace-pre-wrap text-sm text-gray-700 mb-4">{essay}</div>
+<div className="text-xs text-gray-500">
+Word Count: {essay.split(' ').filter(w=>w.length>0).length}
+</div>
+</div>):(<div className="text-center text-gray-500 mt-4">No essay submitted for this task</div>)}
+</div>
+<div className="w-1/3 bg-white p-6 rounded-xl shadow overflow-y-auto h-[80vh]">
+<h2 className="text-xl font-bold mb-4">AI Feedback</h2>
+{isLoading?(<div className="flex items-center justify-center h-32 text-gray-500">Analyzing your essay...</div>):rating?(<div className="space-y-4">
+<div className="bg-gray-50 p-4 rounded-lg">
+<h3 className="font-semibold mb-2">IELTS Writing Scores</h3>
+<div className="space-y-2 text-sm">
+<div className="flex justify-between">
+<span>Task Achievement:</span>
+<span className="font-semibold">{rating.rating.taskAchievement}</span>
+</div>
+<div className="flex justify-between">
+<span>Coherence & Cohesion:</span>
+<span className="font-semibold">{rating.rating.coherenceCohesion}</span>
+</div>
+<div className="flex justify-between">
+<span>Lexical Resource:</span>
+<span className="font-semibold">{rating.rating.lexicalResource}</span>
+</div>
+<div className="flex justify-between">
+<span>Grammatical Range & Accuracy:</span>
+<span className="font-semibold">{rating.rating.grammaticalRangeAccuracy}</span>
+</div>
+<div className="border-t pt-2 mt-2">
+<div className="flex justify-between font-bold">
+<span>Final Score:</span>
+<span className="text-blue-600">{rating.finalScore}</span>
+</div>
+<div className="text-xs text-gray-500">
+Average: {rating.averageScore.toFixed(1)}
+</div>
+</div>
+</div>
+</div>
+<div className="bg-blue-50 p-4 rounded-lg">
+<h3 className="font-semibold mb-2">Detailed Feedback</h3>
+<div className="whitespace-pre-wrap text-sm text-gray-700">{rating.feedback}</div>
+</div>
+<div className="text-xs text-gray-400 italic">
+Generated by Unbabel AI
+</div>
+</div>):error?(<div className="text-center text-red-500 mt-4">
+<div className="mb-2">{error}</div>
+<button onClick={getFeedback} disabled={isLoading} className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-300">
+<RefreshCw className={`w-4 h-4 ${isLoading?'animate-spin':''}`}/>
+<span>Retry</span>
+</button>
+</div>):(<div className="text-center text-gray-500 mt-4">No feedback available</div>)}
+</div>
+</div>
+<div className="w-full max-w-6xl flex justify-center mt-6 space-x-4">
+<button onClick={()=>hn('back')} disabled={type==='1'} className={`px-6 py-2 rounded-lg transition-colors ${type==='1'?'bg-gray-300 cursor-not-allowed text-gray-500':'bg-blue-500 hover:bg-blue-600 text-white'}`}>
+Back
+</button>
+<button onClick={()=>hn('next')} disabled={type==='4'} className={`px-6 py-2 rounded-lg transition-colors ${type==='4'?'bg-gray-300 cursor-not-allowed text-gray-500':'bg-blue-500 hover:bg-blue-600 text-white'}`}>
+Next
+</button>
+</div>
+</div>);
+}
