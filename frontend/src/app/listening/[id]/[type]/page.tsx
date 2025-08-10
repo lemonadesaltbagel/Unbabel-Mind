@@ -4,10 +4,10 @@ import { useEffect, useState, useRef } from 'react';
 import { Home } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Question } from '@/types/reading';
-import { ld, sv, ldp, ldq, sub, ldh, svh } from '@/utils/listening';
+import { ld, sv, ldp, ldq, sub } from '@/utils/listening';
 import { showToast } from '@/utils/toast';
 import ListeningTranscript from '@/components/ListeningTranscript';
-import QuestionList from '@/components/QuestionList';
+import ListeningQuestionList from '@/components/ListeningQuestionList';
 import ReadingControls from '@/components/ReadingControls';
 import CopyrightMessage from '@/components/CopyrightMessage';
 import { useTestPageTitle } from '@/utils/usePageTitle';
@@ -24,7 +24,6 @@ const [pt,setPt]=useState('');
 const [qs,setQs]=useState<Question[]>([]);
 const [a,setA]=useState<Record<number,string[]>>({});
 const [is,setIs]=useState(false);
-const [highlights,setHighlights]=useState<{text:string;start:number;end:number}[]>([]);
 const il=useRef(true);
 useEffect(()=>{
 if(!loading&&!user){
@@ -42,10 +41,6 @@ setPt(title);})();}, [id,type]);
 useEffect(()=>{
 (async()=>{
 setQs(await ldq(id,type));})();}, [id,type]);
-useEffect(()=>{
-setHighlights(ldh(id,type));}, [id,type]);
-useEffect(()=>{
-svh(id,type,highlights);}, [highlights,id,type]);
 const hsub=async()=>{
 if(is)return;
 setIs(true);
@@ -83,7 +78,7 @@ return(
 </div>
 <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6 w-full max-w-6xl">
 <ListeningTranscript title={pt} />
-<QuestionList questions={qs} answers={a} setAnswers={setA} />
+<ListeningQuestionList questions={qs} answers={a} setAnswers={setA} />
 </div>
 <ReadingControls questionType={qt} isSubmitting={is} onSubmit={hsub} onNavigate={hn} />
 </div>);} 
