@@ -8,7 +8,7 @@ import{ld,sv,ldh,svh,ldp,ldq,sub}from'@/utils/reading';
 import{showToast}from'@/utils/toast';
 import{createContextMenu,getTextPosition}from'@/utils/contextMenu';
 import ReadingPassage from'@/components/ReadingPassage';
-import QuestionList from'@/components/QuestionList';
+import ReadingQuestionList from'@/components/ReadingQuestionList';
 import ReadingControls from'@/components/ReadingControls';
 import CopyrightMessage from'@/components/CopyrightMessage';
 import{useTestPageTitle}from'@/utils/usePageTitle';
@@ -33,4 +33,4 @@ if(!user)return null;
 const isContentMissing=pc==='Failed to load passage.'||(qs.length===1&&qs[0].type==='intro'&&qs[0].text==='Failed to load questions.');
 if(isContentMissing)return<CopyrightMessage quizType="reading" quizId={id} questionType={type}/>;
 const tm=`${Math.floor(ts/60).toString().padStart(2,'0')}:${(ts%60).toString().padStart(2,'0')}`;
-return(<div className="min-h-screen bg-black text-black p-6 flex flex-col items-center"><div className="w-full max-w-full flex justify-between items-center mb-4"><button onClick={()=>r.push('/dashboard')}><Home className="w-6 h-6 text-white hover:text-blue-500 transition"/></button><div className="text-white text-xl font-mono">{tm}</div><div></div></div><div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-4 w-full max-w-full"><ReadingPassage title={pt} content={pc} highlights={highlights} onContextMenu={handleContextMenu}/><QuestionList questions={qs} answers={a} setAnswers={ha} highlights={questionHighlights} setHighlights={setQuestionHighlights}/></div><ReadingControls questionType={qt} isSubmitting={is} onSubmit={hsub} onNavigate={hn}/></div>);}
+return(<div className="min-h-screen bg-black text-black p-6 flex flex-col items-center"><div className="w-full max-w-full flex justify-between items-center mb-4"><button onClick={()=>r.push('/dashboard')}><Home className="w-6 h-6 text-white hover:text-blue-500 transition"/></button><div className="text-white text-xl font-mono">{tm}</div><div></div></div><div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-4 w-full max-w-full"><ReadingPassage title={pt} content={pc} highlights={highlights} onContextMenu={handleContextMenu}/><ReadingQuestionList questions={qs} answers={a} setAnswers={ha} highlights={questionHighlights} setHighlights={setQuestionHighlights}/></div><ReadingControls questionType={qt} isSubmitting={is} onSubmit={hsub} onNavigate={hn}/></div>);}

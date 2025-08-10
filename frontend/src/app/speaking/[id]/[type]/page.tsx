@@ -7,7 +7,7 @@ import{Question}from'@/types/reading';
 import{ld,sv,ldp,ldq,sub}from'@/utils/speaking';
 import{showToast}from'@/utils/toast';
 import SpeakingPrompt from'@/components/SpeakingPrompt';
-import QuestionList from'@/components/QuestionList';
+import ListeningQuestionList from'@/components/ListeningQuestionList';
 import ReadingControls from'@/components/ReadingControls';
 import CopyrightMessage from'@/components/CopyrightMessage';
 import{useTestPageTitle}from'@/utils/usePageTitle';
@@ -27,4 +27,4 @@ if(loading)return<div className="min-h-screen bg-black flex items-center justify
 if(!user)return null;
 const isContentMissing=pt===''||pc==='Failed to load speaking prompt.'||(qs.length===1&&qs[0].type==='intro'&&qs[0].text==='Failed to load questions.');
 if(isContentMissing)return<CopyrightMessage quizType="speaking" quizId={id} questionType={type}/>;
-return(<div className="min-h-screen bg-black text-black p-4 sm:p-6 flex flex-col items-center"><div className="w-full max-w-6xl flex justify-start mb-4"><button onClick={()=>r.push('/dashboard')}><Home className="w-6 h-6 text-white hover:text-blue-500 transition"/></button></div><div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6 w-full max-w-6xl"><SpeakingPrompt title={pt} content={pc} recording={recording} audioUrl={audioUrl} onStartRecording={startRecording} onStopRecording={stopRecording}/><QuestionList questions={qs} answers={a} setAnswers={setA}/></div><ReadingControls questionType={qt} isSubmitting={is} onSubmit={hsub} onNavigate={hn}/></div>);} 
+return(<div className="min-h-screen bg-black text-black p-4 sm:p-6 flex flex-col items-center"><div className="w-full max-w-6xl flex justify-start mb-4"><button onClick={()=>r.push('/dashboard')}><Home className="w-6 h-6 text-white hover:text-blue-500 transition"/></button></div><div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6 w-full max-w-6xl"><SpeakingPrompt title={pt} content={pc} recording={recording} audioUrl={audioUrl} onStartRecording={startRecording} onStopRecording={stopRecording}/><ListeningQuestionList questions={qs} answers={a} setAnswers={setA}/></div><ReadingControls questionType={qt} isSubmitting={is} onSubmit={hsub} onNavigate={hn}/></div>);} 
