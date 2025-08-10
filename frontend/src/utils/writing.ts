@@ -17,13 +17,13 @@ Respond ONLY with a JSON object in this exact format:
 
 Where X.X is a number from 0 to 9 with 0.5 increments (e.g., 6.0, 6.5, 7.0, etc.).`;
 const res=await fetch('/api/reviewaiapi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:p})});
-if(!res.ok)throw new Error('Failed to get rating');
+if(!res.ok){const errorData=await res.json();throw new Error(errorData.error||'Failed to get rating');}
 const data=await res.json();
 const text=data.generated_text||'';
 const jsonMatch=text.match(/\{[\s\S]*\}/);
-if(!jsonMatch)throw new Error('Invalid response format');
+if(!jsonMatch)throw new Error('Invalid response format from AI');
 const rating=JSON.parse(jsonMatch[0])as WritingRating;
 const{taskAchievement,coherenceCohesion,lexicalResource,grammaticalRangeAccuracy,feedback}=rating;
 const validRating={taskAchievement:Math.max(0,Math.min(9,Math.round(taskAchievement*2)/2)),coherenceCohesion:Math.max(0,Math.min(9,Math.round(coherenceCohesion*2)/2)),lexicalResource:Math.max(0,Math.min(9,Math.round(lexicalResource*2)/2)),grammaticalRangeAccuracy:Math.max(0,Math.min(9,Math.round(grammaticalRangeAccuracy*2)/2))};
 const{averageScore,finalScore}=calculateWritingScore(validRating);
-return{rating:validRating,averageScore,finalScore,feedback:feedback||'No feedback provided.'};}catch{return{rating:{taskAchievement:0,coherenceCohesion:0,lexicalResource:0,grammaticalRangeAccuracy:0},averageScore:0,finalScore:0,feedback:'Error getting rating.'};}}; 
+return{rating:validRating,averageScore,finalScore,feedback:feedback||'No feedback provided.'};}catch(e){console.error('Error getting writing rating:',e);return{rating:{taskAchievement:0,coherenceCohesion:0,lexicalResource:0,grammaticalRangeAccuracy:0},averageScore:0,finalScore:0,feedback:`Error getting rating: ${e instanceof Error?e.message:'Unknown error'}`};}}; 

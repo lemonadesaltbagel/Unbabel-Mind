@@ -3,7 +3,7 @@ import {NextRequest,NextResponse} from 'next/server';
 export async function POST(req:NextRequest){
   try{
     const d=await req.json();
-    // 在容器环境中直接使用backend服务名
+
     const apiUrl = 'http://backend:3001/api/answers/submit';
     
     const r=await fetch(apiUrl,{
