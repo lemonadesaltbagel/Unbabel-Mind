@@ -5,6 +5,7 @@ import { Home } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { ldp, ldq, ldh, lde, getResultsWithCorrectAnswers } from '@/utils/listening';
 import { useTestPageTitle } from '@/utils/usePageTitle';
+import {checkTokenAndWarn} from '@/utils/tokenCheck';
 interface Question{type:string;text?:string;number?:number;question?:string;options?:string[];correctAnswer?:string;}
 interface Highlight{text:string;start:number;end:number;}
 export default function ListeningReviewPage(){
@@ -51,7 +52,7 @@ Please provide 4-6 specific, actionable suggestions to help the user improve the
 
 Respond with plain text suggestions only, one per line, without any formatting or JSON structure.`;
 callGptApi(prompt).then(response=>{try{const suggestions=response.split('\n').map(line=>line.trim()).filter(line=>line.length>0).slice(0,6);if(suggestions.length>0){setAiSuggestions(suggestions);}else{setAiSuggestions(["Focus on listening comprehension strategies","Practice identifying key information in audio passages","Work on vocabulary building exercises","Review question types you struggled with"]);}}catch{setAiSuggestions(["Focus on listening comprehension strategies","Practice identifying key information in audio passages","Work on vocabulary building exercises","Review question types you struggled with"]);}}).finally(()=>{setIsLoading(false);});}},[qs,results,evidence]);
-const callGptApi=async(prompt:string):Promise<string>=>{try{const res=await fetch('/api/reviewaiapi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt}),});const data=await res.json();if(Array.isArray(data)&&data[0]?.generated_text)return data[0].generated_text;if(data.generated_text)return data.generated_text;return JSON.stringify(data);}catch{return'Error calling Unbabel API.';}};
+const callGptApi=async(prompt:string):Promise<string>=>{try{const hasToken=await checkTokenAndWarn();if(!hasToken)return'Please configure your OpenAI API token in your profile to use AI features.';const res=await fetch('/api/reviewaiapi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt}),});const data=await res.json();if(Array.isArray(data)&&data[0]?.generated_text)return data[0].generated_text;if(data.generated_text)return data.generated_text;return JSON.stringify(data);}catch{return'Error calling Unbabel API.';}};
 const hn=(d:'back'|'next')=>{if(d==='back')r.push('/dashboard?tab=Listening');else r.push(`/listening/${id}/${Number(type)+1}/review`);};
 const hcm=(e:React.MouseEvent)=>{e.preventDefault();setContextMenuPosition({x:e.pageX,y:e.pageY});setShowContextMenu(true);};
 const hh=()=>{const s=window.getSelection();if(!s)return;const st=s.toString().trim();const r=s.getRangeAt(0);const pcr=r.cloneRange();pcr.selectNodeContents(document.querySelector('.transcript-content')as Node);pcr.setEnd(r.startContainer,r.startOffset);const start=pcr.toString().length;setHighlights(prev=>[...prev,{text:st,start,end:start+st.length}]);setShowContextMenu(false);};

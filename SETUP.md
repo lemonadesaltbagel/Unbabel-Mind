@@ -152,29 +152,26 @@ To unlock the AI-powered features, you'll need an OpenAI API key:
 
 ### Step 2: Configure the API Key
 
-#### Method A: Environment Variable (Recommended)
-Add this to your `frontend/.env.local` file:
-```env
-NEXT_PUBLIC_API_URL=http://localhost:3001/api
-OPENAI_API_KEY=sk-your-actual-api-key-here
-```
+The OpenAI API key can only be managed through the Profile page in the application:
 
-#### Method B: Token File
-Edit the `frontend/openai_token.txt` file:
-```bash
-cd frontend
-echo "sk-your-actual-api-key-here" > openai_token.txt
-```
+1. Start the application and navigate to the Profile page
+2. Scroll down to "LLM Token Configuration" section
+3. Click "Add Token" or "Edit Token"
+4. Enter your OpenAI API key (starts with `sk-`)
+5. Click "Save" to persist the configuration
 
-> ⚠️ **Security Note**: Never commit your API key to version control! The `.env.local` file is already in `.gitignore` to keep your key safe.
+> ⚠️ **Security Note**: The API key is stored securely in a local file that is automatically protected from version control.
 
-### Step 3: Restart the Frontend
-After adding your API key, restart the frontend:
-```bash
-# If using npm run start, stop and restart
-# If running individually:
-npm run dev:frontend
-```
+### Step 3: LLM Configuration Features
+
+The application includes built-in LLM configuration management:
+
+- **Profile-Based Management**: Configure your OpenAI API token directly from your user profile
+- **Secure Storage**: API keys are stored in a local file that's automatically protected from version control
+- **User-Friendly Interface**: Simple add/edit interface integrated into the profile page
+
+### Step 4: Start Using the Application
+Once the application is running, you can configure your API key through the Profile page. No restart is required after adding your API key.
 
 ## 🧪 Testing Your Setup
 
