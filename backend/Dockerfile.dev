@@ -2,6 +2,7 @@ FROM node:18-alpine
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
+RUN npm install -g nodemon ts-node
 COPY . .
 EXPOSE 3001
-CMD ["npm", "run", "dev"] 
+CMD ["nodemon", "--exec", "ts-node", "src/server.ts"] 
