@@ -1,254 +1,132 @@
-# IELTS Practice App Frontend - Developer Documentation
+# Reading Next.js Frontend
 
-A modern React/Next.js frontend for an interactive IELTS practice platform with comprehensive skill development.
+This is the frontend application for the Unbabel Mind project, built with Next.js 15, React 19, and TypeScript.
 
-## Technical Overview
+## Features
 
-This frontend application is built with Next.js 15 using the App Router pattern, providing a comprehensive IELTS practice platform with four core skills (Reading, Listening, Speaking, Writing) plus AI-powered quiz functionality.
-
-## Architecture
-
-- **Framework**: Next.js 15 with App Router
-- **Language**: TypeScript for type safety
-- **Styling**: Tailwind CSS v4 with utility-first approach
-- **State Management**: React Context API for authentication
-- **API Integration**: Custom API client with OpenAI integration
-- **Build Tool**: Next.js built-in bundler
-
-## Core Features Implementation
-
-### Authentication System
-- JWT-based authentication with localStorage persistence
-- Protected route wrapper component
-- Automatic token validation and refresh
-- User profile management with update capabilities
-
-### Skill Modules
-Each IELTS skill is implemented as a separate module with consistent patterns:
-
-#### Reading Module
-- **File Structure**: `app/reading/[id]/[type]/page.tsx`
-- **Components**: `ReadingPassage`, `QuestionList`, `ReadingControls`
-- **Utilities**: `utils/reading.ts` for data management
-- **Features**: Text highlighting, context menu, multiple question types
-
-#### Listening Module
-- **File Structure**: `app/listening/[id]/[type]/page.tsx`
-- **Components**: `ListeningTranscript`, `QuestionList`, `ReadingControls`
-- **Utilities**: `utils/listening.ts` for audio management
-- **Features**: Transcript display, audio controls
-
-#### Speaking Module
-- **File Structure**: `app/speaking/[id]/[type]/page.tsx`
-- **Components**: `SpeakingPrompt`, `QuestionList`, `ReadingControls`
-- **Utilities**: `utils/speaking.ts` for recording management
-- **Features**: Audio recording, prompt display
-
-#### Writing Module
-- **File Structure**: `app/writing/[id]/[type]/page.tsx`
-- **Components**: `WritingPrompt`, `EssayEditor`, `ReadingControls`
-- **Utilities**: `utils/writing.ts` for essay management
-- **Features**: Word count tracking, AI review integration
-
-#### AI Quiz Module
-- **Location**: Integrated in dashboard page
-- **API**: `/api/reviewaiapi` for OpenAI integration
-- **Features**: Dynamic question generation, real-time scoring
+- **Modern React**: Built with React 19 and Next.js 15
+- **TypeScript**: Full type safety throughout the application
+- **Tailwind CSS**: Utility-first CSS framework for styling
+- **Responsive Design**: Mobile-first approach with responsive layouts
+- **Dark Theme**: Built-in dark mode support
+- **Hot Reloading**: Fast development with hot module replacement
 
 ## Project Structure
 
 ```
 src/
-├── app/                    # Next.js App Router pages
-│   ├── dashboard/         # Main dashboard with skill selection
-│   ├── login/            # Authentication pages
-│   ├── signup/
-│   ├── profile/          # User profile management
-│   ├── reading/[id]/     # Dynamic reading practice pages
-│   │   └── [type]/
-│   │       ├── page.tsx
-│   │       └── review/
-│   ├── listening/[id]/   # Dynamic listening practice pages
-│   │   └── [type]/
-│   │       ├── page.tsx
-│   │       └── review/
-│   ├── speaking/[id]/    # Dynamic speaking practice pages
-│   │   └── [type]/
-│   │       └── page.tsx
-│   ├── writing/[id]/     # Dynamic writing practice pages
-│   │   └── [type]/
-│   │       ├── page.tsx
-│   │       └── review/
-│   ├── api/              # API routes
-│   │   ├── reviewaiapi/  # OpenAI integration
-│   │   └── submitAnswer/ # Answer submission
-│   └── layout.tsx        # Root layout with AuthProvider
-├── components/           # Reusable components
-│   ├── EssayEditor.tsx
-│   ├── ListeningTranscript.tsx
-│   ├── ProtectedRoute.tsx
-│   ├── QuestionList.tsx
-│   ├── ReadingControls.tsx
-│   ├── ReadingPassage.tsx
-│   ├── SpeakingPrompt.tsx
-│   └── WritingPrompt.tsx
-├── contexts/            # React contexts
-│   └── AuthContext.tsx
-├── types/               # TypeScript type definitions
-│   ├── index.ts
-│   ├── reading.ts
-│   ├── listening.ts
-│   ├── speaking.ts
-│   └── writing.ts
-└── utils/              # Utility functions
-    ├── api.ts          # API client
-    ├── contextMenu.ts  # Text highlighting
-    ├── listening.ts    # Listening utilities
-    ├── reading.ts      # Reading utilities
-    ├── speaking.ts     # Speaking utilities
-    ├── toast.ts        # Toast notifications
-    ├── usePageTitle.ts # Page title management
-    └── writing.ts      # Writing utilities
+├── app/                    # Next.js 13+ app directory
+│   ├── api/               # API routes
+│   ├── dashboard/         # Dashboard page
+│   ├── login/            # Login page
+│   ├── signup/           # Signup page
+│   ├── profile/          # Profile page
+│   ├── reading/          # Reading module
+│   ├── listening/        # Listening module
+│   ├── speaking/         # Speaking module
+│   └── writing/          # Writing module
+├── components/            # Reusable React components
+├── contexts/              # React contexts for state management
+├── types/                 # TypeScript type definitions
+└── utils/                 # Utility functions and helpers
 ```
 
-## API Architecture
-
-### Backend Integration
-- **Base URL**: Configurable via `NEXT_PUBLIC_API_URL` environment variable
-- **Authentication**: JWT token management with automatic header injection
-- **Error Handling**: Centralized error handling with toast notifications
-- **Request Methods**: GET, POST, PUT, DELETE with type-safe responses
-
-### OpenAI Integration
-- **Endpoint**: `/api/reviewaiapi`
-- **Purpose**: Dynamic question generation and essay review
-- **Authentication**: API key from environment or token file
-- **Fallback**: Offline question sets for reliability
-
-## Development Setup
+## Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-- OpenAI API key (for AI features)
 
-### Installation
+- Docker and Docker Compose
+- Node.js 18+ (for development only)
+
+### Development
+
+The frontend is designed to run exclusively through Docker. To start development:
+
 ```bash
-npm install
+# Start all services
+docker-compose up --build
+
+# Access the application
+# Frontend: http://localhost:3000
+# Backend: http://localhost:3001
 ```
 
-### Environment Configuration
-Create `.env.local`:
+### Environment Variables
+
+Create a `.env.local` file in the frontend directory:
+
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:3001/api
-OPENAI_API_KEY=your_openai_api_key_here
+# Backend API URL (for internal communication)
+NEXT_PUBLIC_API_URL=http://backend:3001/api
 ```
 
-### Development Server
-```bash
-npm run dev
-```
+## Available Scripts
 
-### Build Process
+- `npm run build` - Build the application for production
+
+## Technology Stack
+
+- **Framework**: Next.js 15.3.5
+- **Runtime**: React 19
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 4
+- **Linting**: ESLint 9
+- **Containerization**: Docker
+
+## Development Workflow
+
+1. **Code Changes**: Edit files in the `src/` directory
+2. **Hot Reloading**: Changes automatically reflect in the browser
+3. **Type Checking**: TypeScript provides real-time type checking
+4. **Linting**: ESLint ensures code quality
+
+## Building for Production
+
 ```bash
+# Build the application
 npm run build
-npm start
+
+# The built application will be in the .next directory
 ```
 
-## Code Patterns
+## Docker Development
 
-### Component Structure
-All skill pages follow a consistent pattern:
-```typescript
-'use client';
-import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-// Skill-specific imports
-```
+The frontend container includes:
 
-### State Management
-- **Local State**: useState for component-specific data
-- **Global State**: AuthContext for user authentication
-- **Persistence**: localStorage for progress and answers
-- **API State**: Custom hooks for data fetching
-
-### Type Safety
-- **Interface Definitions**: Centralized in `/types` directory
-- **API Types**: Type-safe API client with generic responses
-- **Component Props**: Fully typed component interfaces
-
-## Key Utilities
-
-### API Client (`utils/api.ts`)
-- Centralized HTTP client with authentication
-- Type-safe request/response handling
-- Automatic error handling and retry logic
-
-### Context Menu (`utils/contextMenu.ts`)
-- Text selection and highlighting functionality
-- Right-click context menu implementation
-- Position calculation for text ranges
-
-### Toast Notifications (`utils/toast.ts`)
-- User feedback system
-- Success/error message display
-- Auto-dismiss functionality
-
-## Development Guidelines
-
-### Code Style
-- Follow TypeScript strict mode
-- Use functional components with hooks
-- Implement proper error boundaries
-- Maintain consistent naming conventions
-
-### Performance
-- Implement proper memoization where needed
-- Use Next.js Image component for optimization
-- Lazy load non-critical components
-- Optimize bundle size with dynamic imports
-
-### Testing
-- Unit tests for utility functions
-- Component testing with React Testing Library
-- API integration testing
-- E2E testing for critical user flows
-
-## Deployment
-
-### Production Build
-```bash
-npm run build
-npm start
-```
-
-### Docker Deployment
-- Multi-stage Dockerfile for optimization
-- Environment variable configuration
-- Health check endpoints
-- Static asset optimization
-
-## Backend Dependencies
-
-The frontend expects the following backend endpoints:
-
-### Authentication
-- `POST /api/auth/login` - User authentication
-- `POST /api/auth/register` - User registration  
-- `GET /api/auth/profile` - Profile retrieval
-- `PUT /api/auth/profile` - Profile updates
-
-### Answer Submission
-- `POST /api/answers/submit` - Submit answers for all skills
+- **Volume Mounting**: Source code is mounted for live development
+- **Hot Reloading**: Changes are reflected immediately
+- **Network Access**: Communicates with backend via Docker network
+- **Environment Variables**: Automatically configured for Docker environment
 
 ## Troubleshooting
 
 ### Common Issues
-1. **API Connection**: Verify backend URL in environment variables
-2. **OpenAI Integration**: Check API key configuration
-3. **Authentication**: Clear localStorage for token issues
-4. **Build Errors**: Ensure all TypeScript types are properly defined
 
-### Debug Mode
-Enable debug logging by setting `NODE_ENV=development` and checking browser console for detailed error messages.
+1. **Build Failures**: Ensure all dependencies are properly installed
+2. **Type Errors**: Check TypeScript configuration and type definitions
+3. **Styling Issues**: Verify Tailwind CSS configuration
+4. **API Connection**: Ensure backend service is running and accessible
+
+### Debug Commands
+
+```bash
+# Check container logs
+docker logs unbabel-frontend
+
+# Access container shell
+docker exec -it unbabel-frontend sh
+
+# Rebuild container
+docker-compose build frontend
+```
+
+## Contributing
+
+1. Follow the project's coding standards
+2. Ensure all TypeScript types are properly defined
+3. Test changes in the Docker environment
+4. Update documentation as needed
+
+## License
+
+This project is licensed under the MIT License.

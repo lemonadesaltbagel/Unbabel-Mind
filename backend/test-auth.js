@@ -1,5 +1,5 @@
 const axios=require('axios');
-const BASE_URL='http://localhost:3001/api';
+const BASE_URL='http://backend:3001/api';
 const testAuth=async()=>{
 try{
 console.log('Testing registration...');

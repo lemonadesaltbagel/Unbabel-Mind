@@ -36,7 +36,7 @@ Unbabel Mind is your comprehensive IELTS preparation companion, combining tradit
 - **Cambridge IELTS listening materials**
 - **Progress persistence across sessions**
 
-<img width="1789" height="1179" alt="image" src="https://github.com/user-attachments/assets/534da315-ff3e-4675-9e9c-815e7aebddb2" />
+<img width="1789" height="1179" alt="image" src="https://github.com/user-attachments/assets/534da315-ff3e-4675-9e9c-6840a97bddb2" />
 
 
 ### 🗣️ **Speaking Module**
@@ -46,7 +46,7 @@ Unbabel Mind is your comprehensive IELTS preparation companion, combining tradit
 - **Performance tracking**
 - **IELTS-style question formats**
 
-<img width="1070" height="1113" alt="image" src="https://github.com/user-attachments/assets/68463f92-6f56-4b85-b1d7-a96140a97b64" />
+<img width="1070" height="1113" alt="image" src="https://github.com/user-attachments/assets/6843f92-f56-4b85-b1d7-a96140a97b64" />
 
 ### ✍️ **Writing Module**
 - **Rich text editor** with word count
@@ -66,7 +66,7 @@ Unbabel Mind is your comprehensive IELTS preparation companion, combining tradit
 - **Adaptive difficulty** based on your level
 - **Instant feedback** and explanations
 
-<img width="2337" height="1771" alt="image" src="https://github.com/user-attachments/assets/f7fe0450-f242-47ce-abc8-75828f736a5a" />
+<img width="2337" height="1771" alt="image" src="https://github.com/user-attachments/assets/5f7fe050-f242-47ce-abc8-5a28f736a5a" />
 
 
 ## 🚀 Technology Stack
@@ -85,7 +85,7 @@ Unbabel Mind is your comprehensive IELTS preparation companion, combining tradit
 - **Real-time feedback** and performance tracking
 - **Seamless authentication** and user management
 
-<img width="3802" height="2297" alt="image" src="https://github.com/user-attachments/assets/310f930c-e3d7-4e21-b405-3b92765f2324" />
+<img width="3802" height="2297" alt="image" src="https://github.com/user-attachments/assets/310f9d7-e3d7-4e21-b405-3b92765f2324" />
 
 ## 📊 Progress Tracking
 

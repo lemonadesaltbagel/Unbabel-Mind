@@ -73,7 +73,7 @@ This project is now fully containerized with Docker. The setup includes frontend
 ## Environment Variables
 
 ### Frontend
-- `NEXT_PUBLIC_API_URL`: Backend API URL (default: http://localhost:3001)
+- `NEXT_PUBLIC_API_URL`: Backend API URL (default: http://backend:3001/api)
 
 ### Backend
 - `NODE_ENV`: Environment (development/production)

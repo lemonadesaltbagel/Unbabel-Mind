@@ -1,4 +1,4 @@
-# Docker Setup for Unbabel Project
+# Docker Setup for Unbabel Mind Project
 
 This project uses Docker for consistent development and deployment environments with a full-stack setup including frontend, backend, and database services.
 
@@ -30,13 +30,15 @@ docker-compose -f docker-compose.prod.yml down
 ### Frontend (Next.js)
 - **Container:** `unbabel-frontend` (dev) / `unbabel-frontend-prod` (prod)
 - **Port:** `3000` (host) → `3000` (container)
-- **URL:** http://localhost:3000
+- **URL:** http://localhost:3000 (user access)
+- **Internal Communication:** http://backend:3001/api
 - **Environment:** Development with hot reload, production optimized
 
 ### Backend API (Node.js/Express)
 - **Container:** `unbabel-backend` (dev) / `unbabel-backend-prod` (prod)
 - **Port:** `3001` (host) → `3001` (container)
-- **URL:** http://localhost:3001/api
+- **URL:** http://localhost:3001/api (user access)
+- **Internal Communication:** postgres:5432 (database)
 - **Environment:** Development with nodemon, production optimized
 
 ### PostgreSQL Database
@@ -72,21 +74,6 @@ docker-compose build frontend
 docker-compose build backend
 ```
 
-### Using npm scripts (from backend directory)
-```bash
-# Start with Docker
-npm run docker:dev
-
-# Stop Docker services
-npm run docker:stop
-
-# Clean Docker volumes
-npm run docker:clean
-
-# View logs
-npm run docker:logs
-```
-
 ## Environment Variables
 
 ### Development Environment
@@ -104,7 +91,7 @@ The following environment variables are automatically set in Docker:
 
 **Frontend:**
 - `NODE_ENV=development`
-- `NEXT_PUBLIC_API_URL=http://localhost:3001/api`
+- `NEXT_PUBLIC_API_URL=http://backend:3001/api`
 
 ### Production Environment
 **Backend:**
@@ -119,7 +106,7 @@ The following environment variables are automatically set in Docker:
 
 **Frontend:**
 - `NODE_ENV=production`
-- `NEXT_PUBLIC_API_URL=http://localhost:3001`
+- `NEXT_PUBLIC_API_URL=http://backend:3001`
 
 ## Database Access
 
