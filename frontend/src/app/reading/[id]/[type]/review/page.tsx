@@ -58,7 +58,7 @@ Respond with plain text suggestions only, one per line, without any formatting o
 callGptApi(prompt).then(response=>{try{const suggestions=response.split('\n').map(line=>line.trim()).filter(line=>line.length>0).slice(0,6);if(suggestions.length>0){setAiSuggestions(suggestions);}else{setAiSuggestions(["Focus on reading comprehension strategies","Practice identifying key information in passages","Work on vocabulary building exercises","Review question types you struggled with"]);}}catch{setAiSuggestions(["Focus on reading comprehension strategies","Practice identifying key information in passages","Work on vocabulary building exercises","Review question types you struggled with"]);}}).finally(()=>{setIsLoading(false);});}
 },[qs,results,evidence]);
 const callGptApi=async(prompt:string):Promise<string>=>{try{const hasToken=await checkTokenAndWarn();if(!hasToken)return'Please configure your OpenAI API token in your profile to use AI features.';const res=await fetch('/api/reviewaiapi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt}),});const data=await res.json();if(Array.isArray(data)&&data[0]?.generated_text)return data[0].generated_text;if(data.generated_text)return data.generated_text;return JSON.stringify(data);}catch{return'Error calling Unbabel API.';}};
-const hn=(d:'back'|'next')=>{if(d==='back')r.push('/dashboard?tab=Reading');else r.push(`/reading/${id}/${Number(type)+1}/review`);};
+const hn=(d:'back'|'next')=>{if(d==='back')r.push('/dashboard?tab=Reading');else{const nt=Number(type)+1;if(nt>=1&&nt<=4)r.push(`/reading/${id}/${nt}`);}};
 const hcm=(e:React.MouseEvent)=>{e.preventDefault();setContextMenuPosition({x:e.pageX,y:e.pageY});setShowContextMenu(true);};
 const hh=()=>{const s=window.getSelection();if(!s)return;const st=s.toString().trim();const r=s.getRangeAt(0);const pcr=r.cloneRange();pcr.selectNodeContents(document.querySelector('.passage-content')as Node);pcr.setEnd(r.startContainer,r.startOffset);const start=pcr.toString().length;setHighlights(prev=>[...prev,{text:st,start,end:start+st.length}]);setShowContextMenu(false);};
 const hch=()=>{const s=window.getSelection();if(!s)return;const st=s.toString().trim();const r=s.getRangeAt(0);const pcr=r.cloneRange();pcr.selectNodeContents(document.querySelector('.passage-content')as Node);pcr.setEnd(r.startContainer,r.startOffset);const start=pcr.toString().length;const end=start+st.length;setHighlights(prev=>prev.filter(h=>!(start<=h.end&&end>=h.start)));setShowContextMenu(false);};
@@ -198,11 +198,11 @@ Personalized by <span className="bg-gradient-to-r from-red-400 via-orange-400 vi
 </div>
 </div>
 <div className="w-full flex justify-center mt-6 space-x-4">
-<button onClick={()=>hn('back')} className="px-6 py-2 rounded-lg transition-colors bg-blue-500 hover:bg-blue-600 text-white">
-Back
+<button onClick={()=>hn('back')} className="px-8 py-2 rounded-lg transition-colors bg-blue-500 hover:bg-blue-600 text-white whitespace-nowrap">
+Back to Dashboard
 </button>
-<button onClick={()=>hn('next')} disabled={type==='3'} className={`px-6 py-2 rounded-lg transition-colors ${type==='3'?'bg-gray-300 cursor-not-allowed text-gray-500':'bg-blue-500 hover:bg-blue-600 text-white'}`}>
-Next
+<button onClick={()=>hn('next')} disabled={type==='3'} className={`px-8 py-2 rounded-lg transition-colors whitespace-nowrap ${type==='3'?'bg-gray-300 cursor-not-allowed text-gray-500':'bg-blue-500 hover:bg-blue-600 text-white'}`}>
+Next Exercise
 </button>
 </div>
 </div>);}
