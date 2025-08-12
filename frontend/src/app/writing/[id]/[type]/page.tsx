@@ -1,46 +1,25 @@
 'use client';
-import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { Home } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { ldp, sub, wc } from '@/utils/writing';
-import { showToast } from '@/utils/toast';
-import WritingPrompt from '@/components/WritingPrompt';
-import EssayEditor from '@/components/EssayEditor';
-import ReadingControls from '@/components/ReadingControls';
-import CopyrightMessage from '@/components/CopyrightMessage';
-import { useTestPageTitle } from '@/utils/usePageTitle';
+import{useParams,useRouter}from'next/navigation';
+import{useEffect,useState}from'react';
+import{Home}from'lucide-react';
+import{useAuth}from'@/contexts/AuthContext';
+import{ldp,sub,wc}from'@/utils/writing';
+import{showToast}from'@/utils/toast';
+import WritingPrompt from'@/components/WritingPrompt';
+import EssayEditor from'@/components/EssayEditor';
+import ReadingControls from'@/components/ReadingControls';
+import CopyrightMessage from'@/components/CopyrightMessage';
+import{useTestPageTitle}from'@/utils/usePageTitle';
+import{useTimer}from'@/utils/useTimer';
 export default function WritingPage(){
 useTestPageTitle();
-const r=useRouter();
-const p=useParams();
-const {user,loading}=useAuth();
-const {id,type}=p as {id:string;type:string};
-const pid=Number(id);
-const qt=Number(type);
-const lk=`writing-answers-${id}-${type}`;
-const [pt,setPt]=useState('');
-const [pc,setPc]=useState('Loading writing prompt...');
-const [is,setIs]=useState(false);
-const [essay,setEssay]=useState('');
-const [showConfirm,setShowConfirm]=useState(false);
+const r=useRouter();const p=useParams();const{user,loading}=useAuth();const{id,type}=p as{id:string;type:string};const pid=Number(id);const qt=Number(type);const lk=`writing-answers-${id}-${type}`;const[pt,setPt]=useState('');const[pc,setPc]=useState('Loading writing prompt...');const[is,setIs]=useState(false);const[essay,setEssay]=useState('');const[showConfirm,setShowConfirm]=useState(false);const{tm}=useTimer();
 useEffect(()=>{
 if(!loading&&!user)r.push('/login');
 },[user,loading,r]);
-useEffect(()=>{
-(async()=>{
-const {title,content}=await ldp(id,type);
-setPt(title);
-setPc(content);
-})();
-},[id,type]);
-useEffect(()=>{
-const saved=localStorage.getItem(lk);
-if(saved)setEssay(saved);
-},[lk]);
-useEffect(()=>{
-localStorage.setItem(lk,essay);
-},[lk,essay]);
+useEffect(()=>{(async()=>{const{title,content}=await ldp(id,type);setPt(title);setPc(content);})();},[id,type]);
+useEffect(()=>{const saved=localStorage.getItem(lk);if(saved)setEssay(saved);},[lk]);
+useEffect(()=>{localStorage.setItem(lk,essay);},[lk,essay]);
 const hsub=async()=>{
 if(is)return;
 const trimmedEssay=essay.trim();
@@ -93,5 +72,5 @@ return(<div className="min-h-screen bg-black text-black p-6 flex flex-col items-
 </div>
 </div>
 </div>)}
-<div className="w-full max-w-full flex justify-start mb-4"><button onClick={()=>r.push('/dashboard')}><Home className="w-6 h-6 text-white hover:text-blue-500 transition"/></button></div><div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-4 w-full max-w-full"><WritingPrompt title={pt} content={pc} wordCount={wc(essay)}/><EssayEditor essay={essay} setEssay={setEssay}/></div><ReadingControls questionType={qt} isSubmitting={is} onSubmit={hsub} onNavigate={hn}/></div>);
+<div className="w-full max-w-full flex justify-between items-center mb-4"><button onClick={()=>r.push('/dashboard')}><Home className="w-6 h-6 text-white hover:text-blue-500 transition"/></button><div className="text-white text-xl font-mono">{tm}</div><div></div></div><div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-4 w-full max-w-full"><WritingPrompt title={pt} content={pc} wordCount={wc(essay)}/><EssayEditor essay={essay} setEssay={setEssay}/></div><ReadingControls questionType={qt} isSubmitting={is} onSubmit={hsub} onNavigate={hn}/></div>);
 }
