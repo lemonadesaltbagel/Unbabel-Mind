@@ -32,34 +32,35 @@ return(
 <div className="mb-20">
 <div className="text-center mb-12">
 <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-blue-400 bg-clip-text text-transparent">Interactive Demo</h2>
-<p className="text-lg text-gray-400 max-w-2xl mx-auto">Experience the sophistication of our AI-powered learning platform</p>
+<p className="text-lg text-gray-400 max-w-2xl mx-auto">Experience our AI-powered learning platform</p>
 </div>
 <div className="relative">
-<div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-transparent to-blue-600/20 rounded-3xl blur-3xl"></div>
-<div className="relative bg-gradient-to-br from-slate-900/80 via-purple-900/40 to-blue-900/40 backdrop-blur-xl p-10 rounded-3xl border border-white/10 shadow-2xl shadow-purple-500/20 min-h-[700px]">
-<div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/50 to-transparent"></div>
-<div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent"></div>
-<div className="flex justify-center mb-8">
-<div className="bg-black/40 backdrop-blur-sm rounded-2xl p-2 border border-white/10 shadow-lg">
-{['Reading','Listening','Speaking','Writing'].map((tab)=>(<button key={tab} onClick={()=>setActiveTab(tab)} className={`px-8 py-4 rounded-xl font-semibold transition-all duration-300 relative overflow-hidden ${activeTab===tab?'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg shadow-purple-500/30':'bg-transparent text-gray-400 hover:text-white hover:bg-white/5'}`}>
-{activeTab===tab&&<div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-blue-400/20 animate-pulse"></div>}
-<span className="relative z-10">{tab}</span>
+<div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-transparent to-blue-600/10 rounded-3xl blur-2xl"></div>
+<div className="relative bg-gradient-to-br from-slate-900/90 via-purple-900/30 to-blue-900/30 backdrop-blur-xl p-10 rounded-3xl border border-white/20 shadow-xl min-h-[700px]">
+<div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/30 to-transparent"></div>
+<div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"></div>
+<div className="flex h-[600px]">
+<div className="bg-black/30 backdrop-blur-sm rounded-2xl p-2 border border-white/20 mr-6 flex-shrink-0">
+<div className="flex flex-col space-y-2 h-full">
+{['Reading','Listening','Speaking','Writing'].map((tab)=>(<button key={tab} onClick={()=>setActiveTab(tab)} className={`px-6 py-4 rounded-xl font-semibold transition-all duration-300 text-left flex-shrink-0 ${activeTab===tab?'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg':'bg-transparent text-gray-400 hover:text-white hover:bg-white/10'}`}>
+{tab}
 </button>))}
 </div>
 </div>
-<div className="relative bg-gradient-to-br from-white/5 via-purple-900/20 to-blue-900/20 backdrop-blur-sm p-12 rounded-2xl border border-white/10 shadow-xl min-h-[550px] flex items-center justify-center">
-<div className="absolute top-4 right-4 w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
+<div className="flex-1 relative bg-gradient-to-br from-white/5 via-purple-900/10 to-blue-900/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center min-h-0">
+<div className="absolute top-4 right-4 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
 <div className="absolute top-4 left-4 flex space-x-2">
 <div className="w-3 h-3 bg-red-400 rounded-full"></div>
 <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
 <div className="w-3 h-3 bg-green-400 rounded-full"></div>
 </div>
 <div className="text-center">
-<div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-blue-400 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-lg shadow-purple-500/30">
+<div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-blue-400 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-lg">
 <div className="text-2xl">✨</div>
 </div>
 <p className="text-2xl font-light text-gray-200 mb-4">{activeTab} Exercise</p>
 <p className="text-gray-400 text-lg">Premium learning experience coming soon</p>
+</div>
 </div>
 </div>
 </div>
