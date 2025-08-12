@@ -98,8 +98,8 @@ Keep your response concise, clear, encouraging, and focused on helping the user 
 useEffect(()=>{const handleClickOutside=(event:MouseEvent)=>{if(contextMenuRef.current&&!contextMenuRef.current.contains(event.target as Node)){setShowContextMenu(false);}};document.addEventListener('click',handleClickOutside);return()=>document.removeEventListener('click',handleClickOutside);},[]);
 if(loading)return<div className="min-h-screen bg-black flex items-center justify-center"><div className="text-white text-xl">Loading...</div></div>;
 if(!user)return null;
-return(<div className="min-h-screen bg-black text-black p-4 sm:p-6 flex flex-col items-center">
-<div className="w-full max-w-6xl flex items-center mb-4">
+return(<div className="min-h-screen bg-black text-black p-6 flex flex-col">
+<div className="w-full flex justify-between mb-4">
 <div className="w-6">
 <button onClick={()=>r.push('/dashboard')} className="text-white hover:text-blue-500 transition">
 <Home className="w-6 h-6" />
@@ -110,9 +110,9 @@ return(<div className="min-h-screen bg-black text-black p-4 sm:p-6 flex flex-col
 </div>
 <div className="w-6"></div>
 </div>
-<div className="flex w-full max-w-6xl">
-<div className="flex w-1/3 justify-end pr-2">
-<div className="w-[320px] bg-white p-6 rounded-xl shadow overflow-y-auto h-[80vh]">
+<div className="flex w-full gap-4">
+<div className="w-1/4">
+<div className="bg-white p-6 rounded-xl shadow overflow-y-auto h-[80vh]">
 <div className="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg shadow-sm text-center font-semibold mb-4">
 Unbabel
 </div>
@@ -121,8 +121,8 @@ Unbabel
 </div>):(<div className="text-center text-gray-500 mt-4">Get Started with Unbabel for IELTS</div>)}
 </div>
 </div>
-<div className="flex space-x-4">
-<div className="w-[500px] bg-white p-6 rounded-xl shadow overflow-y-auto h-[80vh] border-r border-gray-400">
+<div className="w-2/4">
+<div className="bg-white p-6 rounded-xl shadow overflow-y-auto h-[80vh]">
 <h2 className="text-xl font-bold mb-2">{pt}</h2>
 <div className="whitespace-pre-wrap text-sm transcript-content" onContextMenu={hcm}>
 {(()=>{let lastIndex=0;const sortedHighlights=[...highlights].sort((a,b)=>a.start-b.start);const result=[];sortedHighlights.forEach((highlight,index)=>{if(highlight.start>lastIndex){result.push(<span key={`text-${index}`}>{pc.slice(lastIndex,highlight.start)}</span>);}result.push(<span key={`highlight-${index}`} className="bg-yellow-200">{pc.slice(highlight.start,highlight.end)}</span>);lastIndex=highlight.end;});if(lastIndex<pc.length){result.push(<span key="text-last">{pc.slice(lastIndex)}</span>);}return result;})()}
@@ -133,7 +133,9 @@ Unbabel
 <button className="w-full px-4 py-2 text-left hover:bg-gray-100 text-sm" onClick={hp}>Unbabel Paraphrase</button>
 </div>)}
 </div>
-<div className="w-[320px] bg-white p-6 rounded-xl shadow overflow-y-auto h-[80vh]">
+</div>
+<div className="w-1/4">
+<div className="bg-white p-6 rounded-xl shadow overflow-y-auto h-[80vh]">
 <h2 className="text-xl font-bold mb-4">Your Answers</h2>
 <ol className="space-y-4 text-sm">
 {qs.map((q,i)=>{if(!('number'in q)||!q.number)return null;const result=results.find(r=>r.questionId===q.number);if(!result)return null;const userAns=result.userAnswer[0]||'';const correct=result.correctAnswer;const isCorrect=result.isCorrect;return(<li key={i}>
@@ -173,7 +175,7 @@ Score: {results.length>0?Math.round((results.filter(r=>r.isCorrect).length/resul
 </div>
 </div>
 </div>
-<div className="w-full max-w-6xl flex justify-center mt-6 space-x-4">
+<div className="w-full flex justify-center mt-6 space-x-4">
 <button onClick={()=>hn('back')} className="px-6 py-2 rounded-lg transition-colors bg-blue-500 hover:bg-blue-600 text-white">
 Back
 </button>

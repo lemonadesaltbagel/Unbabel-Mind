@@ -1,31 +1,31 @@
 "use client";
-import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState, useRef } from 'react';
-import { Home } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { ldp, ldq, ldh, lde, getResultsWithCorrectAnswers } from '@/utils/reading';
-import { useTestPageTitle } from '@/utils/usePageTitle';
-import {checkTokenAndWarn} from '@/utils/tokenCheck';
+import{useParams,useRouter}from'next/navigation';
+import{useEffect,useState,useRef}from'react';
+import{Home}from'lucide-react';
+import{useAuth}from'@/contexts/AuthContext';
+import{ldp,ldq,ldh,lde,getResultsWithCorrectAnswers}from'@/utils/reading';
+import{useTestPageTitle}from'@/utils/usePageTitle';
+import{checkTokenAndWarn}from'@/utils/tokenCheck';
 interface Question{type:string;text?:string;number?:number;question?:string;options?:string[];correctAnswer?:string;}
 interface Highlight{text:string;start:number;end:number;}
 export default function ReviewPage(){
 useTestPageTitle();
 const r=useRouter();
 const p=useParams();
-const {user,loading}=useAuth();
-const {id,type}=p as {id:string;type:string};
-const [pt,setPt]=useState('');
-const [pc,setPc]=useState('');
-const [qs,setQs]=useState<Question[]>([]);
-const [highlights,setHighlights]=useState<Highlight[]>([]);
-const [showContextMenu,setShowContextMenu]=useState(false);
-const [contextMenuPosition,setContextMenuPosition]=useState({x:0,y:0});
+const{user,loading}=useAuth();
+const{id,type}=p as{id:string;type:string};
+const[pt,setPt]=useState('');
+const[pc,setPc]=useState('');
+const[qs,setQs]=useState<Question[]>([]);
+const[highlights,setHighlights]=useState<Highlight[]>([]);
+const[showContextMenu,setShowContextMenu]=useState(false);
+const[contextMenuPosition,setContextMenuPosition]=useState({x:0,y:0});
 const contextMenuRef=useRef<HTMLDivElement>(null);
-const [aiResponse,setAiResponse]=useState('');
-const [isLoading,setIsLoading]=useState(false);
-const [evidence,setEvidence]=useState<{number:number;text:string}[]>([]);
-const [aiSuggestions,setAiSuggestions]=useState<string[]>([]);
-const [results,setResults]=useState<{questionId:number;userAnswer:string[];correctAnswer:string;isCorrect:boolean}[]>([]);
+const[aiResponse,setAiResponse]=useState('');
+const[isLoading,setIsLoading]=useState(false);
+const[evidence,setEvidence]=useState<{number:number;text:string}[]>([]);
+const[aiSuggestions,setAiSuggestions]=useState<string[]>([]);
+const[results,setResults]=useState<{questionId:number;userAnswer:string[];correctAnswer:string;isCorrect:boolean}[]>([]);
 useEffect(()=>{
 if(!loading&&!user){r.push('/login');return;}
 },[user,loading,r]);
