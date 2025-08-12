@@ -68,8 +68,12 @@ useEffect(()=>{
 if(essay&&pc&&!rating&&!isLoading&&!error)getFeedback();
 },[essay,pc,pt,rating,isLoading,error,getFeedback]);
 const hn=(d:'back'|'next')=>{
-const nt=d==='back'?Number(type)-1:Number(type)+1;
+if(d==='back'){
+r.push('/dashboard?tab=Writing');
+}else{
+const nt=Number(type)+1;
 if(nt>=1&&nt<=4)r.push(`/writing/${id}/${nt}/review`);
+}
 };
 if(loading)return(<div className="min-h-screen bg-black flex items-center justify-center"><div className="text-white text-xl">Loading...</div></div>);
 if(!user)return null;
@@ -77,7 +81,7 @@ if(pt===''||pc==='Failed to load writing prompt.')return(<div className="min-h-s
 return(<div className="min-h-screen bg-black text-black p-6 flex flex-col">
 <div className="w-full flex justify-between mb-4">
 <div className="w-6">
-<button onClick={()=>r.push('/dashboard')} className="text-white hover:text-blue-500 transition">
+<button onClick={()=>r.push('/dashboard?tab=Writing')} className="text-white hover:text-blue-500 transition">
 <Home className="w-6 h-6"/>
 </button>
 </div>

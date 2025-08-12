@@ -54,8 +54,12 @@ showToast(message,true);
 setIs(false);
 };
 const hn=(d:'back'|'next')=>{
-const nt=d==='back'?qt-1:qt+1;
+if(d==='back'){
+r.push('/dashboard?tab=Writing');
+}else{
+const nt=qt+1;
 if(nt>=1&&nt<=4)r.push(`/writing/${id}/${nt}`);
+}
 };
 if(loading)return(<div className="min-h-screen bg-black flex items-center justify-center"><div className="text-white text-xl">Loading...</div></div>);
 if(!user)return null;
@@ -72,5 +76,5 @@ return(<div className="min-h-screen bg-black text-black p-6 flex flex-col items-
 </div>
 </div>
 </div>)}
-<div className="w-full max-w-full flex justify-between items-center mb-4"><button onClick={()=>r.push('/dashboard')}><Home className="w-6 h-6 text-white hover:text-blue-500 transition"/></button><div className="text-white text-xl font-mono">{tm}</div><div></div></div><div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-4 w-full max-w-full"><WritingPrompt title={pt} content={pc} wordCount={wc(essay)}/><EssayEditor essay={essay} setEssay={setEssay}/></div><ReadingControls questionType={qt} isSubmitting={is} onSubmit={hsub} onNavigate={hn}/></div>);
+<div className="w-full max-w-full flex justify-between items-center mb-4"><button onClick={()=>r.push('/dashboard?tab=Writing')}><Home className="w-6 h-6 text-white hover:text-blue-500 transition"/></button><div className="text-white text-xl font-mono">{tm}</div><div></div></div><div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-4 w-full max-w-full"><WritingPrompt title={pt} content={pc} wordCount={wc(essay)}/><EssayEditor essay={essay} setEssay={setEssay}/></div><ReadingControls questionType={qt} isSubmitting={is} onSubmit={hsub} onNavigate={hn}/></div>);
 }

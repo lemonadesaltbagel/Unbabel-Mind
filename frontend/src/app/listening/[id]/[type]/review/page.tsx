@@ -101,7 +101,7 @@ if(!user)return null;
 return(<div className="min-h-screen bg-black text-black p-6 flex flex-col">
 <div className="w-full flex justify-between mb-4">
 <div className="w-6">
-<button onClick={()=>r.push('/dashboard')} className="text-white hover:text-blue-500 transition">
+<button onClick={()=>r.push('/dashboard?tab=Listening')} className="text-white hover:text-blue-500 transition">
 <Home className="w-6 h-6" />
 </button>
 </div>
