@@ -3,7 +3,7 @@ import{useRouter}from'next/navigation';
 import{BookOpen,Info}from'lucide-react';
 export default function CopyrightMessage({quizType,quizId,questionType}:{quizType:string;quizId:string;questionType:string}){
 const r=useRouter();
-const hg=()=>window.open('https://github.com/lemonadesaltbagel/Unbabel-Mind/blob/main/frontend/public/QUIZ_CREATION_GUIDE.md','_blank');
+const hg=()=>window.open('/QUIZ_CREATION_GUIDE.html','_blank');
 return(<div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
 <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8 text-center">
 <div className="mb-6">

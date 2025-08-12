@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📚 How to Add Your Own Quizzes to Unbabel Mind</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;line-height:1.6;color:#333;max-width:1200px;margin:0 auto;padding:20px;background:#f8f9fa;}
+.container{background:white;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);padding:40px;margin:20px 0;}
+h1{font-size:2.5em;color:#2c3e50;margin-bottom:20px;border-bottom:3px solid #3498db;padding-bottom:10px;}
+h2{font-size:1.8em;color:#34495e;margin:30px 0 15px 0;border-left:4px solid #3498db;padding-left:15px;}
+h3{font-size:1.4em;color:#2c3e50;margin:25px 0 10px 0;}
+p{margin-bottom:15px;font-size:1.1em;}
+ul,ol{margin:15px 0;padding-left:30px;}
+li{margin-bottom:8px;}
+code{background:#f1f2f6;padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:0.9em;}
+pre{background:#2c3e50;color:#ecf0f1;padding:20px;border-radius:8px;overflow-x:auto;margin:20px 0;font-family:'Courier New',monospace;font-size:0.9em;}
+pre code{background:none;padding:0;color:inherit;}
+blockquote{border-left:4px solid #3498db;padding-left:20px;margin:20px 0;font-style:italic;color:#7f8c8d;}
+.emoji{font-size:1.2em;}
+.file-structure{background:#f8f9fa;border:1px solid #dee2e6;border-radius:8px;padding:20px;margin:20px 0;font-family:'Courier New',monospace;}
+.example-box{background:#e8f5e8;border:1px solid #28a745;border-radius:8px;padding:20px;margin:20px 0;}
+.warning-box{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:20px;margin:20px 0;}
+.tip-box{background:#d1ecf1;border:1px solid #17a2b8;border-radius:8px;padding:20px;margin:20px 0;}
+.step-number{display:inline-block;background:#3498db;color:white;width:30px;height:30px;border-radius:50%;text-align:center;line-height:30px;margin-right:10px;font-weight:bold;}
+.json-example{background:#2c3e50;color:#ecf0f1;padding:15px;border-radius:8px;overflow-x:auto;margin:15px 0;}
+.checklist{list-style:none;padding-left:0;}
+.checklist li:before{content:"✅ ";margin-right:10px;}
+.troubleshooting-table{width:100%;border-collapse:collapse;margin:20px 0;}
+.troubleshooting-table th,.troubleshooting-table td{border:1px solid #dee2e6;padding:12px;text-align:left;}
+.troubleshooting-table th{background:#f8f9fa;font-weight:bold;}
+@media (max-width:768px){body{padding:10px;}h1{font-size:2em;}h2{font-size:1.5em;}h3{font-size:1.2em;}.container{padding:20px;}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1><span class="emoji">📚</span> How to Add Your Own Quizzes to Unbabel Mind</h1>
+<p>Welcome to the comprehensive guide for creating custom quizzes in Unbabel Mind! This guide will walk you through the entire process of adding your own reading and listening quizzes with questions, answers, and evidence.</p>
+<div class="tip-box">
+<p><strong>Quiz creation workflow diagram showing the three main file types and their relationships</strong></p>
+</div>
+<h2><span class="emoji">🎯</span> What You'll Learn</h2>
+<p>By the end of this guide, you'll be able to:</p>
+<ul class="checklist">
+<li>Create reading passages and audio transcripts</li>
+<li>Design various question types (True/False/Not Given, Multiple Choice, Fill-in-the-blank)</li>
+<li>Provide correct answers and supporting evidence</li>
+<li>Structure your quiz data properly</li>
+<li>Test and deploy your custom quizzes</li>
+</ul>
+<h2><span class="emoji">📁</span> Understanding the File Structure</h2>
+<p>Each quiz in Unbabel Mind consists of <strong>three essential files</strong>:</p>
+<div class="file-structure">
+frontend/public/static/<br>
+├── reading/<br>
+│   ├── [quiz_id]_[type].txt      # 📄 Reading passage<br>
+│   ├── [quiz_id]_[type]_q.json   # ❓ Questions and answers<br>
+│   └── [quiz_id]_[type]_e.json   # 🔍 Evidence for answers<br>
+└── listening/<br>
+    ├── [quiz_id]_[type].txt      # 🎧 Audio transcript<br>
+    ├── [quiz_id]_[type]_q.json   # ❓ Questions and answers<br>
+    └── [quiz_id]_[type]_e.json   # 🔍 Evidence for answers
+</div>
+<h3>File Naming Convention</h3>
+<ul>
+<li><strong>Quiz ID</strong>: A unique identifier (e.g., <code>20</code>, <code>21</code>, <code>22</code>)</li>
+<li><strong>Type</strong>: The question type number (e.g., <code>1</code>, <code>2</code>, <code>3</code>, <code>4</code>)</li>
+<li><strong>Example</strong>: <code>20_1.txt</code> = Quiz 20, Type 1</li>
+</ul>
+<div class="tip-box">
+<p><strong>File structure diagram showing the three files and their purposes</strong></p>
+</div>
+<h2><span class="emoji">📄</span> Step 1: Creating the Passage/Transcript File</h2>
+<h3>For Reading Quizzes (<code>[quiz_id]_[type].txt</code>)</h3>
+<p>Create a text file with the following structure:</p>
+<pre><code>Title of Your Reading Passage
+
+Your reading passage content goes here. This should be a comprehensive text that provides enough information for students to answer the questions you'll create later.
+
+The passage should be well-structured with clear paragraphs and contain factual information that can be used to create various types of questions.
+
+Make sure your content is engaging and appropriate for the target audience level.</code></pre>
+<h3>For Listening Quizzes (<code>[quiz_id]_[type].txt</code>)</h3>
+<p>Create a transcript file with the same structure:</p>
+<pre><code>Title of Your Audio Transcript
+
+This is the transcript of the audio that students will listen to. It should contain all the spoken content, including:
+
+- Speaker dialogue
+- Descriptions of sounds or actions
+- Any relevant background information
+- Clear markers for different speakers if applicable
+
+The transcript should match exactly what students hear in the audio recording.</code></pre>
+<div class="example-box">
+<p><strong>Example of a well-formatted passage file</strong></p>
+</div>
+<h2><span class="emoji">❓</span> Step 2: Creating Questions (<code>[quiz_id]_[type]_q.json</code>)</h2>
+<p>This is the most important file! It contains all your questions, answer options, and correct answers.</p>
+<h3>Question Types Supported</h3>
+<ol>
+<li><strong>Intro</strong> - Instructions for a question section</li>
+<li><strong>Subheading</strong> - Section headers</li>
+<li><strong>True/False/Not Given (TFNG)</strong> - True/False/Not Given questions</li>
+<li><strong>Single Choice</strong> - Multiple choice with one correct answer</li>
+<li><strong>Multi Choice</strong> - Multiple choice with multiple correct answers</li>
+<li><strong>Fill-in-line</strong> - Fill in the blank questions</li>
+</ol>
+<h3>JSON Structure</h3>
+<div class="json-example">
+<pre><code>[
+  {
+    "type": "intro",
+    "text": "Questions 1-6\n\nDo the following statements agree with the information given in Reading Passage 1?\nIn boxes 1–6 on your answer sheet, write\nTRUE           if the statement agrees with the information\nFALSE         if the statement contradicts the information\nNOT GIVEN  if there is no information on this"
+  },
+  {
+    "type": "tfng",
+    "number": 1,
+    "question": "Your question text here?",
+    "options": ["TRUE", "FALSE", "NOT GIVEN"],
+    "correctAnswer": "TRUE"
+  },
+  {
+    "type": "single",
+    "number": 2,
+    "question": "What is the main purpose of this passage?",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "correctAnswer": "Option A"
+  },
+  {
+    "type": "multi",
+    "number": 3,
+    "question": "Which of the following are mentioned in the passage?",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "correctAnswer": ["Option A", "Option C"]
+  },
+  {
+    "type": "subheading",
+    "text": "Section Title"
+  },
+  {
+    "type": "fill-in-line",
+    "number": 4,
+    "text": "The answer is ____ and the result is ____.",
+    "correctAnswer": "correct"
+  }
+]</code></pre>
+</div>
+<h3>Question Type Details</h3>
+<h4>1. Intro Questions</h4>
+<div class="json-example">
+<pre><code>{
+  "type": "intro",
+  "text": "Your instruction text here"
+}</code></pre>
+</div>
+<h4>2. Subheading Questions</h4>
+<div class="json-example">
+<pre><code>{
+  "type": "subheading", 
+  "text": "Your section title"
+}</code></pre>
+</div>
+<h4>3. True/False/Not Given Questions</h4>
+<div class="json-example">
+<pre><code>{
+  "type": "tfng",
+  "number": 1,
+  "question": "Your statement here?",
+  "options": ["TRUE", "FALSE", "NOT GIVEN"],
+  "correctAnswer": "TRUE"
+}</code></pre>
+</div>
+<h4>4. Single Choice Questions</h4>
+<div class="json-example">
+<pre><code>{
+  "type": "single",
+  "number": 2,
+  "question": "Your question here?",
+  "options": ["Option A", "Option B", "Option C", "Option D"],
+  "correctAnswer": "Option A"
+}</code></pre>
+</div>
+<h4>5. Multi Choice Questions</h4>
+<div class="json-example">
+<pre><code>{
+  "type": "multi",
+  "number": 3,
+  "question": "Which of the following are correct?",
+  "options": ["Option A", "Option B", "Option C", "Option D"],
+  "correctAnswer": ["Option A", "Option C"]
+}</code></pre>
+</div>
+<h4>6. Fill-in-line Questions</h4>
+<div class="json-example">
+<pre><code>{
+  "type": "fill-in-line",
+  "number": 4,
+  "text": "The answer is ____ and the result is ____.",
+  "correctAnswer": "correct"
+}</code></pre>
+</div>
+<div class="tip-box">
+<p><strong>Visual examples of each question type</strong></p>
+</div>
+<h2><span class="emoji">🔍</span> Step 3: Creating Evidence (<code>[quiz_id]_[type]_e.json</code>)</h2>
+<p>The evidence file provides supporting text from the passage/transcript that justifies each correct answer.</p>
+<h3>JSON Structure</h3>
+<div class="json-example">
+<pre><code>[
+  {
+    "number": 1,
+    "text": "This is the specific text from the passage that supports the correct answer for question 1."
+  },
+  {
+    "number": 2,
+    "text": "This is the specific text from the passage that supports the correct answer for question 2."
+  },
+  {
+    "number": 3,
+    "text": "This is the specific text from the passage that supports the correct answer for question 3."
+  }
+]</code></pre>
+</div>
+<h3>Evidence Guidelines</h3>
+<ul>
+<li><strong>Be Specific</strong>: Quote the exact text that supports the answer</li>
+<li><strong>Be Concise</strong>: Keep evidence focused and relevant</li>
+<li><strong>Include Context</strong>: Provide enough context to understand the answer</li>
+<li><strong>Match Question Numbers</strong>: Each evidence entry should correspond to a question number</li>
+</ul>
+<div class="example-box">
+<p><strong>Example showing how evidence connects to questions and answers</strong></p>
+</div>
+<h2><span class="emoji">🛠️</span> Step-by-Step Creation Process</h2>
+<h3><span class="step-number">1</span>Plan Your Quiz</h3>
+<ol>
+<li><strong>Choose a Topic</strong>: Select an engaging subject for your quiz</li>
+<li><strong>Determine Question Types</strong>: Decide which types of questions to include</li>
+<li><strong>Create an Outline</strong>: Plan the structure of your passage and questions</li>
+</ol>
+<h3><span class="step-number">2</span>Write Your Passage/Transcript</h3>
+<ol>
+<li><strong>Create the Text File</strong>: Save as <code>[quiz_id]_[type].txt</code></li>
+<li><strong>Add Title</strong>: First line should be the title</li>
+<li><strong>Write Content</strong>: Create comprehensive, factual content</li>
+<li><strong>Review</strong>: Ensure clarity and accuracy</li>
+</ol>
+<h3><span class="step-number">3</span>Design Your Questions</h3>
+<ol>
+<li><strong>Create the JSON File</strong>: Save as <code>[quiz_id]_[type]_q.json</code></li>
+<li><strong>Add Instructions</strong>: Include intro questions for each section</li>
+<li><strong>Create Questions</strong>: Add various question types</li>
+<li><strong>Set Correct Answers</strong>: Ensure accuracy</li>
+</ol>
+<h3><span class="step-number">4</span>Provide Evidence</h3>
+<ol>
+<li><strong>Create the Evidence File</strong>: Save as <code>[quiz_id]_[type]_e.json</code></li>
+<li><strong>Quote Supporting Text</strong>: Extract relevant passages</li>
+<li><strong>Match Question Numbers</strong>: Ensure correspondence</li>
+<li><strong>Verify Accuracy</strong>: Double-check all evidence</li>
+</ol>
+<h3><span class="step-number">5</span>Test Your Quiz</h3>
+<ol>
+<li><strong>Validate JSON</strong>: Ensure proper formatting</li>
+<li><strong>Check File Names</strong>: Verify naming convention</li>
+<li><strong>Test in Application</strong>: Load and test the quiz</li>
+<li><strong>Review Results</strong>: Verify scoring and feedback</li>
+</ol>
+<div class="tip-box">
+<p><strong>Step-by-step workflow diagram</strong></p>
+</div>
+<h2><span class="emoji">📋</span> Example: Complete Quiz Creation</h2>
+<p>Let's create a complete example quiz about "Climate Change":</p>
+<h3>1. Passage File (<code>21_1.txt</code>)</h3>
+<pre><code>Climate Change: A Global Challenge
+
+Climate change represents one of the most significant challenges facing humanity in the 21st century. The Earth's average temperature has increased by approximately 1.1 degrees Celsius since pre-industrial times, primarily due to human activities such as burning fossil fuels and deforestation.
+
+The primary greenhouse gas responsible for global warming is carbon dioxide (CO2), which is released when we burn coal, oil, and natural gas for energy. Other significant greenhouse gases include methane, nitrous oxide, and fluorinated gases. These gases trap heat in the Earth's atmosphere, creating what is known as the greenhouse effect.
+
+The consequences of climate change are already visible worldwide. Rising sea levels threaten coastal communities, extreme weather events are becoming more frequent and intense, and many species are struggling to adapt to changing conditions. The Arctic is warming at twice the global average rate, leading to melting ice caps and permafrost.
+
+Scientists have identified several key solutions to address climate change. Renewable energy sources such as solar, wind, and hydroelectric power can replace fossil fuels. Energy efficiency measures can reduce overall energy consumption. Reforestation and forest conservation can help absorb CO2 from the atmosphere.
+
+Individual actions also play a crucial role in combating climate change. Simple steps such as using energy-efficient appliances, reducing car travel, and supporting sustainable products can make a significant difference when adopted by millions of people worldwide.</code></pre>
+<h3>2. Questions File (<code>21_1_q.json</code>)</h3>
+<div class="json-example">
+<pre><code>[
+  {
+    "type": "intro",
+    "text": "Questions 1-5\n\nDo the following statements agree with the information given in the reading passage?\nIn boxes 1–5 on your answer sheet, write\nTRUE           if the statement agrees with the information\nFALSE         if the statement contradicts the information\nNOT GIVEN  if there is no information on this"
+  },
+  {
+    "type": "tfng",
+    "number": 1,
+    "question": "The Earth's temperature has increased by more than 2 degrees Celsius since pre-industrial times.",
+    "options": ["TRUE", "FALSE", "NOT GIVEN"],
+    "correctAnswer": "FALSE"
+  },
+  {
+    "type": "tfng",
+    "number": 2,
+    "question": "Carbon dioxide is the only greenhouse gas contributing to global warming.",
+    "options": ["TRUE", "FALSE", "NOT GIVEN"],
+    "correctAnswer": "FALSE"
+  },
+  {
+    "type": "tfng",
+    "number": 3,
+    "question": "The Arctic is experiencing faster warming than the global average.",
+    "options": ["TRUE", "FALSE", "NOT GIVEN"],
+    "correctAnswer": "TRUE"
+  },
+  {
+    "type": "intro",
+    "text": "\n\nQuestions 4-6\nComplete the summary below.\n\nChoose ONE WORD from the passage for each answer."
+  },
+  {
+    "type": "fill-in-line",
+    "number": 4,
+    "text": "The main cause of climate change is the burning of ____ fuels.",
+    "correctAnswer": "fossil"
+  },
+  {
+    "type": "fill-in-line",
+    "number": 5,
+    "text": "Renewable energy sources include solar, wind, and ____ power.",
+    "correctAnswer": "hydroelectric"
+  }
+]</code></pre>
+</div>
+<h3>3. Evidence File (<code>21_1_e.json</code>)</h3>
+<div class="json-example">
+<pre><code>[
+  {
+    "number": 1,
+    "text": "The Earth's average temperature has increased by approximately 1.1 degrees Celsius since pre-industrial times"
+  },
+  {
+    "number": 2,
+    "text": "Other significant greenhouse gases include methane, nitrous oxide, and fluorinated gases"
+  },
+  {
+    "number": 3,
+    "text": "The Arctic is warming at twice the global average rate"
+  },
+  {
+    "number": 4,
+    "text": "The primary greenhouse gas responsible for global warming is carbon dioxide (CO2), which is released when we burn coal, oil, and natural gas for energy"
+  },
+  {
+    "number": 5,
+    "text": "Renewable energy sources such as solar, wind, and hydroelectric power can replace fossil fuels"
+  }
+]</code></pre>
+</div>
+<div class="example-box">
+<p><strong>Complete example showing all three files working together</strong></p>
+</div>
+<h2><span class="emoji">🎯</span> Best Practices</h2>
+<h3>Content Creation</h3>
+<ul>
+<li><strong>Choose Engaging Topics</strong>: Select subjects that interest your target audience</li>
+<li><strong>Ensure Accuracy</strong>: Verify all facts and information</li>
+<li><strong>Maintain Appropriate Difficulty</strong>: Match content to student level</li>
+<li><strong>Include Variety</strong>: Use different question types for engagement</li>
+</ul>
+<h3>Question Design</h3>
+<ul>
+<li><strong>Be Clear and Concise</strong>: Write unambiguous questions</li>
+<li><strong>Avoid Trick Questions</strong>: Focus on comprehension, not confusion</li>
+<li><strong>Provide Plausible Options</strong>: Make all answer choices reasonable</li>
+<li><strong>Test Your Questions</strong>: Ensure they work as intended</li>
+</ul>
+<h3>Evidence Quality</h3>
+<ul>
+<li><strong>Quote Accurately</strong>: Use exact text from the passage</li>
+<li><strong>Provide Sufficient Context</strong>: Include enough information to justify the answer</li>
+<li><strong>Be Specific</strong>: Avoid vague or general statements</li>
+<li><strong>Cross-Reference</strong>: Verify evidence matches questions and answers</li>
+</ul>
+<h3>File Management</h3>
+<ul>
+<li><strong>Use Consistent Naming</strong>: Follow the established convention</li>
+<li><strong>Validate JSON</strong>: Check for proper formatting</li>
+<li><strong>Backup Your Work</strong>: Keep copies of your files</li>
+<li><strong>Test Thoroughly</strong>: Verify everything works before deployment</li>
+</ul>
+<div class="tip-box">
+<p><strong>Best practices checklist</strong></p>
+</div>
+<h2><span class="emoji">🚀</span> Deployment</h2>
+<h3>Adding Your Quiz to the System</h3>
+<ol>
+<li><strong>Place Files</strong>: Copy your three files to the appropriate directory:
+   <ul>
+   <li>Reading: <code>frontend/public/static/reading/</code></li>
+   <li>Listening: <code>frontend/public/static/listening/</code></li>
+   </ul>
+</li>
+<li><strong>Verify Structure</strong>: Ensure all files follow the naming convention</li>
+<li><strong>Test Locally</strong>: Run the application and test your quiz</li>
+<li><strong>Deploy</strong>: Upload your files to the production environment</li>
+</ol>
+<h3>Accessing Your Quiz</h3>
+<p>Your quiz will be available at:</p>
+<ul>
+<li>Reading: <code>/reading/[quiz_id]/[type]</code></li>
+<li>Listening: <code>/listening/[quiz_id]/[type]</code></li>
+</ul>
+<p>Example: <code>/reading/21/1</code> for Quiz 21, Type 1</p>
+<div class="tip-box">
+<p><strong>Deployment workflow diagram</strong></p>
+</div>
+<h2><span class="emoji">🔧</span> Troubleshooting</h2>
+<h3>Common Issues and Solutions</h3>
+<table class="troubleshooting-table">
+<thead>
+<tr>
+<th>Problem</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>JSON Formatting Errors</strong><br>Quiz doesn't load or shows errors</td>
+<td>Validate JSON syntax using online tools</td>
+</tr>
+<tr>
+<td><strong>Missing Evidence</strong><br>AI feedback doesn't work properly</td>
+<td>Ensure every question has corresponding evidence</td>
+</tr>
+<tr>
+<td><strong>Incorrect File Names</strong><br>Quiz doesn't appear in the application</td>
+<td>Check naming convention and file locations</td>
+</tr>
+<tr>
+<td><strong>Question Number Mismatch</strong><br>Evidence doesn't match questions</td>
+<td>Verify question numbers in all files are consistent</td>
+</tr>
+</tbody>
+</table>
+<div class="warning-box">
+<p><strong>Common troubleshooting scenarios</strong></p>
+</div>
+<h2><span class="emoji">📚</span> Additional Resources</h2>
+<h3>Tools for Quiz Creation</h3>
+<ul>
+<li><strong>JSON Validator</strong>: <a href="https://jsonlint.com" target="_blank">jsonlint.com</a></li>
+<li><strong>Text Editor</strong>: VS Code, Sublime Text, or Notepad++</li>
+<li><strong>Markdown Editor</strong>: Typora or Obsidian for planning</li>
+</ul>
+<h3>Reference Materials</h3>
+<ul>
+<li><strong>IELTS Question Types</strong>: Study official IELTS materials</li>
+<li><strong>Academic Writing</strong>: Review academic text structures</li>
+<li><strong>Question Design</strong>: Learn about effective assessment design</li>
+</ul>
+<h3>Support</h3>
+<ul>
+<li><strong>Documentation</strong>: Check the main README for technical details</li>
+<li><strong>Community</strong>: Join our community forums for help</li>
+<li><strong>Feedback</strong>: Share your quiz creations with others</li>
+</ul>
+<div class="tip-box">
+<p><strong>Additional resources and tools</strong></p>
+</div>
+<h2><span class="emoji">🎉</span> Congratulations!</h2>
+<p>You've now learned how to create comprehensive quizzes for Unbabel Mind! With this knowledge, you can:</p>
+<ul class="checklist">
+<li>Create engaging reading and listening content</li>
+<li>Design various question types to test different skills</li>
+<li>Provide accurate answers and supporting evidence</li>
+<li>Contribute to the learning experience of students worldwide</li>
+</ul>
+<p>Remember, the key to great quizzes is <strong>quality content</strong>, <strong>clear questions</strong>, and <strong>accurate evidence</strong>. Take your time, test thoroughly, and don't hesitate to iterate and improve your quizzes based on student feedback.</p>
+<p>Happy quiz creating! <span class="emoji">🚀</span></p>
+<hr>
+<blockquote>
+<p><em>This guide is part of the Unbabel Mind project. For technical support or questions about the application, please refer to the main documentation.</em></p>
+</blockquote>
+</div>
+</body>
+</html>
