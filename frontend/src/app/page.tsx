@@ -36,31 +36,74 @@ return(
 </div>
 <div className="relative">
 <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-transparent to-blue-600/10 rounded-3xl blur-2xl"></div>
-<div className="relative bg-gradient-to-br from-slate-900/90 via-purple-900/30 to-blue-900/30 backdrop-blur-xl p-10 rounded-3xl border border-white/20 shadow-xl min-h-[700px]">
+<div className="relative bg-gradient-to-br from-slate-900/90 via-purple-900/30 to-blue-900/30 backdrop-blur-xl p-12 rounded-3xl border border-white/20 shadow-xl min-h-[900px]">
 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/30 to-transparent"></div>
 <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"></div>
-<div className="flex h-[600px]">
-<div className="bg-black/30 backdrop-blur-sm rounded-2xl p-2 border border-white/20 mr-6 flex-shrink-0">
-<div className="flex flex-col space-y-2 h-full">
-{['Reading','Listening','Speaking','Writing'].map((tab)=>(<button key={tab} onClick={()=>setActiveTab(tab)} className={`px-6 py-4 rounded-xl font-semibold transition-all duration-300 text-left flex-shrink-0 ${activeTab===tab?'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg':'bg-transparent text-gray-400 hover:text-white hover:bg-white/10'}`}>
+<div className="flex h-[800px]">
+<div className="bg-black/30 backdrop-blur-sm rounded-2xl p-3 border border-white/20 mr-8 flex-shrink-0 w-48">
+<div className="flex flex-col space-y-3 h-full">
+{['Reading','Listening','Speaking','Writing'].map((tab)=>(<button key={tab} onClick={()=>setActiveTab(tab)} className={`px-8 py-6 rounded-xl font-semibold transition-all duration-300 text-left flex-shrink-0 text-lg ${activeTab===tab?'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg':'bg-transparent text-gray-400 hover:text-white hover:bg-white/10'}`}>
 {tab}
 </button>))}
 </div>
 </div>
 <div className="flex-1 relative bg-gradient-to-br from-white/5 via-purple-900/10 to-blue-900/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center min-h-0">
-<div className="absolute top-4 right-4 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-<div className="absolute top-4 left-4 flex space-x-2">
-<div className="w-3 h-3 bg-red-400 rounded-full"></div>
-<div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-<div className="w-3 h-3 bg-green-400 rounded-full"></div>
+{activeTab==='Reading'&&(
+<div className="w-full h-full flex">
+<div className="w-1/3 bg-black/20 rounded-xl p-4 m-2">
+<div className="text-sm text-gray-300 mb-2">Passage Excerpt</div>
+<div className="text-xs text-gray-400 leading-relaxed">
+The kākāpō is a nocturnal, flightless parrot that is critically endangered and one of New Zealand's unique treasures. It is the world's only flightless parrot, and is also possibly one of the world's longest-living birds, with a reported lifespan of up to 100 years.
 </div>
+</div>
+<div className="w-1/3 bg-black/20 rounded-xl p-4 m-2">
+<div className="text-sm text-gray-300 mb-2">Question 1</div>
+<div className="text-xs text-gray-400 mb-2">There are other parrots that share the kakapo's inability to fly.</div>
+<div className="text-xs text-red-400">Your Answer: TRUE</div>
+<div className="text-xs text-green-400">Correct: FALSE</div>
+</div>
+<div className="w-1/3 bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-xl p-4 m-2 border border-purple-500/20">
+<div className="text-sm text-purple-300 mb-2 flex items-center">
+<svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+<path fillRule="evenodd" d="M9.99 0C4.47 0 0 4.48 0 10s4.47 10 9.99 10C15.52 20 20 15.52 20 10S15.52 0 9.99 0zM10 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S14.33 6 13.5 6 12 6.67 12 7.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S7.33 6 6.5 6 5 6.67 5 7.5S5.67 9 6.5 9zm3.5-6.5c2.33 0 4.31-1.46 5.11-3.5H4.89c.8 2.04 2.78 3.5 5.11 3.5z" clipRule="evenodd"/>
+</svg>
+Unbabel AI Analysis
+</div>
+<div className="text-xs text-gray-300 space-y-2">
+<div><span className="text-blue-400 font-semibold">Why FALSE is correct:</span> The passage states "It is the world's only flightless parrot" - this means no other parrots share this characteristic.</div>
+<div><span className="text-orange-400 font-semibold">Your mistake:</span> You may have focused on "flightless" without noting the word "only" which makes this unique to kakapo.</div>
+<div><span className="text-green-400 font-semibold">Improvement tip:</span> Pay attention to absolute words like "only," "never," "always" - they often determine True/False answers.</div>
+</div>
+</div>
+</div>
+)}
+{activeTab==='Listening'&&(
 <div className="text-center">
-<div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-blue-400 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-lg">
-<div className="text-2xl">✨</div>
+<div className="w-24 h-24 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-2xl mx-auto mb-8 flex items-center justify-center shadow-lg">
+<div className="text-4xl">🎧</div>
 </div>
-<p className="text-2xl font-light text-gray-200 mb-4">{activeTab} Exercise</p>
-<p className="text-gray-400 text-lg">Premium learning experience coming soon</p>
+<p className="text-3xl font-light text-gray-200 mb-6">Listening Exercise</p>
+<p className="text-gray-400 text-xl">Premium learning experience coming soon</p>
 </div>
+)}
+{activeTab==='Speaking'&&(
+<div className="text-center">
+<div className="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-400 rounded-2xl mx-auto mb-8 flex items-center justify-center shadow-lg">
+<div className="text-4xl">🗣️</div>
+</div>
+<p className="text-3xl font-light text-gray-200 mb-6">Speaking Exercise</p>
+<p className="text-gray-400 text-xl">Premium learning experience coming soon</p>
+</div>
+)}
+{activeTab==='Writing'&&(
+<div className="text-center">
+<div className="w-24 h-24 bg-gradient-to-br from-orange-400 to-red-400 rounded-2xl mx-auto mb-8 flex items-center justify-center shadow-lg">
+<div className="text-4xl">✍️</div>
+</div>
+<p className="text-3xl font-light text-gray-200 mb-6">Writing Exercise</p>
+<p className="text-gray-400 text-xl">Premium learning experience coming soon</p>
+</div>
+)}
 </div>
 </div>
 </div>
