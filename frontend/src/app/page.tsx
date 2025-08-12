@@ -53,12 +53,12 @@ return(
 <div className="w-1/3 bg-black/20 rounded-xl p-4 m-2">
 <div className="text-sm text-gray-300 mb-2">Passage Excerpt</div>
 <div className="text-xs text-gray-400 leading-relaxed">
-The kākāpō is a nocturnal, flightless parrot that is critically endangered and one of New Zealand's unique treasures. It is the world's only flightless parrot, and is also possibly one of the world's longest-living birds, with a reported lifespan of up to 100 years.
+The kākāpō is a nocturnal, flightless parrot that is critically endangered and one of New Zealand&apos;s unique treasures. It is the world&apos;s only flightless parrot, and is also possibly one of the world&apos;s longest-living birds, with a reported lifespan of up to 100 years.
 </div>
 </div>
 <div className="w-1/3 bg-black/20 rounded-xl p-4 m-2">
 <div className="text-sm text-gray-300 mb-2">Question 1</div>
-<div className="text-xs text-gray-400 mb-2">There are other parrots that share the kakapo's inability to fly.</div>
+<div className="text-xs text-gray-400 mb-2">There are other parrots that share the kakapo&apos;s inability to fly.</div>
 <div className="text-xs text-red-400">Your Answer: TRUE</div>
 <div className="text-xs text-green-400">Correct: FALSE</div>
 </div>
@@ -70,20 +70,52 @@ The kākāpō is a nocturnal, flightless parrot that is critically endangered an
 Unbabel AI Analysis
 </div>
 <div className="text-xs text-gray-300 space-y-2">
-<div><span className="text-blue-400 font-semibold">Why FALSE is correct:</span> The passage states "It is the world's only flightless parrot" - this means no other parrots share this characteristic.</div>
-<div><span className="text-orange-400 font-semibold">Your mistake:</span> You may have focused on "flightless" without noting the word "only" which makes this unique to kakapo.</div>
-<div><span className="text-green-400 font-semibold">Improvement tip:</span> Pay attention to absolute words like "only," "never," "always" - they often determine True/False answers.</div>
+<div><span className="text-blue-400 font-semibold">Why FALSE is correct:</span> The passage states &quot;It is the world&apos;s only flightless parrot&quot; - this means no other parrots share this characteristic.</div>
+<div><span className="text-orange-400 font-semibold">Your mistake:</span> You may have focused on &quot;flightless&quot; without noting the word &quot;only&quot; which makes this unique to kakapo.</div>
+<div><span className="text-green-400 font-semibold">Improvement tip:</span> Pay attention to absolute words like &quot;only,&quot; &quot;never,&quot; &quot;always&quot; - they often determine True/False answers.</div>
 </div>
 </div>
 </div>
 )}
 {activeTab==='Listening'&&(
-<div className="text-center">
-<div className="w-24 h-24 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-2xl mx-auto mb-8 flex items-center justify-center shadow-lg">
-<div className="text-4xl">🎧</div>
+<div className="w-full h-full flex">
+<div className="w-1/3 bg-black/20 rounded-xl p-4 m-2">
+<div className="text-sm text-gray-300 mb-2">Audio Player</div>
+<div className="bg-gray-800 rounded-lg p-3 mb-3">
+<div className="flex items-center justify-center space-x-2 mb-2">
+<button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs">⏮️</button>
+<button className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded text-xs">▶️ Play</button>
+<button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs">⏭️</button>
 </div>
-<p className="text-3xl font-light text-gray-200 mb-6">Listening Exercise</p>
-<p className="text-gray-400 text-xl">Premium learning experience coming soon</p>
+<div className="w-full bg-gray-600 rounded-full h-1 mb-1">
+<div className="bg-blue-500 h-1 rounded-full" style={{width:'45%'}}></div>
+</div>
+<div className="text-xs text-gray-400 text-center">02:15 / 05:30</div>
+</div>
+<div className="text-xs text-gray-400 leading-relaxed">
+The kākāpō is a nocturnal, flightless parrot that is critically endangered and one of New Zealand&apos;s unique treasures. It is the world&apos;s only flightless parrot, and is also possibly one of the world&apos;s longest-living birds, with a reported lifespan of up to 100 years.
+</div>
+</div>
+<div className="w-1/3 bg-black/20 rounded-xl p-4 m-2">
+<div className="text-sm text-gray-300 mb-2">Question 1</div>
+<div className="text-xs text-gray-400 mb-2">There are other parrots that share the kakapo&apos;s inability to fly.</div>
+<div className="text-xs text-red-400">Your Answer: TRUE</div>
+<div className="text-xs text-green-400">Correct: FALSE</div>
+</div>
+<div className="w-1/3 bg-gradient-to-br from-blue-900/30 to-cyan-900/30 rounded-xl p-4 m-2 border border-blue-500/20">
+<div className="text-sm text-blue-300 mb-2 flex items-center">
+<svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+<path fillRule="evenodd" d="M9.99 0C4.47 0 0 4.48 0 10s4.47 10 9.99 10C15.52 20 20 15.52 20 10S15.52 0 9.99 0zM10 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S14.33 6 13.5 6 12 6.67 12 7.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S7.33 6 6.5 6 5 6.67 5 7.5S5.67 9 6.5 9zm3.5-6.5c2.33 0 4.31-1.46 5.11-3.5H4.89c.8 2.04 2.78 3.5 5.11 3.5z" clipRule="evenodd"/>
+</svg>
+Unbabel AI Analysis
+</div>
+<div className="text-xs text-gray-300 space-y-2">
+<div><span className="text-blue-400 font-semibold">Why FALSE is correct:</span> The audio states &quot;It is the world&apos;s only flightless parrot&quot; - this means no other parrots share this characteristic.</div>
+<div><span className="text-orange-400 font-semibold">Your mistake:</span> You may have focused on &quot;flightless&quot; without noting the word &quot;only&quot; which makes this unique to kakapo.</div>
+<div><span className="text-green-400 font-semibold">Improvement tip:</span> Pay attention to absolute words like &quot;only,&quot; &quot;never,&quot; &quot;always&quot; - they often determine True/False answers in listening tests.</div>
+<div><span className="text-purple-400 font-semibold">Listening strategy:</span> Practice identifying key words and phrases that indicate exclusivity or uniqueness.</div>
+</div>
+</div>
 </div>
 )}
 {activeTab==='Speaking'&&(
@@ -96,12 +128,69 @@ Unbabel AI Analysis
 </div>
 )}
 {activeTab==='Writing'&&(
-<div className="text-center">
-<div className="w-24 h-24 bg-gradient-to-br from-orange-400 to-red-400 rounded-2xl mx-auto mb-8 flex items-center justify-center shadow-lg">
-<div className="text-4xl">✍️</div>
+<div className="w-full h-full flex">
+<div className="w-1/3 bg-black/20 rounded-xl p-4 m-2">
+<div className="text-sm text-gray-300 mb-2">Writing Prompt</div>
+<div className="text-xs text-gray-400 mb-3">
+<div className="font-semibold text-yellow-400 mb-2">Task 2: Academic Writing</div>
+<div className="text-gray-300 leading-relaxed">
+Some people believe that technology has made life easier and more convenient, while others argue that it has made life more complex and stressful. Discuss both views and give your own opinion.
 </div>
-<p className="text-3xl font-light text-gray-200 mb-6">Writing Exercise</p>
-<p className="text-gray-400 text-xl">Premium learning experience coming soon</p>
+<div className="text-xs text-gray-500 mt-2">Write at least 250 words</div>
+</div>
+</div>
+<div className="w-1/3 bg-black/20 rounded-xl p-4 m-2">
+<div className="text-sm text-gray-300 mb-2">Sample Essay</div>
+<div className="text-[10px] text-gray-400 leading-relaxed">
+Technology has undoubtedly transformed modern life in profound ways. While some argue that technological advancements have simplified daily routines, others contend that they have introduced new complexities and stress factors. This essay will examine both perspectives before presenting a balanced conclusion.
+
+On the positive side, technology has streamlined many aspects of daily life. Smartphones enable instant communication across continents, reducing the need for physical travel. Online banking eliminates the need to visit physical branches, saving time and effort. Additionally, household appliances like washing machines and dishwashers have significantly reduced manual labor in homes.
+
+However, critics argue that technology has created new forms of stress and complexity. The constant connectivity through social media can lead to information overload and mental fatigue. The pressure to stay updated with rapidly changing technology can be overwhelming, especially for older generations. Furthermore, the blurring of work-life boundaries due to remote work technologies has increased stress levels for many professionals.
+
+In my opinion, while technology has introduced certain complexities, its benefits far outweigh the drawbacks. The key lies in how individuals choose to use and manage technology in their lives. With proper digital literacy and mindful usage, technology can indeed make life more convenient and efficient.
+
+In conclusion, technology&apos;s impact on modern life is multifaceted. While it has simplified many tasks, it has also introduced new challenges. The solution is not to reject technology but to develop better strategies for managing its use effectively.
+</div>
+<div className="text-[10px] text-gray-500 mt-2">Word count: 248</div>
+</div>
+<div className="w-1/3 bg-gradient-to-br from-orange-900/30 to-red-900/30 rounded-xl p-4 m-2 border border-orange-500/20">
+<div className="text-sm text-orange-300 mb-2 flex items-center">
+<svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+<path fillRule="evenodd" d="M9.99 0C4.47 0 0 4.48 0 10s4.47 10 9.99 10C15.52 20 20 15.52 20 10S15.52 0 9.99 0zM10 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S14.33 6 13.5 6 12 6.67 12 7.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S7.33 6 6.5 6 5 6.67 5 7.5S5.67 9 6.5 9zm3.5-6.5c2.33 0 4.31-1.46 5.11-3.5H4.89c.8 2.04 2.78 3.5 5.11 3.5z" clipRule="evenodd"/>
+</svg>
+Unbabel AI Analysis
+</div>
+<div className="text-xs text-gray-300 space-y-2">
+<div className="bg-gray-800/50 p-2 rounded">
+<div className="flex justify-between mb-1">
+<span>Task Achievement:</span>
+<span className="text-green-400 font-semibold">7.5</span>
+</div>
+<div className="flex justify-between mb-1">
+<span>Coherence & Cohesion:</span>
+<span className="text-blue-400 font-semibold">7.0</span>
+</div>
+<div className="flex justify-between mb-1">
+<span>Lexical Resource:</span>
+<span className="text-purple-400 font-semibold">6.5</span>
+</div>
+<div className="flex justify-between mb-1">
+<span>Grammatical Range:</span>
+<span className="text-yellow-400 font-semibold">7.0</span>
+</div>
+<div className="border-t pt-1 mt-1">
+<div className="flex justify-between font-bold">
+<span>Final Score:</span>
+<span className="text-orange-400">7.0</span>
+</div>
+</div>
+</div>
+<div><span className="text-green-400 font-semibold">Strengths:</span> Good task response, clear structure, balanced argument</div>
+<div><span className="text-orange-400 font-semibold">Areas to improve:</span> Expand vocabulary range, add more complex sentence structures</div>
+<div><span className="text-blue-400 font-semibold">Suggestion:</span> Include more academic vocabulary and varied linking phrases</div>
+</div>
+</div>
 </div>
 )}
 </div>
@@ -138,6 +227,8 @@ Unbabel AI Analysis
 </div>
 <div className="text-center mb-20">
 <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">Comprehensive IELTS Preparation</h2>
+<div className="mb-8 flex gap-4 justify-center flex-wrap">
+</div>
 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
 <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 p-6 rounded-xl border border-purple-500/20">
 <div className="text-3xl mb-4">📖</div>
