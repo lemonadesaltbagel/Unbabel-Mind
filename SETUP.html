@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unbabel Mind Setup Guide</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;line-height:1.6;color:#333;background:#f8f9fa;padding:20px;}
+.container{max-width:900px;margin:0 auto;background:white;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);overflow:hidden;}
+.header{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:40px;text-align:center;}
+.header h1{font-size:2.5rem;margin-bottom:10px;font-weight:700;}
+.header p{font-size:1.1rem;opacity:0.9;}
+.content{padding:40px;}
+h1{color:#2d3748;font-size:2rem;margin:30px 0 20px;font-weight:600;border-bottom:3px solid #667eea;padding-bottom:10px;}
+h2{color:#4a5568;font-size:1.5rem;margin:25px 0 15px;font-weight:600;}
+h3{color:#2d3748;font-size:1.2rem;margin:20px 0 10px;font-weight:600;}
+p{margin-bottom:15px;color:#4a5568;}
+ul,ol{margin:15px 0;padding-left:25px;}
+li{margin-bottom:8px;color:#4a5568;}
+strong{font-weight:600;color:#2d3748;}
+em{font-style:italic;}
+a{color:#667eea;text-decoration:none;border-bottom:1px solid transparent;transition:border-color 0.3s;}
+a:hover{border-bottom-color:#667eea;}
+blockquote{background:#f7fafc;border-left:4px solid #667eea;padding:15px 20px;margin:20px 0;border-radius:0 8px 8px 0;}
+blockquote p{margin:0;color:#4a5568;}
+code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-family:'Monaco','Menlo','Ubuntu Mono',monospace;font-size:0.9em;color:#e53e3e;}
+pre{background:#2d3748;color:#e2e8f0;padding:20px;border-radius:8px;overflow-x:auto;margin:20px 0;font-family:'Monaco','Menlo','Ubuntu Mono',monospace;font-size:0.9em;line-height:1.5;}
+pre code{background:none;padding:0;color:inherit;}
+.section{margin:30px 0;padding:20px;background:#f8f9fa;border-radius:8px;border-left:4px solid #667eea;}
+.step{margin:20px 0;padding:15px;background:#f7fafc;border-radius:6px;border:1px solid #e2e8f0;}
+.step h3{color:#667eea;margin-bottom:10px;}
+.tip{background:#ebf8ff;border:1px solid #bee3f8;border-radius:6px;padding:15px;margin:15px 0;}
+.tip::before{content:"💡 ";font-size:1.2em;}
+.warning{background:#fed7d7;border:1px solid #feb2b2;border-radius:6px;padding:15px;margin:15px 0;}
+.warning::before{content:"⚠️ ";font-size:1.2em;}
+.success{background:#c6f6d5;border:1px solid #9ae6b4;border-radius:6px;padding:15px;margin:15px 0;}
+.success::before{content:"✅ ";font-size:1.2em;}
+.checklist{list-style:none;padding:0;}
+.checklist li{position:relative;padding-left:30px;margin-bottom:10px;}
+.checklist li::before{content:"✅";position:absolute;left:0;color:#48bb78;}
+@media (max-width:768px){.container{margin:10px;border-radius:8px;}.header{padding:30px 20px;}.content{padding:20px;}h1{font-size:1.8rem;}h2{font-size:1.3rem;}}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>🚀 Welcome to Unbabel Mind Setup Guide!</h1>
+<p>Hey there! 👋 We're excited to have you join the Unbabel Mind project. This guide will walk you through everything you need to get up and running smoothly using Docker.</p>
+</div>
+<div class="content">
+<h1>📋 What You'll Need</h1>
+<p>Before we dive in, make sure you have these installed on your machine:</p>
+<ul>
+<li><strong>Docker</strong> and <strong>Docker Compose</strong> - <a href="https://www.docker.com/products/docker-desktop/" target="_blank">Download here</a></li>
+<li><strong>Git</strong> - <a href="https://git-scm.com/" target="_blank">Download here</a></li>
+</ul>
+<div class="tip">
+<strong>Pro Tip</strong>: If you're not sure what versions you have, run <code>docker --version</code> and <code>docker-compose --version</code> in your terminal.
+</div>
+<h1>🎯 Quick Start (The Easy Way)</h1>
+<p>If you want to get everything running in one go, here's the simplest approach using Docker Compose:</p>
+<pre><code># 1. Clone the repository
+git clone &lt;your-repo-url&gt;
+cd Unbabel-Mind
+
+# 2. Start everything with Docker Compose
+docker-compose up --build</code></pre>
+<p>That's it! 🎉 Your application should now be running at:</p>
+<ul>
+<li><strong>Frontend</strong>: <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></li>
+<li><strong>Backend API</strong>: <a href="http://localhost:3001" target="_blank">http://localhost:3001</a></li>
+<li><strong>Database</strong>: PostgreSQL on port 5432</li>
+</ul>
+<div class="tip">
+<strong>What's happening</strong>: Docker Compose automatically sets up the database, installs dependencies, and starts all services for you. No manual configuration needed!
+</div>
+<h1>🔧 Docker Setup (Step by Step)</h1>
+<div class="step">
+<h3>Step 1: Get the Code</h3>
+<pre><code>git clone &lt;your-repo-url&gt;
+cd Unbabel-Mind</code></pre>
+</div>
+<div class="step">
+<h3>Step 2: Set Up the Database</h3>
+<p>The easiest way is using Docker (recommended):</p>
+<pre><code># Start PostgreSQL database
+docker-compose up -d postgres</code></pre>
+</div>
+<div class="step">
+<h3>Step 3: Configure Environment Variables</h3>
+<h4>Backend Configuration</h4>
+<p>Create a <code>.env</code> file in the <code>backend</code> directory:</p>
+<pre><code>cd backend
+cp env.example .env</code></pre>
+<p>Edit the <code>.env</code> file with your database settings:</p>
+<pre><code>PORT=3001
+DB_HOST=postgres
+DB_PORT=5432
+DB_NAME=unbabel
+DB_USER=postgres
+DB_PASSWORD=password
+JWT_SECRET=your-super-secret-jwt-key-here</code></pre>
+<h4>Frontend Configuration</h4>
+<p>The frontend is automatically configured to communicate with the backend using Docker service names.</p>
+</div>
+<div class="step">
+<h3>Step 4: Start the Application</h3>
+<h4>Using Docker Compose (Recommended)</h4>
+<pre><code># Start everything with Docker Compose
+docker-compose up --build
+
+# Stop services
+docker-compose down
+
+# View logs
+docker-compose logs -f</code></pre>
+</div>
+<h1>🤖 Setting Up AI Features (LLM Token)</h1>
+<p>To unlock the AI-powered features, you'll need an OpenAI API key:</p>
+<div class="step">
+<h3>Step 1: Get Your OpenAI API Key</h3>
+<ol>
+<li>Go to <a href="https://platform.openai.com/" target="_blank">OpenAI Platform</a></li>
+<li>Sign up or log in</li>
+<li>Navigate to "API Keys" in your dashboard</li>
+<li>Create a new API key</li>
+<li>Copy the key (it starts with <code>sk-</code>)</li>
+</ol>
+</div>
+<div class="step">
+<h3>Step 2: Configure the API Key</h3>
+<p>The OpenAI API key can only be managed through the Profile page in the application:</p>
+<ol>
+<li>Start the application and navigate to the Profile page</li>
+<li>Scroll down to "LLM Token Configuration" section</li>
+<li>Click "Add Token" or "Edit Token"</li>
+<li>Enter your OpenAI API key (starts with <code>sk-</code>)</li>
+<li>Click "Save" to persist the configuration</li>
+</ol>
+<div class="warning">
+<strong>Security Note</strong>: The API key is stored securely in a local file that is automatically protected from version control.
+</div>
+</div>
+<div class="step">
+<h3>Step 3: LLM Configuration Features</h3>
+<p>The application includes built-in LLM configuration management:</p>
+<ul>
+<li><strong>Profile-Based Management</strong>: Configure your OpenAI API token directly from your user profile</li>
+<li><strong>Secure Storage</strong>: API keys are stored in a local file that's automatically protected from version control</li>
+<li><strong>User-Friendly Interface</strong>: Simple add/edit interface integrated into the profile page</li>
+</ul>
+</div>
+<div class="step">
+<h3>Step 4: Start Using the Application</h3>
+<p>Once the application is running, you can configure your API key through the Profile page. No restart is required after adding your API key.</p>
+</div>
+<h1>🧪 Testing Your Setup</h1>
+<p>Once everything is running, you can test the setup:</p>
+<ol>
+<li><strong>Frontend</strong>: Visit <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></li>
+<li><strong>Backend Health Check</strong>: Visit <a href="http://localhost:3001/api/health" target="_blank">http://localhost:3001/api/health</a></li>
+<li><strong>Database</strong>: The backend will automatically create tables on first run</li>
+</ol>
+<h1>🛠️ Troubleshooting</h1>
+<h2>Common Issues and Solutions</h2>
+<div class="step">
+<h3>Port Already in Use</h3>
+<pre><code># Check what's using the ports
+lsof -i :3000
+lsof -i :3001
+lsof -i :5432
+
+# Kill the process or change ports in your config</code></pre>
+</div>
+<div class="step">
+<h3>Database Connection Issues</h3>
+<pre><code># Reset database (Docker)
+docker-compose down -v
+docker-compose up --build
+
+# Check database logs
+docker-compose logs postgres</code></pre>
+</div>
+<div class="step">
+<h3>Docker Issues</h3>
+<pre><code># Clean up Docker
+docker system prune -a
+docker volume prune
+
+# Rebuild everything
+docker-compose build --no-cache
+docker-compose up</code></pre>
+</div>
+<h2>Getting Help</h2>
+<p>If you're still having issues:</p>
+<ol>
+<li>Check the logs: <code>docker-compose logs -f</code></li>
+<li>Verify your environment variables</li>
+<li>Make sure all ports are available</li>
+<li>Check that Docker is running</li>
+</ol>
+<h1>🎉 You're All Set!</h1>
+<div class="success">
+<strong>Congratulations! 🎊</strong> You should now have:
+</div>
+<ul class="checklist">
+<li>A running frontend at <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></li>
+<li>A backend API at <a href="http://localhost:3001" target="_blank">http://localhost:3001</a></li>
+<li>A PostgreSQL database</li>
+<li>AI features configured (if you added the OpenAI key)</li>
+</ul>
+<h1>📚 Next Steps</h1>
+<p>Now that you're up and running:</p>
+<ol>
+<li>Explore the application at <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></li>
+<li>Check out the API documentation in the backend README</li>
+<li>Start developing! 🚀</li>
+</ol>
+<h1>🔄 Development Workflow</h1>
+<p>For ongoing development:</p>
+<div class="step">
+<h3>Using Docker Compose (Recommended)</h3>
+<pre><code># Start everything
+docker-compose up --build
+
+# The application will automatically reload when you make changes to the code</code></pre>
+</div>
+<p>The application will automatically reload when you make changes to the code.</p>
+<hr style="margin:40px 0;border:none;border-top:1px solid #e2e8f0;">
+<div style="text-align:center;padding:20px;background:#f7fafc;border-radius:8px;">
+<p style="font-size:1.1rem;font-weight:600;color:#2d3748;margin-bottom:10px;"><strong>Happy coding! 💻</strong></p>
+<p style="color:#4a5568;">If you have any questions or run into issues, don't hesitate to reach out to the team or check the project documentation.</p>
+</div>
+</div>
+</div>
+</body>
+</html>
