@@ -26,16 +26,12 @@ const[isLoading,setIsLoading]=useState(false);
 const[evidence,setEvidence]=useState<{number:number;text:string}[]>([]);
 const[aiSuggestions,setAiSuggestions]=useState<string[]>([]);
 const[results,setResults]=useState<{questionId:number;userAnswer:string[];correctAnswer:string;isCorrect:boolean}[]>([]);
-useEffect(()=>{
-if(!loading&&!user){r.push('/login');return;}
-},[user,loading,r]);
-useEffect(()=>{
-(async()=>{const{title,content}=await ldp(id,type);setPt(title);setPc(content);})();
+useEffect(()=>{if(!loading&&!user){r.push('/login');return;}},[user,loading,r]);
+useEffect(()=>{(async()=>{const{title,content}=await ldp(id,type);setPt(title);setPc(content);})();
 (async()=>setQs(await ldq(id,type)))();
 (async()=>{if(user){const backendResults=await getResultsWithCorrectAnswers(Number(user.id),Number(id),Number(type));setResults(backendResults);}})();
 setHighlights(ldh(id,type));
-(async()=>setEvidence(await lde(id,type)))();
-},[id,type,user]);
+(async()=>setEvidence(await lde(id,type)))();},[id,type,user]);
 useEffect(()=>{
 if(qs.length>0&&results.length>0&&evidence.length>0){
 const wrongQuestions=results.filter(r=>!r.isCorrect).map(r=>{const q=qs.find(q=>q.number===r.questionId);return{...q,userAnswer:r.userAnswer[0]||'',correctAnswer:r.correctAnswer};});
@@ -55,8 +51,7 @@ ${wrongQuestions.map(q=>`- Question ${q.number}: ${q.question}
 Please provide 4-6 specific, actionable suggestions to help the user improve their reading comprehension skills based on their mistakes. Focus on the specific question types and skills they struggled with.
 
 Respond with plain text suggestions only, one per line, without any formatting or JSON structure.`;
-callGptApi(prompt).then(response=>{try{const suggestions=response.split('\n').map(line=>line.trim()).filter(line=>line.length>0).slice(0,6);if(suggestions.length>0){setAiSuggestions(suggestions);}else{setAiSuggestions(["Focus on reading comprehension strategies","Practice identifying key information in passages","Work on vocabulary building exercises","Review question types you struggled with"]);}}catch{setAiSuggestions(["Focus on reading comprehension strategies","Practice identifying key information in passages","Work on vocabulary building exercises","Review question types you struggled with"]);}}).finally(()=>{setIsLoading(false);});}
-},[qs,results,evidence]);
+callGptApi(prompt).then(response=>{try{const suggestions=response.split('\n').map(line=>line.trim()).filter(line=>line.length>0).slice(0,6);if(suggestions.length>0){setAiSuggestions(suggestions);}else{setAiSuggestions(["Focus on reading comprehension strategies","Practice identifying key information in passages","Work on vocabulary building exercises","Review question types you struggled with"]);}}catch{setAiSuggestions(["Focus on reading comprehension strategies","Practice identifying key information in passages","Work on vocabulary building exercises","Review question types you struggled with"]);}}).finally(()=>{setIsLoading(false);});}},[qs,results,evidence]);
 const callGptApi=async(prompt:string):Promise<string>=>{try{const hasToken=await checkTokenAndWarn();if(!hasToken)return'Please configure your OpenAI API token in your profile to use AI features.';const token=localStorage.getItem('token');if(!token)return'No authentication token';const res=await fetch('/reviewaiapi',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({prompt})});const data=await res.json();return data.generated_text;}catch{return'Error calling Unbabel API.';}};
 const hn=(d:'back'|'next')=>{if(d==='back')r.push('/dashboard?tab=Reading');else{const nt=Number(type)+1;if(nt>=1&&nt<=4)r.push(`/reading/${id}/${nt}`);}};
 const hcm=(e:React.MouseEvent)=>{e.preventDefault();setContextMenuPosition({x:e.pageX,y:e.pageY});setShowContextMenu(true);};
@@ -141,7 +136,33 @@ return(<div className="min-h-screen bg-black text-black p-6 flex flex-col">
 <div className="bg-white p-6 rounded-xl shadow overflow-y-auto h-[80vh]">
 <h2 className="text-xl font-bold mb-4">Your Answers</h2>
 <ol className="space-y-4 text-sm">
-{qs.map((q,i)=>{if(!('number'in q)||!q.number)return null;const result=results.find(r=>r.questionId===q.number);if(!result)return null;const userAns=result.userAnswer[0]||'';const correct=result.correctAnswer;const isCorrect=result.isCorrect;return(<li key={i}>
+{qs.map((q,i)=>{
+if(q.type==='intro'||q.type==='subheading')return(<div key={`${q.type}-${i}`} className="text-base font-semibold mb-3 whitespace-pre-line">{q.text}</div>);
+if(q.type==='fill-in-line'){const result=results.find(r=>r.questionId===q.number);const userAns=result?.userAnswer[0]||'—';const correct=result?.correctAnswer||'N/A';const isCorrect=result?.isCorrect||false;return(<li key={`fill-${q.number}`}><div className="mb-1 font-semibold">{q.number}. {q.text?.split('____').map((part,j,arr)=>(<span key={j}>{part}{j<arr.length-1&&<span className="inline-block w-40 border border-gray-400 rounded px-2 py-1 mx-1 bg-gray-100">{userAns}</span>}</span>))}</div><div className={isCorrect?'text-green-600':'text-red-600'}>Your Answer: {userAns}</div>{!isCorrect&&(<><div className="text-blue-600">Correct Answer: {correct}</div><button className="mt-2 px-4 py-2 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 hover:from-orange-500 hover:via-orange-600 hover:to-orange-700 text-white rounded-xl transition-all duration-500 text-sm font-semibold shadow-2xl hover:shadow-orange-500/40 transform hover:-translate-y-0.5 border border-orange-300/40 hover:border-orange-200/60 relative overflow-hidden group backdrop-blur-sm" onClick={()=>he(q.number!,userAns,correct)}>
+<span className="relative z-10 flex justify-center tracking-wide">
+<svg className="w-4 h-4 mr-2 text-orange-100" fill="currentColor" viewBox="0 0 20 20">
+<path fillRule="evenodd" d="M9.99 0C4.47 0 0 4.48 0 10s4.47 10 9.99 10C15.52 20 20 15.52 20 10S15.52 0 9.99 0zM10 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S14.33 6 13.5 6 12 6.67 12 7.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S7.33 6 6.5 6 5 6.67 5 7.5S5.67 9 6.5 9zm3.5-6.5c2.33 0 4.31-1.46 5.11-3.5H4.89c.8 2.04 2.78 3.5 5.11 3.5z" clipRule="evenodd"/>
+</svg>
+Unbabel AI
+</span>
+<div className="absolute inset-0 bg-gradient-to-br from-red-400/20 via-orange-400/20 via-yellow-400/20 via-green-400/20 via-blue-400/20 via-indigo-400/20 to-purple-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 animate-pulse"></div>
+<div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+<div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-400 via-orange-400 via-yellow-400 via-green-400 via-blue-400 via-indigo-400 to-purple-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+<div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 via-indigo-400 via-blue-400 via-green-400 via-yellow-400 via-orange-400 to-red-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-right"></div>
+</button></>)}</li>);}
+if(q.type==='single'||q.type==='multi'||q.type==='tfng'){const result=results.find(r=>r.questionId===q.number);const userAns=result?.userAnswer[0]||'—';const correct=result?.correctAnswer||'N/A';const isCorrect=result?.isCorrect||false;return(<li key={`q-${q.number}`}><div className="mb-1 font-semibold">{q.number}. {q.question}</div><div className="flex flex-wrap gap-4 mb-2">{q.options?.map((o)=>(<span key={o} className={`px-2 py-1 rounded text-xs ${userAns===o?'bg-blue-100 text-blue-800':correct===o?'bg-green-100 text-green-800':'bg-gray-100 text-gray-600'}`}>{o}</span>))}</div><div className={isCorrect?'text-green-600':'text-red-600'}>Your Answer: {userAns}</div>{!isCorrect&&(<><div className="text-blue-600">Correct Answer: {correct}</div><button className="mt-2 px-4 py-2 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 hover:from-orange-500 hover:via-orange-600 hover:to-orange-700 text-white rounded-xl transition-all duration-500 text-sm font-semibold shadow-2xl hover:shadow-orange-500/40 transform hover:-translate-y-0.5 border border-orange-300/40 hover:border-orange-200/60 relative overflow-hidden group backdrop-blur-sm" onClick={()=>he(q.number!,userAns,correct)}>
+<span className="relative z-10 flex justify-center tracking-wide">
+<svg className="w-4 h-4 mr-2 text-orange-100" fill="currentColor" viewBox="0 0 20 20">
+<path fillRule="evenodd" d="M9.99 0C4.47 0 0 4.48 0 10s4.47 10 9.99 10C15.52 20 20 15.52 20 10S15.52 0 9.99 0zM10 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S14.33 6 13.5 6 12 6.67 12 7.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S7.33 6 6.5 6 5 6.67 5 7.5S5.67 9 6.5 9zm3.5-6.5c2.33 0 4.31-1.46 5.11-3.5H4.89c.8 2.04 2.78 3.5 5.11 3.5z" clipRule="evenodd"/>
+</svg>
+Unbabel AI
+</span>
+<div className="absolute inset-0 bg-gradient-to-br from-red-400/20 via-orange-400/20 via-yellow-400/20 via-green-400/20 via-blue-400/20 via-indigo-400/20 to-purple-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 animate-pulse"></div>
+<div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+<div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-400 via-orange-400 via-yellow-400 via-green-400 via-blue-400 via-indigo-400 to-purple-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+<div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 via-indigo-400 via-blue-400 via-green-400 via-yellow-400 via-orange-400 to-red-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-right"></div>
+</button></>)}</li>);}
+if(!('number'in q)||!q.number)return null;const result=results.find(r=>r.questionId===q.number);if(!result)return null;const userAns=result.userAnswer[0]||'';const correct=result.correctAnswer;const isCorrect=result.isCorrect;return(<li key={i}>
 <div className="mb-1 font-semibold">{q.number}. {q.question}</div>
 <div className={isCorrect?'text-green-600':'text-red-600'}>
 Your Answer: {userAns||'—'}
@@ -188,7 +209,7 @@ Generated by <span className="bg-gradient-to-r from-red-400 via-orange-400 via-y
 </ul>)}
 <p className="text-xs bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent font-medium mt-4 text-center">
 <svg className="w-3 h-3 mr-1 inline" fill="currentColor" viewBox="0 0 20 20">
-<path fillRule="evenodd" d="M9.99 0C4.47 0 0 4.48 0 10s4.47 10 9.99 10C15.52 20 20 15.52 20 10S15.52 0 9.99 0zM10 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S7.33 6 6.5 6 5 6.67 5 7.5S5.67 9 6.5 9zm3.5-6.5c2.33 0 4.31-1.46 5.11-3.5H4.89c.8 2.04 2.78 3.5 5.11 3.5z" clipRule="evenodd"/>
+<path fillRule="evenodd" d="M9.99 0C4.47 0 0 4.48 0 10s4.47 10 9.99 10C15.52 20 20 15.52 20 10S15.52 0 9.99 0zM10 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S14.33 6 13.5 6 12 6.67 12 7.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S7.33 6 6.5 6 5 6.67 5 7.5S5.67 9 6.5 9zm3.5-6.5c2.33 0 4.31-1.46 5.11-3.5H4.89c.8 2.04 2.78 3.5 5.11 3.5z" clipRule="evenodd"/>
 </svg>
 Personalized by <span className="bg-gradient-to-r from-red-400 via-orange-400 via-yellow-400 via-green-400 via-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent animate-pulse">Unbabel AI</span>
 </p>
