@@ -31,6 +31,7 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=password
       - JWT_SECRET=your-secret-key
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     depends_on:
       - postgres
     networks:
@@ -45,7 +46,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=http://backend:3001
+      - NEXT_PUBLIC_API_URL=http://backend:3001/api
     depends_on:
       - backend
     networks:

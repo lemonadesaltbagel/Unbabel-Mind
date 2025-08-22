@@ -33,7 +33,7 @@ useEffect(()=>{
 if(user&&id&&type){
 setEssayLoading(true);
 setError('');
-fetch(`/api/answers/essay/${user.id}/${id}/${type}`).then(res=>res.json()).then(data=>{
+fetch(`/answers/essay/${user.id}/${id}/${type}`).then(res=>res.json()).then(data=>{
 console.log('Essay API response:',data);
 if(data.success&&data.data)setEssay(data.data.essay_text);
 else{

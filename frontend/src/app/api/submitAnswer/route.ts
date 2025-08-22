@@ -1,10 +1,10 @@
-import {NextRequest,NextResponse} from 'next/server';
+import {NextRequest,NextResponse} from 'next/server';import{getBackendUrl}from'@/utils/config';
 
 export async function POST(req:NextRequest){
   try{
     const d=await req.json();
 
-    const apiUrl = 'http://backend:3001/api/answers/submit';
+    const apiUrl = getBackendUrl() + '/api/answers/submit';
     
     const r=await fetch(apiUrl,{
       method:'POST',

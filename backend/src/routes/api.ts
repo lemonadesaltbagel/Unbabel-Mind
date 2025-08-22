@@ -1,8 +1,14 @@
 import {Router} from 'express';
 import authRoutes from './auth';
 import answerRoutes from './answers';
+import profileRoutes from './profile';
+import reviewAIRoutes from './reviewAI';
+import passageRoutes from './passages';
 const r=Router();
 r.get('/health',(req,res)=>{res.json({status:'ok',timestamp:new Date().toISOString()});});
 r.use('/auth',authRoutes);
 r.use('/answers',answerRoutes);
+r.use('/profile',profileRoutes);
+r.use('/reviewaiapi',reviewAIRoutes);
+r.use('/passages',passageRoutes);
 export default r; 

@@ -1,8 +1,8 @@
-import{NextRequest,NextResponse}from'next/server';
+import{NextRequest,NextResponse}from'next/server';import{getBackendUrl}from'@/utils/config';
 export async function GET(req:NextRequest,{params}:{params:{userId:string;passageId:string;questionType:string}}){
 try{
 const p=await params;
-const apiUrl=`http://backend:3001/api/answers/review/${p.userId}/${p.passageId}/${p.questionType}`;
+const apiUrl=`${getBackendUrl()}/api/answers/review/${p.userId}/${p.passageId}/${p.questionType}`;
 const r=await fetch(apiUrl,{method:'GET'});
 if(!r.ok)return NextResponse.json({message:'Backend error'},{status:r.status});
 const contentType=r.headers.get('content-type');

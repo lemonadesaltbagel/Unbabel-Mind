@@ -1,6 +1,6 @@
 import{WritingSubmission,WritingRating,WritingRatingResponse,calculateWritingScore}from'@/types/writing';
 export const ldp=async(id:string,type:string):Promise<{title:string;content:string}>=>{try{const res=await fetch(`/static/writing/${id}_${type}.txt`);const text=await res.text();const[tl,...rest]=text.split('\n');return{title:tl.trim(),content:rest.join('\n').trim()};}catch{return{title:'',content:'Failed to load writing prompt.'};}};
-export const sub=async(pl:WritingSubmission):Promise<{ok:boolean;message:string}>=>{try{const res=await fetch('/api/submitAnswer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(pl)});const result=await res.json();return{ok:res.ok,message:result.message||'Submission failed.'};}catch{return{ok:false,message:'Network error.'};}};
+export const sub=async(pl:WritingSubmission):Promise<{ok:boolean;message:string}>=>{try{const res=await fetch('/answers/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(pl)});const result=await res.json();return{ok:res.ok,message:result.message||'Submission failed.'};}catch{return{ok:false,message:'Network error.'};}};
 export const wc=(text:string):number=>text.split(' ').filter(word=>word.length>0).length;
 export const getWritingRating=async(essay:string,prompt:string):Promise<WritingRatingResponse>=>{try{const p=`You are an expert IELTS writing examiner. Rate the following essay based on IELTS Writing Task 2 criteria. The essay is responding to this prompt: "${prompt}"
 
