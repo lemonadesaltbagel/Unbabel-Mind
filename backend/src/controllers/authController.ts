@@ -1,8 +1,144 @@
-import {Request,Response} from 'express';
+import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import {createUser,findUserByEmail,findUserById,updateUser} from '../models/User';
-export const register=async(req:Request,res:Response):Promise<void>=>{try{const {firstName,lastName,email,password}=req.body;if(!firstName||!lastName||!email||!password){res.status(400).json({error:'All fields are required'});return;}const e=await findUserByEmail(email);if(e){res.status(400).json({error:'User already exists'});return;}const u=await createUser(firstName,lastName,email,password);const t=jwt.sign({userId:u.id},process.env.JWT_SECRET||'fallback-secret',{expiresIn:'24h'});res.status(201).json({message:'User created successfully',token:t,user:{id:u.id.toString(),firstName:u.first_name,lastName:u.last_name,email:u.email}});}catch(e){console.error('Register error:',e);res.status(500).json({error:'Internal server error'});}};
-export const login=async(req:Request,res:Response):Promise<void>=>{try{const {email,password}=req.body;if(!email||!password){res.status(400).json({error:'Email and password are required'});return;}const u=await findUserByEmail(email);if(!u){res.status(401).json({error:'Invalid credentials'});return;}const v=await bcrypt.compare(password,u.password);if(!v){res.status(401).json({error:'Invalid credentials'});return;}const t=jwt.sign({userId:u.id},process.env.JWT_SECRET||'fallback-secret',{expiresIn:'24h'});res.json({message:'Login successful',token:t,user:{id:u.id.toString(),firstName:u.first_name,lastName:u.last_name,email:u.email}});}catch(e){console.error('Login error:',e);res.status(500).json({error:'Internal server error'});}};
-export const getProfile=async(req:Request,res:Response):Promise<void>=>{try{const r=req as any;const i=r.user?.userId;if(!i){res.status(401).json({error:'User not authenticated'});return;}const u=await findUserById(i);if(!u){res.status(404).json({error:'User not found'});return;}res.json({id:u.id.toString(),firstName:u.first_name,lastName:u.last_name,email:u.email});}catch(e){console.error('Get profile error:',e);res.status(500).json({error:'Internal server error'});}};
-export const updateProfile=async(req:Request,res:Response):Promise<void>=>{try{const r=req as any;const i=r.user?.userId;if(!i){res.status(401).json({error:'User not authenticated'});return;}const {firstName,lastName,email}=req.body;if(!firstName||!lastName||!email){res.status(400).json({error:'All fields are required'});return;}const u=await updateUser(i,firstName,lastName,email);res.json({id:u.id.toString(),firstName:u.first_name,lastName:u.last_name,email:u.email});}catch(e){console.error('Update profile error:',e);res.status(500).json({error:'Internal server error'});}}; 
+import { createUser, findUserByEmail, findUserById, updateUser } from '../models/User';
+
+export const register = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { firstName, lastName, email, password } = req.body;
+    
+    if (!firstName || !lastName || !email || !password) {
+      res.status(400).json({ error: 'All fields are required' });
+      return;
+    }
+    
+    const existingUser = await findUserByEmail(email);
+    if (existingUser) {
+      res.status(400).json({ error: 'User already exists' });
+      return;
+    }
+    
+    const user = await createUser(firstName, lastName, email, password);
+    const token = jwt.sign(
+      { userId: user.id }, 
+      process.env.JWT_SECRET || 'fallback-secret', 
+      { expiresIn: '24h' }
+    );
+    
+    res.status(201).json({
+      message: 'User created successfully',
+      token: token,
+      user: {
+        id: user.id.toString(),
+        firstName: user.first_name,
+        lastName: user.last_name,
+        email: user.email
+      }
+    });
+  } catch (error) {
+    console.error('Register error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const login = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, password } = req.body;
+    
+    if (!email || !password) {
+      res.status(400).json({ error: 'Email and password are required' });
+      return;
+    }
+    
+    const user = await findUserByEmail(email);
+    if (!user) {
+      res.status(401).json({ error: 'Invalid credentials' });
+      return;
+    }
+    
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+      res.status(401).json({ error: 'Invalid credentials' });
+      return;
+    }
+    
+    const token = jwt.sign(
+      { userId: user.id }, 
+      process.env.JWT_SECRET || 'fallback-secret', 
+      { expiresIn: '24h' }
+    );
+    
+    res.json({
+      message: 'Login successful',
+      token: token,
+      user: {
+        id: user.id.toString(),
+        firstName: user.first_name,
+        lastName: user.last_name,
+        email: user.email
+      }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const getProfile = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const authReq = req as any;
+    const userId = authReq.user?.userId;
+    
+    if (!userId) {
+      res.status(401).json({ error: 'User not authenticated' });
+      return;
+    }
+    
+    const user = await findUserById(userId);
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+    
+    res.json({
+      id: user.id.toString(),
+      firstName: user.first_name,
+      lastName: user.last_name,
+      email: user.email
+    });
+  } catch (error) {
+    console.error('Get profile error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const updateProfile = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const authReq = req as any;
+    const userId = authReq.user?.userId;
+    
+    if (!userId) {
+      res.status(401).json({ error: 'User not authenticated' });
+      return;
+    }
+    
+    const { firstName, lastName, email } = req.body;
+    
+    if (!firstName || !lastName || !email) {
+      res.status(400).json({ error: 'All fields are required' });
+      return;
+    }
+    
+    const user = await updateUser(userId, firstName, lastName, email);
+    
+    res.json({
+      id: user.id.toString(),
+      firstName: user.first_name,
+      lastName: user.last_name,
+      email: user.email
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}; 
