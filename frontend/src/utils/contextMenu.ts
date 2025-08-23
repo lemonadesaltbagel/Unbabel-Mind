@@ -1,2 +1,66 @@
-export const createContextMenu=(e:React.MouseEvent,selectedText:string,start:number,end:number,onHighlight:()=>void,onRemove:()=>void):void=>{e.preventDefault();const contextMenu=document.createElement('div');contextMenu.className='fixed bg-white shadow-lg rounded-md py-1 z-50';contextMenu.style.left=`${e.pageX}px`;contextMenu.style.top=`${e.pageY}px`;let isRemoved=false;const removeMenu=()=>{if(!isRemoved&&document.body.contains(contextMenu)){document.body.removeChild(contextMenu);isRemoved=true;}};const highlightItem=document.createElement('div');highlightItem.className='px-3 py-1 hover:bg-gray-100 cursor-pointer text-black text-sm';highlightItem.textContent='Highlight';highlightItem.onclick=()=>{onHighlight();removeMenu();};const removeItem=document.createElement('div');removeItem.className='px-3 py-1 hover:bg-gray-100 cursor-pointer text-black text-sm';removeItem.textContent='Remove Highlight';removeItem.onclick=()=>{onRemove();removeMenu();};contextMenu.appendChild(highlightItem);contextMenu.appendChild(removeItem);document.body.appendChild(contextMenu);const handleClickOutside=()=>{removeMenu();document.removeEventListener('click',handleClickOutside);};setTimeout(()=>document.addEventListener('click',handleClickOutside),0);};
-export const getTextPosition=(container:HTMLElement,selection:Selection):{start:number;end:number}=>{const range=selection.getRangeAt(0);const preCaretRange=range.cloneRange();preCaretRange.selectNodeContents(container);preCaretRange.setEnd(range.startContainer,range.startOffset);const start=preCaretRange.toString().length;const end=start+selection.toString().length;return{start,end};}; 
+export const createContextMenu = (
+  event: React.MouseEvent, 
+  selectedText: string, 
+  start: number, 
+  end: number, 
+  onHighlight: () => void, 
+  onRemove: () => void
+): void => {
+  event.preventDefault();
+  
+  const contextMenu = document.createElement('div');
+  contextMenu.className = 'fixed bg-white shadow-lg rounded-md py-1 z-50';
+  contextMenu.style.left = `${event.pageX}px`;
+  contextMenu.style.top = `${event.pageY}px`;
+  
+  let isRemoved = false;
+  
+  const removeMenu = () => {
+    if (!isRemoved && document.body.contains(contextMenu)) {
+      document.body.removeChild(contextMenu);
+      isRemoved = true;
+    }
+  };
+  
+  const highlightItem = document.createElement('div');
+  highlightItem.className = 'px-3 py-1 hover:bg-gray-100 cursor-pointer text-black text-sm';
+  highlightItem.textContent = 'Highlight';
+  highlightItem.onclick = () => {
+    onHighlight();
+    removeMenu();
+  };
+  
+  const removeItem = document.createElement('div');
+  removeItem.className = 'px-3 py-1 hover:bg-gray-100 cursor-pointer text-black text-sm';
+  removeItem.textContent = 'Remove Highlight';
+  removeItem.onclick = () => {
+    onRemove();
+    removeMenu();
+  };
+  
+  contextMenu.appendChild(highlightItem);
+  contextMenu.appendChild(removeItem);
+  document.body.appendChild(contextMenu);
+  
+  const handleClickOutside = () => {
+    removeMenu();
+    document.removeEventListener('click', handleClickOutside);
+  };
+  
+  setTimeout(() => document.addEventListener('click', handleClickOutside), 0);
+};
+
+export const getTextPosition = (
+  container: HTMLElement, 
+  selection: Selection
+): { start: number; end: number } => {
+  const range = selection.getRangeAt(0);
+  const preCaretRange = range.cloneRange();
+  preCaretRange.selectNodeContents(container);
+  preCaretRange.setEnd(range.startContainer, range.startOffset);
+  
+  const start = preCaretRange.toString().length;
+  const end = start + selection.toString().length;
+  
+  return { start, end };
+}; 

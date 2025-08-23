@@ -1,1 +1,18 @@
-export const checkTokenAndWarn=async()=>{try{const r=await fetch('/profile/configs');if(r.ok){const d=await r.json();if(!d.openaiToken||d.openaiToken.length===0){return false;}}else{return true;}}catch{return false;}return true;};
+export const checkTokenAndWarn = async () => {
+  try {
+    const response = await fetch('/profile/configs');
+    
+    if (response.ok) {
+      const data = await response.json();
+      if (!data.openaiToken || data.openaiToken.length === 0) {
+        return false;
+      }
+    } else {
+      return true;
+    }
+  } catch {
+    return false;
+  }
+  
+  return true;
+};

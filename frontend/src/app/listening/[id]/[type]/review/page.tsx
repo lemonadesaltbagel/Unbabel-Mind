@@ -3,7 +3,7 @@ import{useParams,useRouter}from'next/navigation';
 import{useEffect,useState,useRef}from'react';
 import{Home}from'lucide-react';
 import{useAuth}from'@/contexts/AuthContext';
-import{ldp,ldq,ldh,lde,getResultsWithCorrectAnswers}from'@/utils/listening';
+import{loadTranscript,loadQuestions,loadHighlights,loadExplanations,getResultsWithCorrectAnswers}from'@/utils/listening';
 import{useTestPageTitle}from'@/utils/usePageTitle';
 import{checkTokenAndWarn}from'@/utils/tokenCheck';
 interface Question{type:string;text?:string;number?:number;question?:string;options?:string[];correctAnswer?:string;}
@@ -27,11 +27,11 @@ const[evidence,setEvidence]=useState<{number:number;text:string}[]>([]);
 const[aiSuggestions,setAiSuggestions]=useState<string[]>([]);
 const[results,setResults]=useState<{questionId:number;userAnswer:string[];correctAnswer:string;isCorrect:boolean}[]>([]);
 useEffect(()=>{if(!loading&&!user){r.push('/login');return;}},[user,loading,r]);
-useEffect(()=>{(async()=>{const{title,content}=await ldp(id,type);setPt(title);setPc(content);})();
-(async()=>setQs(await ldq(id,type)))();
+useEffect(()=>{(async()=>{const{title,content}=await loadTranscript(id,type);setPt(title);setPc(content);})();
+(async()=>setQs(await loadQuestions(id,type)))();
 (async()=>{if(user){const backendResults=await getResultsWithCorrectAnswers(Number(user.id),Number(id),Number(type));setResults(backendResults);}})();
-setHighlights(ldh(id,type));
-(async()=>setEvidence(await lde(id,type)))();},[id,type,user]);
+setHighlights(loadHighlights(id,type));
+(async()=>setEvidence(await loadExplanations(id,type)))();},[id,type,user]);
 useEffect(()=>{
 if(qs.length>0&&results.length>0&&evidence.length>0){
 const wrongQuestions=results.filter(r=>!r.isCorrect).map(r=>{const q=qs.find(q=>q.number===r.questionId);return{...q,userAnswer:r.userAnswer[0]||'',correctAnswer:r.correctAnswer};});

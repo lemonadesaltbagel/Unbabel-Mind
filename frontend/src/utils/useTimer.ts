@@ -1,11 +1,43 @@
-import{useEffect,useState,useRef}from'react';
-export function useTimer(){
-const[ts,setTs]=useState(0);
-const[tr,setTr]=useState(false);
-const trs=useRef(false);
-useEffect(()=>{setTs(0);setTr(false);trs.current=false;},[]);
-useEffect(()=>{if(tr){const i=setInterval(()=>{setTs(prev=>prev+1);},1000);return()=>clearInterval(i);}},[tr]);
-useEffect(()=>{const st=()=>{if(!trs.current){setTr(true);trs.current=true;}};document.addEventListener('scroll',st,true);document.addEventListener('click',st);return()=>{document.removeEventListener('scroll',st,true);document.removeEventListener('click',st);};},[]);
-const tm=`${Math.floor(ts/60).toString().padStart(2,'0')}:${(ts%60).toString().padStart(2,'0')}`;
-return{ts,tr,tm};
+import { useEffect, useState, useRef } from 'react';
+
+export function useTimer() {
+  const [timeSeconds, setTimeSeconds] = useState(0);
+  const [timerRunning, setTimerRunning] = useState(false);
+  const timerStarted = useRef(false);
+
+  useEffect(() => {
+    setTimeSeconds(0);
+    setTimerRunning(false);
+    timerStarted.current = false;
+  }, []);
+
+  useEffect(() => {
+    if (timerRunning) {
+      const interval = setInterval(() => {
+        setTimeSeconds(prev => prev + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [timerRunning]);
+
+  useEffect(() => {
+    const startTimer = () => {
+      if (!timerStarted.current) {
+        setTimerRunning(true);
+        timerStarted.current = true;
+      }
+    };
+
+    document.addEventListener('scroll', startTimer, true);
+    document.addEventListener('click', startTimer);
+
+    return () => {
+      document.removeEventListener('scroll', startTimer, true);
+      document.removeEventListener('click', startTimer);
+    };
+  }, []);
+
+  const timeFormatted = `${Math.floor(timeSeconds / 60).toString().padStart(2, '0')}:${(timeSeconds % 60).toString().padStart(2, '0')}`;
+
+  return { timeSeconds, timerRunning, timeFormatted };
 }
