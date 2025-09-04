@@ -1,148 +1,123 @@
-# 🧠 Unbabel Mind - Your AI-Powered IELTS Preparation Platform
+# 🧠 Unbabel Mind — AI-Powered IELTS Preparation
 
-{hero-image: A modern, sleek interface showing the Unbabel Mind dashboard with colorful gradient elements and clean design}
+Master IELTS with interactive practice across Reading, Listening, Speaking, and Writing — now supercharged with per-question AI explanations, mistake analysis, and targeted tips.
 
-## 🎯 Master IELTS with Interactive Learning
+## ✨ Highlights
 
-Unbabel Mind is your comprehensive IELTS preparation companion, combining traditional practice materials with cutting-edge AI technology to help you excel in all four IELTS modules.
+- **AI Assistant**: Clear explanations for wrong answers, pinpointed mistake analysis, and actionable improvement tips — right where you practice.
+- **Interactive Modules**: Tabbed preview of Reading, Listening, Speaking, and Writing from the landing page with polished, responsive UI and smooth animations.
+- **Seamless Auth**: Sign In / Sign Up flows with automatic redirect to your dashboard when already logged in.
+- **IELTS-Style Practice**: True/False/Not Given, MCQs, fill-in-the-blank, and structured task types mapped to real exam formats.
+- **Progress & Feedback**: Real-time feedback and persistent progress across modules.
 
-## ✨ Key Features
+<img width="1600" alt="Unbabel Mind dashboard and AI analysis" src="https://github.com/user-attachments/assets/9a376bd6-f65d-4efe-badf-6835feb4a238" />
 
-### ✨ AI Assistant
-- AI Explanation for each wrong question.
-- AI Suggestion.
+## 🔎 Landing Page Preview
 
-![3eedb4176c989e0d9c02b751c19bc218](https://github.com/user-attachments/assets/9a376bd6-f65d-4efe-badf-6835feb4a238)
+- **Hero + CTA**: Gradient animated hero with Sign In / Sign Up actions.
+- **Tabbed Modules**: Live preview cards for Reading, Listening, Speaking, and Writing with sample content and UI controls.
+- **AI Analysis Panel**: Example feedback blocks show “Why it’s correct”, “Your mistake”, and “Improvement tip”.
 
-![f86488e3c6893225d07b71b84cecc981](https://github.com/user-attachments/assets/366bc9c2-7210-4324-985c-6b087fd4778a)
+<img width="1600" alt="Reading module preview with TF/NG and AI analysis" src="https://github.com/user-attachments/assets/f73391aa-d177-4271-8449-a907874c4f47" />
 
-![c8d1c392b417876f4479169389a91f50](https://github.com/user-attachments/assets/f73391aa-d177-4271-8449-a907874c4f47)
+## 📚 Reading
 
+- **Interactive passages** based on IELTS-style texts.
+- **Multiple question types**: True/False/Not Given, Multiple Choice, Fill-in-the-blank.
+- **AI feedback inline**: Instant explanations and tips next to your answers.
 
-### 📚 **Reading Module**
-- **Interactive passages** from Cambridge IELTS materials
-- **Real-time highlighting** and note-taking capabilities
-- **Multiple question types**: True/False/Not Given, Multiple Choice, Fill-in-the-blank
-- **Progress tracking** and performance analytics
-- **Context-aware question generation**
+<img width="1600" alt="Reading practice interface" src="https://github.com/user-attachments/assets/fa9bf4a0-54bc-410f-b8fb-4e38ea9b8e1c" />
 
-<img width="1779" height="1883" alt="image" src="https://github.com/user-attachments/assets/fa9bf4a0-54bc-410f-b8fb-4e38ea9b8e1c" />
+## 🎧 Listening
 
+- **Audio player UI** with progress and controls.
+- **Question interface** aligned to IELTS listening tasks.
+- **Real-time scoring** and progress persistence.
 
-### 🎧 **Listening Module**
-- **Audio transcript synchronization**
-- **Interactive question interface**
-- **Real-time scoring and feedback**
-- **Cambridge IELTS listening materials**
-- **Progress persistence across sessions**
+<img width="1600" alt="Listening practice interface" src="https://github.com/user-attachments/assets/534da315-ff3e-4675-9e9c-6840a97bddb2" />
 
-<img width="1789" height="1179" alt="image" src="https://github.com/user-attachments/assets/534da315-ff3e-4675-9e9c-6840a97bddb2" />
+## 🗣️ Speaking
 
+- **AI-powered prompts** with structured speaking practice.
+- **Voice recording** support and performance tracking.
 
-### 🗣️ **Speaking Module**
-- **AI-powered speaking prompts**
-- **Voice recording capabilities**
-- **Structured speaking practice**
-- **Performance tracking**
-- **IELTS-style question formats**
+<img width="800" alt="Speaking practice interface" src="https://github.com/user-attachments/assets/6843f92-f56-4b85-b1d7-a96140a97b64" />
 
-<img width="1070" height="1113" alt="image" src="https://github.com/user-attachments/assets/6843f92-f56-4b85-b1d7-a96140a97b64" />
+## ✍️ Writing
 
-### ✍️ **Writing Module**
-- **Rich text editor** with word count
-- **IELTS writing prompts**
-- **Auto-save functionality**
-- **Writing task types** (Task 1 & Task 2)
-- **Progress tracking**
+- **Rich text editor** with word count and auto-save.
+- **Task 1 & Task 2** prompts and progress tracking.
 
-{writing-screenshot: Screenshot showing the writing interface with essay editor}
+## 🤖 AI Quiz
 
-### 🤖 **AI Quiz Feature**
-- **Dynamic question generation** using advanced AI
-- **Three question categories**:
-  - 🧩 **Context Understanding** - Real-world scenarios
-  - 📖 **English to English** - Vocabulary and synonyms
-  - 📝 **Grammar MCQ** - Grammar rules and usage
-- **Adaptive difficulty** based on your level
-- **Instant feedback** and explanations
+- **Dynamic question generation** with three categories:
+  - 🧩 Context Understanding (real-world scenarios)
+  - 📖 English to English (vocabulary and synonyms)
+  - 📝 Grammar MCQ (rules and usage)
+- **Adaptive difficulty** and instant explanations.
 
-<img width="2337" height="1771" alt="image" src="https://github.com/user-attachments/assets/5f7fe050-f242-47ce-abc8-5a28f736a5a" />
+<img width="1600" alt="AI quiz categories and examples" src="https://github.com/user-attachments/assets/5f7fe050-f242-47ce-abc8-5a28f736a5a" />
 
+## 🔐 Authentication & Routing
 
-## 🚀 Technology Stack
+- **Auth context** manages session state, token storage, and profile fetch.
+- **Auto-redirect**: Logged-in users visiting the landing page are redirected to the dashboard.
+
+## 🛠️ Technology Stack
 
 - **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS
 - **Backend**: Node.js, Express, TypeScript
 - **Database**: PostgreSQL 17
-- **AI Integration**: OpenAI API for dynamic content generation
+- **AI**: OpenAI API for dynamic content generation
 - **Containerization**: Docker & Docker Compose
 
-## 🎨 User Experience
-
-- **Modern, responsive design** that works on all devices
-- **Dark theme** for comfortable extended study sessions
-- **Intuitive navigation** with clear progress indicators
-- **Real-time feedback** and performance tracking
-- **Seamless authentication** and user management
-
-<img width="3802" height="2297" alt="image" src="https://github.com/user-attachments/assets/310f9d7-e3d7-4e21-b405-3b92765f2324" />
-
-## 📊 Progress Tracking
-
-- **Detailed analytics** for each module
-- **Performance insights** and improvement suggestions
-- **Study session history**
-- **Score tracking** across all question types
-- **Personalized learning recommendations**
+<img width="1600" alt="Modern responsive UI preview" src="https://github.com/user-attachments/assets/310f9d7-e3d7-4e21-b405-3b92765f2324" />
 
 ## 🔧 Getting Started
 
-Ready to start your IELTS journey? Follow our comprehensive setup guide:
+### 🐳 Quick Start with Docker (recommended)
 
-### 🐳 **Quick Start with Docker** (Recommended)
+1) Clone the repository
+```bash
+git clone https://github.com/yourusername/Unbabel-Mind.git
+cd Unbabel-Mind
+```
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/Unbabel-Mind.git
-   cd Unbabel-Mind
-   ```
+2) Start the application
+```bash
+docker-compose up --build
+```
 
-2. **Start the application**
-   ```bash
-   docker-compose up --build
-   ```
+3) Access the platform
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:3001
 
-3. **Access the platform**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:3001
+### 📖 Detailed Setup
 
-### 📖 **Detailed Setup Instructions**
-
-For detailed setup instructions, environment configuration, and development guidelines, see our **[Setup Guide](./SETUP.md)**.
+For environment variables, development workflows, and troubleshooting, see the full **[Setup Guide](./SETUP.md)**.
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our contributing guidelines and feel free to submit issues and pull requests.
+Contributions are welcome! Please open an issue or submit a PR. See component-level docs in:
+- [Frontend Documentation](./frontend/README.md)
+- [Backend Documentation](./backend/README.md)
+- [Docker Documentation](./DOCKER_README.md)
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License — see the LICENSE file for details.
 
 ## 🆘 Support
 
-- 📧 **Email**: support@unbabelmind.com
-- 💬 **Discord**: Join our community
-- 📖 **Full Developer Documentation**: 
-  - [Docker Documentation](./DOCKER_README.md)
-  - [Frontend Documentation](./frontend/README.md)
-  - [Backend Documentation](./backend/README.md)
+- 📧 Email: support@unbabelmind.com
+- 💬 Discord: Join our community
 
 ---
 
-**Ready to transform your IELTS preparation?** 🚀
+Ready to transform your IELTS preparation? 🚀
 
-[Get Started Now](./SETUP.md) | [View Demo](https://demo.unbabelmind.com) | [Join Community](https://discord.gg/unbabelmind)
+[Get Started](./SETUP.md) • [View Demo](https://demo.unbabelmind.com) • [Join Community](https://discord.gg/unbabelmind)
 
 ---
 
-*Built with ❤️ for IELTS aspirants worldwide* 
+Built with ❤️ for IELTS aspirants worldwide.
