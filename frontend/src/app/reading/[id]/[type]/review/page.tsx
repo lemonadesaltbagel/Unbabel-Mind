@@ -153,7 +153,7 @@ Respond with plain text suggestions only, one per line, without any formatting o
       const token = localStorage.getItem('token');
       if (!token) return 'No authentication token';
       
-      const response = await fetch('/reviewaiapi', {
+      const response = await fetch('/api/reviewaiapi', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -162,8 +162,16 @@ Respond with plain text suggestions only, one per line, without any formatting o
         body: JSON.stringify({ prompt })
       });
       
+      if (!response.ok) {
+        try {
+          const err = await response.json();
+          return err.error || 'Error calling Unbabel API.';
+        } catch {
+          return 'Error calling Unbabel API.';
+        }
+      }
       const data = await response.json();
-      return data.generated_text;
+      return data.generated_text || 'No response from AI';
     } catch {
       return 'Error calling Unbabel API.';
     }

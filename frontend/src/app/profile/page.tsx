@@ -41,7 +41,11 @@ export default function ProfilePage() {
 
   const loadConfigs = async () => {
     try {
-      const response = await fetch('/profile/configs');
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      const headers: Record<string, string> = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const response = await fetch('/api/profile/configs', { headers });
       if (response.ok) {
         const data = await response.json();
         setOpenaiToken(data.openaiToken || '');
@@ -67,9 +71,13 @@ export default function ProfilePage() {
     }
     
     try {
-      const response = await fetch('/profile/token', {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const response = await fetch('/api/profile/token', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ openaiToken: editingToken })
       });
       

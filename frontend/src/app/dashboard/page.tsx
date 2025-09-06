@@ -80,7 +80,7 @@ export default function DashboardPage() {
         return;
       }
 
-      const response = await fetch('/reviewaiapi', {
+      const response = await fetch('/api/reviewaiapi', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -3,7 +3,7 @@ import{useParams,useRouter}from'next/navigation';
 import{useEffect,useState,useCallback}from'react';
 import{Home,RefreshCw}from'lucide-react';
 import{useAuth}from'@/contexts/AuthContext';
-import{ldp,getWritingRating}from'@/utils/writing';
+import{loadWritingPrompt,getWritingRating}from'@/utils/writing';
 import{useTestPageTitle}from'@/utils/usePageTitle';
 import{WritingRatingResponse}from'@/types/writing';
 export default function WritingReviewPage(){
@@ -24,7 +24,7 @@ if(!loading&&!user)r.push('/login');
 },[user,loading,r]);
 useEffect(()=>{
 (async()=>{
-const {title,content}=await ldp(id,type);
+const {title,content}=await loadWritingPrompt(id,type);
 setPt(title);
 setPc(content);
 })();
@@ -33,7 +33,7 @@ useEffect(()=>{
 if(user&&id&&type){
 setEssayLoading(true);
 setError('');
-fetch(`/answers/essay/${user.id}/${id}/${type}`).then(res=>res.json()).then(data=>{
+fetch(`/api/answers/essay/${user.id}/${id}/${type}`).then(res=>res.json()).then(data=>{
 console.log('Essay API response:',data);
 if(data.success&&data.data)setEssay(data.data.essay_text);
 else{

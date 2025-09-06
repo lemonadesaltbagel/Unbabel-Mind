@@ -58,9 +58,13 @@ Respond ONLY with a JSON object in this exact format:
 
 Where X.X is a number from 0 to 9 with 0.5 increments (e.g., 6.0, 6.5, 7.0, etc.).`;
 
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
     const response = await fetch('/api/reviewaiapi', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({ prompt: promptText })
     });
 

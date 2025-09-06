@@ -12,6 +12,12 @@ Master IELTS with interactive practice across Reading, Listening, Speaking, and 
 
 <img width="1600" alt="Unbabel Mind dashboard and AI analysis" src="https://github.com/user-attachments/assets/9a376bd6-f65d-4efe-badf-6835feb4a238" />
 
+## 🎥 Video Walkthrough & Demo
+
+[![Watch the walkthrough & demo](https://img.youtube.com/vi/wlHTPwZr7Nw/hqdefault.jpg)](https://www.youtube.com/watch?v=wlHTPwZr7Nw&t=4s)
+
+Prefer a direct link? https://www.youtube.com/watch?v=wlHTPwZr7Nw&t=4s
+
 ## 🔎 Landing Page Preview
 
 - **Hero + CTA**: Gradient animated hero with Sign In / Sign Up actions.
