@@ -1,16 +1,8 @@
-# 🧠 Unbabel Mind — AI-Powered IELTS Preparation
+# 🧠 Unbabel Mind — AI-Powered IELTS Practice
 
-Master IELTS with interactive practice across Reading, Listening, Speaking, and Writing — now supercharged with per-question AI explanations, mistake analysis, and targeted tips.
+Practice smarter across Reading, Listening, Writing, and Speaking — with AI reviews, context-aware explanations, and personalized suggestions that turn practice into real progress.
 
-## ✨ Highlights
-
-- **AI Assistant**: Clear explanations for wrong answers, pinpointed mistake analysis, and actionable improvement tips — right where you practice.
-- **Interactive Modules**: Tabbed preview of Reading, Listening, Speaking, and Writing from the landing page with polished, responsive UI and smooth animations.
-- **Seamless Auth**: Sign In / Sign Up flows with automatic redirect to your dashboard when already logged in.
-- **IELTS-Style Practice**: True/False/Not Given, MCQs, fill-in-the-blank, and structured task types mapped to real exam formats.
-- **Progress & Feedback**: Real-time feedback and persistent progress across modules.
-
-<img width="1600" alt="Unbabel Mind dashboard and AI analysis" src="https://github.com/user-attachments/assets/9a376bd6-f65d-4efe-badf-6835feb4a238" />
+<img width="2236" height="840" alt="Home — interactive demo with Instant Translation, AI Review, AI Suggestions" src="https://github.com/user-attachments/assets/062d679e-4329-4740-9a50-d6a0450ebea2" />
 
 ## 🎥 Video Walkthrough & Demo
 
@@ -18,89 +10,99 @@ Master IELTS with interactive practice across Reading, Listening, Speaking, and 
 
 Prefer a direct link? https://www.youtube.com/watch?v=wlHTPwZr7Nw&t=4s
 
-## 🔎 Landing Page Preview
+## ✨ What You Can Do
 
-- **Hero + CTA**: Gradient animated hero with Sign In / Sign Up actions.
-- **Tabbed Modules**: Live preview cards for Reading, Listening, Speaking, and Writing with sample content and UI controls.
-- **AI Analysis Panel**: Example feedback blocks show “Why it’s correct”, “Your mistake”, and “Improvement tip”.
+- **Instant Translation & Explanations**: Right‑click selected text to translate, paraphrase, or ask for context‑aware explanations while practicing.
+- **AI Review on Submission**: For each wrong answer, see why it’s wrong, your mistake, and how to improve.
+- **Unbabel Suggestions**: A concise summary of your strengths, weaknesses, and targeted improvement tips after each session.
+- **In‑Context Dictionary & Paraphrase**: Understand tricky words, sentences, or paragraphs in context — English‑to‑English.
+- **Profile & Token Control**: Manage your OpenAI token in the Profile page; the value is kept local and used only to power AI features.
 
-<img width="1600" alt="Reading module preview with TF/NG and AI analysis" src="https://github.com/user-attachments/assets/f73391aa-d177-4271-8449-a907874c4f47" />
+<img width="1680" height="868" alt="Context menu on selection with translate, explain, and paraphrase" src="https://github.com/user-attachments/assets/14a6b47e-37b6-4617-be86-d3f5f9155fe0" />
 
-## 📚 Reading
+## 🚀 Product Tour
 
-- **Interactive passages** based on IELTS-style texts.
-- **Multiple question types**: True/False/Not Given, Multiple Choice, Fill-in-the-blank.
-- **AI feedback inline**: Instant explanations and tips next to your answers.
+### Home — Interactive Demo
+- Try highlights before signing up: Instant Translation, AI Review, and AI Suggestions.
+- Get a feel for the interface and feedback workflow in seconds.
 
-<img width="1600" alt="Reading practice interface" src="https://github.com/user-attachments/assets/fa9bf4a0-54bc-410f-b8fb-4e38ea9b8e1c" />
+<img width="1659" height="865" alt="Interactive demo on the home page" src="https://github.com/user-attachments/assets/ae80ab00-fed4-4f85-8557-a78f85faf4b2" />
+  
+### Reading
+- Attempt IELTS‑style questions (TF/NG, MCQ, fill‑in‑the‑blank) on a passage library.
+- Right‑click any text or question to translate, paraphrase, or ask for help.
+- After submitting, open the AI panel for per‑question review and overall Unbabel Suggestions.
 
-## 🎧 Listening
+<img width="1680" height="868" alt="Reading attempt — selection tools and questions" src="https://github.com/user-attachments/assets/d93b2fe4-5388-4b0c-b53d-53627d8e8c06" />
+<img width="1678" height="863" alt="Reading review — Unbabel AI explanation and suggestions" src="https://github.com/user-attachments/assets/35ab42ae-927b-4402-ab79-68eb030f6462" />
 
-- **Audio player UI** with progress and controls.
-- **Question interface** aligned to IELTS listening tasks.
-- **Real-time scoring** and progress persistence.
+### Listening
+- Built‑in audio player for practice; all UI controls included.
+- Review page shows the full recording transcript to spot what you missed.
+- AI feedback is tailored for listening mistakes and strategies.
 
-<img width="1600" alt="Listening practice interface" src="https://github.com/user-attachments/assets/534da315-ff3e-4675-9e9c-6840a97bddb2" />
+<img width="1665" height="864" alt="Listening review — transcript with AI feedback" src="https://github.com/user-attachments/assets/7aef9969-52ee-4b8d-935e-186c4bede471" />
 
-## 🗣️ Speaking
+### Writing
+- Modern scoring aligned with official IELTS criteria:
+  Task Achievement, Coherence & Cohesion, Lexical Resource, Grammatical Range & Accuracy.
+- Submit your essay to see your score breakdown and actionable suggestions.
 
-- **AI-powered prompts** with structured speaking practice.
-- **Voice recording** support and performance tracking.
+<img width="1680" height="864" alt="Writing — score breakdown across four criteria" src="https://github.com/user-attachments/assets/ba9e6bb3-42fa-48a1-81a3-66bcbbf442fd" />
 
-<img width="800" alt="Speaking practice interface" src="https://github.com/user-attachments/assets/6843f92-f56-4b85-b1d7-a96140a97b64" />
+### Speaking
+- Speaking practice available; AI tutor feedback is ready today.
+- Automatic scoring is in progress as we train our own model.
 
-## ✍️ Writing
+### AI Quiz (Bite‑Size Learning)
+- Practice in short, fun sessions with three dynamic types:
+  Context Understanding, English‑to‑English, Grammar MCQs.
+- Infinite question bank — every item is generated on the fly.
+- Instant result and explanation after submission.
 
-- **Rich text editor** with word count and auto-save.
-- **Task 1 & Task 2** prompts and progress tracking.
+<img width="1680" height="865" alt="AI Quiz — cards and instant result" src="https://github.com/user-attachments/assets/a1953df6-3b94-4065-947a-bb3cda7523c1" />
+<img width="1680" height="861" alt="AI Quiz — cards and instant result" src="https://github.com/user-attachments/assets/f08efbaa-aa03-4640-8d94-ea59c9fd3e5d" />
+<img width="1680" height="866" alt="AI Quiz — cards and instant result" src="https://github.com/user-attachments/assets/90706d7b-cc81-4c9e-bcef-3727b775295a" />
 
-## 🤖 AI Quiz
+## 🧩 How It Works
 
-- **Dynamic question generation** with three categories:
-  - 🧩 Context Understanding (real-world scenarios)
-  - 📖 English to English (vocabulary and synonyms)
-  - 📝 Grammar MCQ (rules and usage)
-- **Adaptive difficulty** and instant explanations.
-
-<img width="1600" alt="AI quiz categories and examples" src="https://github.com/user-attachments/assets/5f7fe050-f242-47ce-abc8-5a28f736a5a" />
-
-## 🔐 Authentication & Routing
-
-- **Auth context** manages session state, token storage, and profile fetch.
-- **Auto-redirect**: Logged-in users visiting the landing page are redirected to the dashboard.
-
-## 🛠️ Technology Stack
-
-- **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS
-- **Backend**: Node.js, Express, TypeScript
+- **Frontend**: Next.js 15, React 19, Tailwind CSS 4
+- **Backend**: Node.js + Express (TypeScript)
 - **Database**: PostgreSQL 17
-- **AI**: OpenAI API for dynamic content generation
-- **Containerization**: Docker & Docker Compose
+- **AI**: OpenAI API for reviews, explanations, and quizzes
+- **Containerization**: Docker + Docker Compose
 
-<img width="1600" alt="Modern responsive UI preview" src="https://github.com/user-attachments/assets/310f9d7-e3d7-4e21-b405-3b92765f2324" />
+## 🐳 Quick Start (Docker)
 
-## 🔧 Getting Started
+Prerequisites: Docker, Docker Compose, and an OpenAI API key.
 
-### 🐳 Quick Start with Docker (recommended)
-
-1) Clone the repository
+1) Clone and enter the repo
 ```bash
-git clone https://github.com/yourusername/Unbabel-Mind.git
-cd Unbabel-Mind
+git clone https://github.com/your-org/unbabel-mind.git
+cd unbabel-mind
 ```
 
-2) Start the application
+2) Start the stack (pass your key)
 ```bash
-docker-compose up --build
+OPENAI_API_KEY=sk-xxxxx docker-compose up --build
 ```
 
-3) Access the platform
+3) Open the app
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:3001
 
-### 📖 Detailed Setup
+4) First run
+- Sign up, then open Profile to confirm or update your token.
+- Your token powers AI features and is kept local to your session.
 
-For environment variables, development workflows, and troubleshooting, see the full **[Setup Guide](./SETUP.md)**.
+## 🔐 Notes on Content
+- Listening audio may be muted or not included for copyright reasons; the player UI is fully functional.
+- AI explanations are generated dynamically; results vary with prompts and context.
+
+## 🗺️ Roadmap
+- Speaking auto‑scoring model (in progress)
+- Expanded passage/library coverage
+- More quiz templates and skills
 
 ## 🤝 Contributing
 
@@ -118,12 +120,7 @@ This project is licensed under the MIT License — see the LICENSE file for deta
 - 📧 Email: support@unbabelmind.com
 - 💬 Discord: Join our community
 
----
-
-Ready to transform your IELTS preparation? 🚀
-
-[Get Started](./SETUP.md) • [View Demo](https://demo.unbabelmind.com) • [Join Community](https://discord.gg/unbabelmind)
 
 ---
 
-Built with ❤️ for IELTS aspirants worldwide.
+Built to make IELTS practice efficient, explainable, and motivating.
