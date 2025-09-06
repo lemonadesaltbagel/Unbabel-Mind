@@ -8,7 +8,7 @@ Practice smarter across Reading, Listening, Writing, and Speaking — with AI re
 
 [![Watch the walkthrough & demo](https://img.youtube.com/vi/wlHTPwZr7Nw/hqdefault.jpg)](https://www.youtube.com/watch?v=wlHTPwZr7Nw&t=4s)
 
-Prefer a direct link? https://www.youtube.com/watch?v=wlHTPwZr7Nw&t=4s
+Prefer a direct link? Go to (https://youtu.be/wlHTPwZr7Nw)
 
 ## ✨ What You Can Do
 
