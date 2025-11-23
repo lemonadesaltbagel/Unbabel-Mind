@@ -8,26 +8,29 @@ type Props = {
 
 export default function EssayEditor({ essay, setEssay }: Props) {
   return (
-    <div className="bg-white p-6 rounded-xl shadow w-full lg:w-1/2 h-[80vh] overflow-y-auto">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">Essay Editor</h2>
-        <button className="flex items-center space-x-2 px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-sm">
-          <Save className="w-4 h-4" />
-          <span>Auto-save</span>
-        </button>
+    <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 text-slate-200 shadow-[0_25px_80px_rgba(2,6,23,0.45)] backdrop-blur-2xl h-[80vh] overflow-y-auto">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.4em] text-white/50">Essay editor</p>
+          <h3 className="text-2xl font-semibold text-white">Draft board</h3>
+        </div>
+        <div className="inline-flex items-center gap-2 rounded-2xl border border-white/15 px-4 py-2 text-xs text-white/70">
+          <Save className="h-4 w-4 text-emerald-300" />
+          Auto-save on
+        </div>
       </div>
-      
+
       <textarea
         value={essay}
-        onChange={(e) => setEssay(e.target.value)}
+        onChange={e => setEssay(e.target.value)}
         placeholder="Start writing your essay here..."
-        className="w-full h-[60vh] p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full h-[60vh] rounded-3xl border border-white/10 bg-black/30 p-5 text-base text-white placeholder-white/40 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-500/30"
       />
-      
-      <div className="mt-4 text-sm text-gray-500">
-        <div>Words: {wordCount(essay)}</div>
-        <div>Characters: {essay.length}</div>
+
+      <div className="mt-4 flex items-center justify-between text-sm text-white/60">
+        <p>Words: {wordCount(essay)}</p>
+        <p>Characters: {essay.length}</p>
       </div>
     </div>
   );
-} 
+}

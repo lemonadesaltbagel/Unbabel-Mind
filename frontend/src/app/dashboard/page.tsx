@@ -3,11 +3,116 @@
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
-import { Home, LogOut, Sparkles, Zap, Target, Brain } from 'lucide-react';
+import { LogOut, Sparkles, Zap, Target, Brain, Activity, Clock } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { checkTokenAndWarn } from '@/utils/tokenCheck';
 
 const tabs = ['Reading', 'Listening', 'Speaking', 'Writing', 'AI Quiz'];
+
+const quickStats = [
+  {
+    label: 'Focus minutes today',
+    value: '48',
+    meta: '+12 vs avg',
+    icon: Clock
+  },
+  {
+    label: 'Band momentum',
+    value: '+0.4',
+    meta: 'Tracking 7.5',
+    icon: Activity
+  },
+  {
+    label: 'Sets cleared',
+    value: '32',
+    meta: '90 day streak',
+    icon: Sparkles
+  }
+] as const;
+
+const practiceFeed = [
+  {
+    title: 'Reading set 09',
+    detail: 'Accuracy bumped 6% after note review',
+    time: '2m ago'
+  },
+  {
+    title: 'Speaking drill',
+    detail: 'Fluency stabilized at 7.1 band',
+    time: '26m ago'
+  },
+  {
+    title: 'Writing Task 2',
+    detail: 'Draft saved · Lexical upgrade issued',
+    time: '1h ago'
+  }
+];
+
+const skillInsights: Record<string, { title: string; cues: string[] }> = {
+  Reading: {
+    title: 'Reading cues',
+    cues: [
+      'Mark absolutes before checking T/F/NG logic.',
+      'Underline paragraph topics in the left margin.',
+      'Decide on keyword synonyms before scanning the passage.'
+    ]
+  },
+  Listening: {
+    title: 'Listening cues',
+    cues: [
+      'Replay clauses, not full recordings, when unsure.',
+      'Note numbers + names immediately—they rarely repeat.',
+      'Highlight tone shifts; they usually flip the answer.'
+    ]
+  },
+  Speaking: {
+    title: 'Speaking cues',
+    cues: [
+      'Use a hook sentence, then dive into detail quickly.',
+      'Swap filler words for 1-2 second reflective pauses.',
+      'Close with a reflective line to signal structure.'
+    ]
+  },
+  Writing: {
+    title: 'Writing cues',
+    cues: [
+      'Lock your stance in the first 40 words.',
+      'Use one high-precision adjective per paragraph.',
+      'Mirror the task prompt verbs to stay on topic.'
+    ]
+  },
+  'AI Quiz': {
+    title: 'AI drill cues',
+    cues: [
+      'Let AI warm you up, then jump into Cambridge sets.',
+      'Tag wrong answers so the system reruns variants.',
+      'Jump to Profile to plug in your API key if needed.'
+    ]
+  }
+};
+
+const stageNotes: Record<string, { headline: string; detail: string }> = {
+  Reading: {
+    headline: 'Deep focus: Reading lane armed',
+    detail: 'True/False banks paired with Cambridge 20-01 sets.'
+  },
+  Listening: {
+    headline: 'Listening wave primed',
+    detail: 'High fidelity audio cues ready with waveform scrub.'
+  },
+  Speaking: {
+    headline: 'Speaking studio live',
+    detail: 'Tempo tracker + Task 2 prompts in queue.'
+  },
+  Writing: {
+    headline: 'Writing sandbox synced',
+    detail: 'Structure prompts loaded with AI critique toggles.'
+  },
+  'AI Quiz': {
+    headline: 'AI quiz',
+    detail: 'Generate context, vocab, or grammar drills instantly.'
+  }
+};
 
 interface DynamicQuestion {
   type: string;
@@ -264,7 +369,7 @@ export default function DashboardPage() {
     setCurrentQuestion(0);
     setAnswers({});
     setDynamicQuestions([]);
-    if (option !== 'AI Quiz') return;
+    if (activeTab !== 'AI Quiz') return;
     generateQuestionFromLLM(option);
   };
 
@@ -290,182 +395,259 @@ export default function DashboardPage() {
     }
   };
 
+  const userInitial = user?.firstName?.charAt(0) || 'U';
+  const displayName = user?.firstName
+    ? `${user.firstName}${user?.lastName ? ` ${user.lastName}` : ''}`
+    : 'Pilot';
+  const userTagline = user?.email || 'pilot@unbabelmind.com';
+  const currentInsight = skillInsights[activeTab] || skillInsights['Reading'];
+  const stageNote = stageNotes[activeTab] || stageNotes['Reading'];
+
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-[#15202B] text-white flex relative overflow-hidden">
-        {/* Background Pattern */}
-        <div 
-          className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.05%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"
-        ></div>
+      <div className="min-h-screen bg-[#030712] text-white">
+        <div className="relative isolate min-h-screen overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(29,155,240,0.25),_transparent_60%)] opacity-60"></div>
+          <div
+            className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)",
+              backgroundSize: '120px 120px'
+            }}
+          ></div>
 
-        {/* Sidebar */}
-        <aside className="fixed top-0 left-0 h-screen w-20 bg-black/20 backdrop-blur-xl border-r border-white/10 flex flex-col items-center py-8 z-50">
-          <button onClick={() => router.push('/dashboard')} className="mb-8 group relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg blur opacity-0 group-hover:opacity-75 transition-opacity duration-300"></div>
-            <Home className="w-7 h-7 text-white relative z-10 group-hover:scale-110 transition-transform duration-200" />
-          </button>
-          
-          <div className="mt-auto mb-6 flex flex-col items-center">
-            <div className="relative group cursor-pointer" onClick={() => router.push(`/profile?tab=${activeTab}`)}>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur opacity-0 group-hover:opacity-75 transition-opacity duration-300"></div>
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold relative z-10 group-hover:scale-110 transition-transform duration-200">
-                {user?.firstName?.charAt(0) || 'U'}
+          <div className="relative z-10 max-w-6xl mx-auto px-6 py-10 space-y-10">
+            <header className="rounded-[32px] border border-white/10 bg-white/[0.03] p-6 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              <div className="space-y-3">
+                <p className="text-xs uppercase tracking-[0.45em] text-white/50">Command center</p>
+                <h1 className="text-3xl md:text-4xl font-semibold">Flight deck dashboard</h1>
+                <p className="text-slate-300 text-sm max-w-xl">
+                  Clean typography, subtle glow, and pill controls mirror the intro page aesthetic while leaning into the calm X-inspired timeline feel.
+                </p>
               </div>
-            </div>
-            <span 
-              className="text-xs mt-2 text-white/80 cursor-pointer hover:text-white transition-colors" 
-              onClick={() => router.push(`/profile?tab=${activeTab}`)}
-            >
-              Profile
-            </span>
-            <button onClick={handleLogout} className="mt-3 group">
-              <div className="absolute inset-0 bg-red-500/20 rounded-lg blur opacity-0 group-hover:opacity-75 transition-opacity duration-300"></div>
-              <LogOut className="w-5 h-5 text-gray-400 hover:text-red-400 relative z-10 group-hover:scale-110 transition-all duration-200" />
-            </button>
-          </div>
-        </aside>
+              <div className="flex flex-col gap-4 items-start md:items-end">
+                <div className="flex items-center gap-3">
+                  <div className="h-12 w-12 rounded-full bg-white text-black font-semibold flex items-center justify-center">
+                    {userInitial}
+                  </div>
+                  <div className="text-left md:text-right">
+                    <p className="font-semibold">{displayName}</p>
+                    <p className="text-sm text-white/60">{userTagline}</p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={() => router.push(`/profile?tab=${activeTab}`)}
+                    className="px-5 py-2 rounded-full border border-white/15 text-white/80 hover:text-white hover:border-white/40 text-sm transition"
+                  >
+                    View profile
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="px-5 py-2 rounded-full bg-white text-black font-semibold text-sm flex items-center gap-2 hover:bg-slate-200 transition"
+                  >
+                    Logout
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </header>
 
-        {/* Main Content */}
-        <main className="ml-20 flex-1 p-8 overflow-y-auto relative">
-          <div className="absolute top-0 right-0 p-6">
-            <button 
-              onClick={handleLogout} 
-              className="text-sm text-white/90 border border-white/20 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-lg hover:bg-white/10 hover:border-white/30 transition-all duration-300 hover:scale-105"
-            >
-              Logout
-            </button>
-          </div>
+            <section className="grid gap-4 md:grid-cols-3">
+              {quickStats.map(stat => {
+                const Icon = stat.icon;
+                return (
+                  <div
+                    key={stat.label}
+                    className="rounded-3xl border border-white/10 bg-white/[0.02] p-5 shadow-[0_25px_60px_rgba(2,6,23,0.45)] flex flex-col gap-3"
+                  >
+                    <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.4em] text-white/40">
+                      <span>{stat.label}</span>
+                      <Icon className="w-4 h-4 text-sky-400" />
+                    </div>
+                    <p className="text-3xl font-semibold text-white">{stat.value}</p>
+                    <p className="text-sm text-slate-400">{stat.meta}</p>
+                  </div>
+                );
+              })}
+            </section>
 
-          {/* Tab Navigation */}
-          <div className="flex space-x-8 border-b border-white/10 mb-8 pb-4">
-            {tabs.map(tab => (
-              <button
-                key={tab}
-                onClick={() => handleTabChange(tab)}
-                onMouseEnter={() => setHoveredTab(tab)}
-                onMouseLeave={() => setHoveredTab(null)}
-                className={`relative pb-3 text-lg font-medium transition-all duration-300 ${
-                  activeTab === tab ? 'text-white' : 'text-white/60 hover:text-white/80'
-                }`}
-              >
-                {activeTab === tab && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-                )}
-                {hoveredTab === tab && activeTab !== tab && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500/50 to-purple-500/50 rounded-full animate-pulse"></div>
-                )}
-                {tab === 'AI Quiz' ? (
-                  <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent font-bold flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 animate-pulse" />
-                    {tab}
-                  </span>
-                ) : tab}
-              </button>
-            ))}
-          </div>
+            <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+              <div className="rounded-[32px] border border-white/10 bg-white/[0.02] p-6 space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.45em] text-white/40">Live feed</p>
+                    <p className="text-xl font-semibold text-white">Practice stream</p>
+                  </div>
+                  <span className="text-xs text-emerald-300 border border-emerald-400/40 px-3 py-1 rounded-full uppercase tracking-[0.3em]">Synced</span>
+                </div>
+                <div className="space-y-4">
+                  {practiceFeed.map(item => (
+                    <div
+                      key={item.title}
+                      className="rounded-2xl border border-white/10 bg-black/20 p-4 flex items-center justify-between gap-4 hover:border-white/30 transition"
+                    >
+                      <div>
+                        <p className="text-white font-semibold">{item.title}</p>
+                        <p className="text-slate-400 text-sm">{item.detail}</p>
+                      </div>
+                      <span className="text-xs text-white/40 uppercase tracking-[0.3em]">{item.time}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-[32px] border border-white/10 bg-[#050b14] p-6 space-y-4">
+                <p className="text-xs uppercase tracking-[0.4em] text-white/40">{currentInsight.title}</p>
+                <ul className="space-y-3 text-sm text-slate-200">
+                  {currentInsight.cues.map(cue => (
+                    <li key={cue} className="flex gap-3">
+                      <span className="w-2 h-2 mt-1 rounded-full bg-sky-400"></span>
+                      <span>{cue}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={() => router.push(`/profile?tab=${activeTab}`)}
+                  className="w-full rounded-2xl border border-white/15 bg-white/5 py-3 text-sm text-white/80 hover:text-white hover:border-white/40 transition"
+                >
+                  Adjust preferences
+                </button>
+              </div>
+            </section>
 
-          {/* AI Quiz Content */}
-          {activeTab === 'AI Quiz' ? (
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl max-w-5xl mx-auto text-white flex flex-col h-[75vh] relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl"></div>
-              <div className="relative z-10">
-                {/* Option Selection */}
-                <div className="flex space-x-4 mb-6">
-                  {['Context Understanding', 'English to English', 'Grammar MCQ'].map(opt => (
+            <section className="rounded-[32px] border border-white/10 bg-[#050b14]/70 p-6 space-y-8">
+              <div className="space-y-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.4em] text-white/40">Skill console</p>
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-2 text-lg font-semibold">
+                      <Sparkles className="w-5 h-5 text-sky-400" />
+                      <span>Active focus: {activeTab}</span>
+                    </div>
+                    <span className="text-xs px-3 py-1 rounded-full border border-white/15 text-white/60 uppercase tracking-[0.35em]">
+                      Beta
+                    </span>
+                  </div>
+                  <p className="text-slate-400 text-sm mt-2">
+                    Tabs carry the same typographic system as the intro page so the transition into the dashboard is seamless.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  {tabs.map(tab => (
                     <button
-                      key={opt}
-                      onClick={() => handleOptionChange(opt)}
-                      className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 relative overflow-hidden ${
-                        activeOption === opt
-                          ? 'bg-gradient-to-r from-white to-gray-100 text-black shadow-lg scale-105'
-                          : 'bg-white/10 hover:bg-white/20 hover:scale-105'
+                      key={tab}
+                      onClick={() => handleTabChange(tab)}
+                      onMouseEnter={() => setHoveredTab(tab)}
+                      onMouseLeave={() => setHoveredTab(null)}
+                      className={`px-5 py-2 rounded-full border text-sm transition ${
+                        activeTab === tab
+                          ? 'border-white text-white bg-white/10'
+                          : hoveredTab === tab
+                            ? 'border-white/25 text-white/80'
+                            : 'border-white/10 text-white/60 hover:text-white hover:border-white/30'
                       }`}
                     >
-                      {activeOption === opt && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 animate-pulse"></div>
-                      )}
-                      <span className="relative z-10">{opt}</span>
+                      {tab}
                     </button>
                   ))}
                 </div>
+              </div>
 
-                {/* Question Display */}
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl mb-6 flex-1 overflow-auto relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-2xl"></div>
-                  <div className="relative z-10">
-                    <p className="text-xl font-bold mb-4 flex items-center gap-2">
-                      <Target className="w-6 h-6 text-blue-400" />
-                      <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                        Q{currentQuestion + 1}:
-                      </span>
-                    </p>
-                    
-                    {isLoadingQuestion ? (
-                      <div className="flex items-center justify-center py-12">
-                        <div className="relative">
-                          <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500/30 border-t-blue-500"></div>
-                          <div className="absolute inset-0 animate-ping rounded-full h-12 w-12 bg-blue-500/20"></div>
-                        </div>
-                        <span className="ml-4 text-lg font-medium">Generating AI question...</span>
-                      </div>
-                    ) : question ? (
-                      <p className="text-lg leading-relaxed">{question.question}</p>
-                    ) : (
-                      <p className="text-lg text-white/60">No questions available</p>
-                    )}
+              {activeTab === 'AI Quiz' ? (
+                <div className="space-y-6">
+                  <div className="flex flex-wrap gap-3">
+                    {['Context Understanding', 'English to English', 'Grammar MCQ'].map(opt => (
+                      <button
+                        key={opt}
+                        onClick={() => handleOptionChange(opt)}
+                        className={`px-4 py-2 rounded-2xl text-sm border transition ${
+                          activeOption === opt
+                            ? 'border-white text-black bg-white'
+                            : 'border-white/15 text-white/70 hover:text-white hover:border-white/40'
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
                   </div>
-                </div>
-
-                {/* Answer Options and Navigation */}
-                <div className="mt-4">
-                  {question && !isLoadingQuestion && (
-                    <>
-                      <div className="grid grid-cols-2 gap-4 mb-6">
-                        {question.options.map((option, idx) => {
-                          let buttonClass = 'w-full py-5 px-6 rounded-xl text-lg text-left border transition-all duration-300 relative overflow-hidden group';
-                          
-                          if (answer.submitted) {
-                            if (option === question.correct) {
-                              buttonClass += ' bg-gradient-to-r from-green-600/20 to-emerald-600/20 border-green-400/50 shadow-lg shadow-green-500/25';
-                            } else if (option === answer.selected) {
-                              buttonClass += ' bg-gradient-to-r from-red-600/20 to-pink-600/20 border-red-400/50 shadow-lg shadow-red-500/25';
-                            } else {
-                              buttonClass += ' bg-white/5 border-white/10';
-                            }
-                          } else if (option === answer.selected) {
-                            buttonClass += ' bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-blue-400/50 shadow-lg shadow-blue-500/25';
-                          } else {
-                            buttonClass += ' bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 hover:scale-105';
-                          }
-
-                          return (
-                            <button
-                              key={idx}
-                              className={buttonClass}
-                              onClick={() => {
-                                if (!answer.submitted) handleAnswer(option);
-                              }}
-                            >
-                              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                              <span className="relative z-10">{option}</span>
-                            </button>
-                          );
-                        })}
+                  <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+                    <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 space-y-4 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-sky-500/5 via-transparent to-transparent"></div>
+                      <div className="relative z-10 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-xs uppercase tracking-[0.4em] text-white/40">Prompt</p>
+                            <p className="text-lg font-semibold">Q{currentQuestion + 1} · {activeOption}</p>
+                          </div>
+                          <Target className="w-5 h-5 text-sky-400" />
+                        </div>
+                        {isLoadingQuestion ? (
+                          <div className="flex flex-col items-center justify-center py-10 gap-3">
+                            <div className="h-12 w-12 border-4 border-white/10 border-t-sky-400 rounded-full animate-spin"></div>
+                            <p className="text-sm text-white/70">Generating AI question…</p>
+                          </div>
+                        ) : question ? (
+                          <p className="text-lg leading-relaxed text-slate-100">{question.question}</p>
+                        ) : (
+                          <p className="text-sm text-white/60">No questions yet—generate one to get started.</p>
+                        )}
                       </div>
+                    </div>
+                    <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-6 space-y-4">
+                      <p className="text-xs uppercase tracking-[0.4em] text-white/40">Answer lane</p>
+                      {question && !isLoadingQuestion ? (
+                        <div className="space-y-3">
+                          {question.options.map((option, idx) => {
+                            let buttonClass = 'w-full rounded-2xl border p-4 text-left text-sm transition relative';
 
-                      <div className="flex justify-between">
+                            if (answer.submitted) {
+                              if (option === question.correct) {
+                                buttonClass += ' border-emerald-400/60 bg-emerald-500/10 text-emerald-100';
+                              } else if (option === answer.selected) {
+                                buttonClass += ' border-rose-400/60 bg-rose-500/10 text-rose-100';
+                              } else {
+                                buttonClass += ' border-white/10 bg-white/5 text-white/70';
+                              }
+                            } else if (option === answer.selected) {
+                              buttonClass += ' border-sky-400/70 bg-sky-500/10 text-white';
+                            } else {
+                              buttonClass += ' border-white/10 bg-white/5 text-white/70 hover:border-white/30 hover:text-white';
+                            }
+
+                            return (
+                              <button
+                                key={idx}
+                                className={buttonClass}
+                                onClick={() => {
+                                  if (!answer.submitted) handleAnswer(option);
+                                }}
+                              >
+                                <span className="relative z-10">{option}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-white/60">Answer options appear after the question loads.</p>
+                      )}
+                      {answer.submitted && question && (
+                        <div className="rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-white/70">
+                          {answer.selected === question.correct ? 'Nice — that was the right pick.' : `Correct answer: ${question.correct}`}
+                        </div>
+                      )}
+                      <div className="pt-4 border-t border-white/5 flex flex-wrap gap-3 items-center justify-between">
                         <button
                           disabled={currentQuestion === 0}
                           onClick={() => setCurrentQuestion(prev => prev - 1)}
-                          className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
+                          className={`px-4 py-2 rounded-2xl text-sm border transition ${
                             currentQuestion === 0
-                              ? 'bg-white/5 text-white/40 cursor-not-allowed'
-                              : 'bg-white/10 hover:bg-white/20 text-white hover:scale-105'
+                              ? 'border-white/10 text-white/30 cursor-not-allowed'
+                              : 'border-white/20 text-white/80 hover:text-white hover:border-white/40'
                           }`}
                         >
-                          ← Back
+                          Back
                         </button>
-
                         {answer.submitted ? (
                           <button
                             onClick={() => {
@@ -476,23 +658,25 @@ export default function DashboardPage() {
                                 setCurrentQuestion(prev => prev + 1);
                               }
                             }}
-                            className="px-6 py-3 rounded-xl font-medium bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2"
+                            className="flex items-center gap-2 px-5 py-2 rounded-2xl bg-emerald-500 text-black font-semibold text-sm hover:bg-emerald-400 transition"
                           >
-                            Next <Zap className="w-4 h-4" />
+                            Next
+                            <Zap className="w-4 h-4" />
                           </button>
                         ) : (
-                          <div className="flex gap-4">
+                          <div className="flex gap-3">
                             <button
                               onClick={() => {
                                 if (currentQuestion < currentQuestions.length - 1) {
                                   setCurrentQuestion(prev => prev + 1);
                                 }
                               }}
-                              className="px-6 py-3 rounded-xl font-medium bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-lg hover:scale-105 transition-all duration-300"
+                              className="px-4 py-2 rounded-2xl text-sm border border-white/15 text-white/70 hover:text-white hover:border-white/40 transition"
                             >
                               Skip
                             </button>
                             <button
+                              disabled={!answer.selected}
                               onClick={() => {
                                 if (!answer.selected) return;
                                 setAnswers(prev => ({
@@ -500,74 +684,88 @@ export default function DashboardPage() {
                                   [currentQuestion]: { ...prev[currentQuestion], submitted: true }
                                 }));
                               }}
-                              className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 ${
+                              className={`flex items-center gap-2 px-5 py-2 rounded-2xl text-sm font-semibold transition ${
                                 answer.selected
-                                  ? 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white shadow-lg hover:scale-105'
+                                  ? 'bg-rose-500 text-white hover:bg-rose-400'
                                   : 'bg-white/5 text-white/40 cursor-not-allowed'
                               }`}
-                              disabled={!answer.selected}
                             >
                               <Brain className="w-4 h-4" /> Submit
                             </button>
                           </div>
                         )}
                       </div>
-                    </>
-                  )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ) : (
-            /* Test Grid for Other Tabs */
-            Array.from({ length: 20 }, (_, i) => {
-              const cambridgeSeries = 20 - i;
-              return (
-                <div key={i} className="mb-10">
-                  <h2 className="text-white text-2xl font-bold mb-6 flex items-center gap-3">
-                    <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                      IELTS Cambridge {cambridgeSeries}
-                    </span>
-                    <div className="w-8 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500"></div>
-                  </h2>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    {Array.from({ length: 4 }, (_, j) => {
-                      const testNumber = j + 1;
-                      const testId = `${cambridgeSeries}-${testNumber}`;
+              ) : (
+                <div className="space-y-6">
+                  <div className="rounded-3xl border border-white/10 bg-white/5 p-5 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.4em] text-white/40">Focus signal</p>
+                      <p className="text-xl font-semibold text-white">{stageNote.headline}</p>
+                      <p className="text-slate-400 text-sm">{stageNote.detail}</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="text-right">
+                        <p className="text-xs text-white/40 uppercase tracking-[0.4em]">Skill</p>
+                        <p className="text-lg font-semibold">{activeTab}</p>
+                      </div>
+                      <div className="h-12 w-12 rounded-2xl border border-white/10 bg-white/5 flex items-center justify-center">
+                        <Sparkles className="w-5 h-5 text-sky-400" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="rounded-[32px] border border-white/10 bg-black/20 p-6 space-y-10">
+                    {Array.from({ length: 20 }, (_, i) => {
+                      const cambridgeSeries = 20 - i;
                       return (
-                        <div
-                          key={testNumber}
-                          onClick={() => router.push(`/${activeTab.toLowerCase()}/${cambridgeSeries}/${testNumber}`)}
-                          onMouseEnter={() => setHoveredTest(testId)}
-                          onMouseLeave={() => setHoveredTest(null)}
-                          className={`border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl p-6 cursor-pointer transition-all duration-300 relative overflow-hidden group ${
-                            hoveredTest === testId
-                              ? 'scale-105 shadow-2xl shadow-blue-500/25'
-                              : 'hover:scale-105 hover:shadow-lg'
-                          }`}
-                        >
-                          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                          <div className="relative z-10">
-                            <div className="text-white text-xl font-bold mb-3 flex items-center gap-2">
-                              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                                Test {testNumber}
-                              </span>
-                              {hoveredTest === testId && (
-                                <Sparkles className="w-5 h-5 text-yellow-400 animate-pulse" />
-                              )}
+                        <div key={cambridgeSeries} className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="h-12 w-12 rounded-2xl border border-white/10 bg-white/5 flex items-center justify-center text-sm text-white/60">
+                                {cambridgeSeries}
+                              </div>
+                              <div>
+                                <p className="text-xs uppercase tracking-[0.35em] text-white/40">Cambridge set</p>
+                                <p className="text-2xl font-semibold text-white">IELTS Cambridge {cambridgeSeries}</p>
+                              </div>
                             </div>
-                            <div className="text-white/60 text-sm group-hover:text-white/80 transition-colors">
-                              Click to Start
-                            </div>
+                            <span className="text-xs text-white/40">4 tests</span>
+                          </div>
+                          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                            {Array.from({ length: 4 }, (_, j) => {
+                              const testNumber = j + 1;
+                              const testId = `${cambridgeSeries}-${testNumber}`;
+                              return (
+                                <button
+                                  key={testId}
+                                  onClick={() => router.push(`/${activeTab.toLowerCase()}/${cambridgeSeries}/${testNumber}`)}
+                                  onMouseEnter={() => setHoveredTest(testId)}
+                                  onMouseLeave={() => setHoveredTest(null)}
+                                  className={`rounded-2xl border border-white/10 bg-white/5 p-4 text-left transition flex flex-col gap-2 ${
+                                    hoveredTest === testId ? 'border-white/40 shadow-[0_20px_40px_rgba(15,23,42,0.5)] scale-[1.01]' : 'hover:border-white/30'
+                                  }`}
+                                >
+                                  <span className="text-sm uppercase tracking-[0.3em] text-white/40">Test</span>
+                                  <p className="text-xl font-semibold text-white flex items-center gap-2">
+                                    {testNumber}
+                                    {hoveredTest === testId && <Sparkles className="w-4 h-4 text-amber-300" />}
+                                  </p>
+                                  <p className="text-xs text-white/60">Jump into {activeTab.toLowerCase()} · Click to start</p>
+                                </button>
+                              );
+                            })}
                           </div>
                         </div>
                       );
                     })}
                   </div>
                 </div>
-              );
-            })
-          )}
-        </main>
+              )}
+            </section>
+          </div>
+        </div>
       </div>
     </ProtectedRoute>
   );

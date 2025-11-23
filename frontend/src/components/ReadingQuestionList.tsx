@@ -8,6 +8,7 @@ type Props = {
   setAnswers: (a: Answers) => void;
   highlights: Highlight[];
   setHighlights: (h: Highlight[] | ((prev: Highlight[]) => Highlight[])) => void;
+  className?: string;
 };
 
 export default function QuestionList({ 
@@ -15,7 +16,8 @@ export default function QuestionList({
   answers, 
   setAnswers, 
   highlights, 
-  setHighlights 
+  setHighlights,
+  className = ''
 }: Props) {
   const handleSelectionAnswer = (questionNumber: number, option: string, isMulti: boolean) => 
     setAnswers(handleSelection(questionNumber, option, isMulti, answers));
@@ -40,7 +42,7 @@ export default function QuestionList({
         );
       }
       result.push(
-        <span key={`highlight-${i}`} className="bg-yellow-200">
+        <span key={`highlight-${i}`} className="bg-sky-400/30 text-white rounded-sm px-0.5">
           {text.slice(highlight.start, highlight.end)}
         </span>
       );
@@ -84,8 +86,13 @@ export default function QuestionList({
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow w-full lg:w-2/5 h-[80vh] overflow-y-auto">
-      <h2 className="text-xl font-bold mb-4">Questions</h2>
+    <div
+      className={`rounded-[28px] border border-white/10 bg-white/[0.03] shadow-[0_25px_80px_rgba(2,6,23,0.45)] p-6 text-slate-200 backdrop-blur-2xl h-[80vh] overflow-y-auto ${className}`}
+    >
+      <div className="flex flex-col gap-1 mb-5">
+        <p className="text-[11px] uppercase tracking-[0.4em] text-white/50">Question deck</p>
+        <h2 className="text-2xl font-semibold text-white">Answer queue</h2>
+      </div>
       
       <ol className="space-y-6 text-sm">
         {questions.map((q, i) => {
@@ -93,7 +100,7 @@ export default function QuestionList({
             return (
               <div 
                 key={`intro-${i}`} 
-                className="text-base font-semibold mb-3 whitespace-pre-line"
+                className="text-base font-semibold mb-3 whitespace-pre-line text-white"
                 onContextMenu={e => handleContextMenu(e, q.text, `intro-${i}`)}
               >
                 {renderHighlightedText(q.text, highlights, `intro-${i}`)}
@@ -105,7 +112,7 @@ export default function QuestionList({
             return (
               <div 
                 key={`subheading-${i}`} 
-                className="font-semibold mb-2"
+                className="font-semibold mb-2 text-white"
                 onContextMenu={e => handleContextMenu(e, q.text, `subheading-${i}`)}
               >
                 {renderHighlightedText(q.text, highlights, `subheading-${i}`)}
@@ -126,9 +133,9 @@ export default function QuestionList({
                       {j < arr.length - 1 && (
                         <input
                           type="text"
-                          className="inline-block w-40 border border-gray-400 rounded px-2 py-1 mx-1"
+                          className="inline-block w-40 border border-white/20 bg-white/5 text-white placeholder-white/40 rounded-xl px-3 py-2 mx-1"
                           value={answers[q.number]?.[0] || ''}
-                          placeholder="—"
+                          placeholder="-"
                           onChange={e => handleFillInAnswer(q.number, e.target.value)}
                         />
                       )}
@@ -146,16 +153,23 @@ export default function QuestionList({
                   {renderHighlightedText(q.question, highlights, `q-${q.number}`)}
                 </span>
               </div>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-3">
                 {q.options.map((option, j) => (
-                  <label key={option} className="flex items-center gap-2">
+                  <label
+                    key={option}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-2xl border ${
+                      answers[q.number]?.includes(option)
+                        ? 'border-sky-400/60 bg-sky-400/10 text-white'
+                        : 'border-white/10 bg-white/5 text-white/70 hover:text-white hover:border-white/40'
+                    } transition`}
+                  >
                     <input
                       type={q.type === 'multi' ? 'checkbox' : 'radio'}
                       name={`q-${q.number}`}
                       value={option}
                       checked={answers[q.number]?.includes(option) || false}
                       onChange={() => handleSelectionAnswer(q.number, option, q.type === 'multi')}
-                      className="mr-2"
+                      className="accent-sky-500"
                     />
                     <span onContextMenu={e => handleContextMenu(e, option, `o-${q.number}-${j}`)}>
                       {renderHighlightedText(option, highlights, `o-${q.number}-${j}`)}
